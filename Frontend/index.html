@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CampusMarket — Student Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body { background: var(--white); }
+    .hero { background: var(--white); padding: 5rem 0; overflow: hidden; }
+    .hero-inner { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; }
+    .hero-label { display: inline-flex; align-items: center; gap: .5rem; font-size: .8125rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); margin-bottom: 1.25rem; }
+    .hero-label::before { content: \'\'; width: 24px; height: 2px; background: var(--teal); border-radius: 2px; }
+    .hero-heading { font-family: var(--font-display); font-size: clamp(2.75rem,5vw,4rem); line-height: 1.05; color: var(--dark); margin-bottom: 1.5rem; }
+    .hero-heading em { font-style: italic; color: var(--teal); }
+    .hero-sub { font-size: 1.0625rem; line-height: 1.7; color: var(--muted); max-width: 480px; margin-bottom: 2.25rem; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 3rem; }
+    .btn-hero-primary { padding: .875rem 2rem; background: var(--teal); border-radius: var(--r-full); font-size: 1rem; font-weight: 600; color: var(--white); box-shadow: var(--shadow-lg); transition: background .2s, transform .15s; }
+    .btn-hero-primary:hover { background: var(--teal-dark); transform: translateY(-2px); }
+    .btn-hero-outline { padding: .875rem 2rem; border: 2px solid var(--teal); border-radius: var(--r-full); font-size: 1rem; font-weight: 600; color: var(--teal); transition: background .2s, color .2s; }
+    .btn-hero-outline:hover { background: var(--teal); color: var(--white); }
+    .hero-stats { display: flex; gap: 2.5rem; }
+    .stat-item { display: flex; flex-direction: column; }
+    .stat-value { font-size: 1.875rem; font-weight: 700; color: var(--dark); line-height: 1; }
+    .stat-label { font-size: .8125rem; color: var(--muted); margin-top: .25rem; }
+    .hero-img-wrap { position: relative; }
+    .hero-img-box { border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-xl); aspect-ratio: 1/.9; position: relative; background: #e0f2f1; }
+    .hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-img-overlay { position: absolute; inset: 0; background: linear-gradient(0deg,rgba(0,0,0,.18) 0%,transparent 60%); }
+    .hero-float-card { position: absolute; bottom: -1.5rem; left: -1.5rem; background: var(--white); border-radius: var(--r-md); padding: 1rem 1.25rem; box-shadow: 0 8px 10px -6px rgba(0,0,0,.1),0 20px 25px -5px rgba(0,0,0,.1); display: flex; align-items: center; gap: .75rem; min-width: 200px; }
+    .float-icon { width: 40px; height: 40px; background: var(--teal-light); border-radius: var(--r-full); display: grid; place-items: center; flex-shrink: 0; }
+    .float-icon svg { width: 18px; height: 18px; }
+    .float-label { font-size: .6875rem; color: var(--muted); }
+    .float-value { font-size: .875rem; font-weight: 700; color: var(--dark); }
+    .categories { background: var(--bg-gray); padding: 3.5rem 0; }
+    .categories-grid { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .cat-card { display: flex; flex-direction: column; align-items: center; padding: 1.3125rem; gap: .75rem; background: var(--white); border: 1px solid var(--light); border-radius: var(--r-md); cursor: pointer; transition: transform .2s,box-shadow .2s,border-color .2s; min-width: 108px; flex: 1; }
+    .cat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--teal); }
+    .cat-icon-wrap { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; }
+    .cat-icon-wrap svg { width: 22px; height: 22px; }
+    .cat-name { font-size: .75rem; font-weight: 600; color: var(--mid); text-align: center; }
+    .products-section, .new-arrivals { background: var(--white); padding: 4rem 0; }
+    .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; }
+    .cta-banner { background: var(--bg-gray); padding: 3.5rem 0; }
+    .cta-inner { background: var(--teal); border-radius: var(--r-lg); position: relative; display: flex; align-items: center; justify-content: space-between; padding: 3.5rem 4rem; gap: 2rem; overflow: hidden; }
+    .cta-bg-pattern { position: absolute; inset: 0; background-image: radial-gradient(circle at 80% 50%,rgba(255,255,255,.08) 0%,transparent 60%); pointer-events: none; }
+    .cta-content { position: relative; z-index: 1; max-width: 560px; }
+    .cta-title { font-family: var(--font-display); font-size: clamp(1.75rem,3vw,2.25rem); color: var(--white); margin-bottom: .75rem; line-height: 1.1; }
+    .cta-sub { font-size: 1rem; color: var(--teal-light); line-height: 1.625; }
+    .btn-cta { position: relative; z-index: 1; flex-shrink: 0; padding: .875rem 2rem; background: var(--white); border-radius: var(--r-full); font-size: 1rem; font-weight: 600; color: var(--teal-dark); box-shadow: var(--shadow-lg); transition: transform .15s; white-space: nowrap; }
+    .btn-cta:hover { transform: translateY(-2px); }
+    .newsletter { background: var(--bg-gray); padding: 5rem 0; }
+    .newsletter-inner { max-width: 580px; margin: 0 auto; text-align: center; }
+    .newsletter-icon { width: 56px; height: 56px; background: var(--teal-light); border-radius: var(--r-full); display: grid; place-items: center; margin: 0 auto 1.25rem; }
+    .newsletter-icon svg { width: 24px; height: 24px; color: var(--teal); }
+    .newsletter-title { font-family: var(--font-display); font-size: 1.875rem; color: var(--dark); margin-bottom: .75rem; }
+    .newsletter-sub { font-size: 1rem; color: var(--muted); line-height: 1.6; margin-bottom: 2rem; }
+    .newsletter-form { display: flex; gap: .75rem; }
+    .newsletter-input { flex: 1; padding: .875rem 1.25rem; border: 1.5px solid var(--border); border-radius: var(--r-full); font-size: .875rem; font-family: var(--font-body); color: var(--dark); outline: none; transition: border-color .15s; }
+    .newsletter-input:focus { border-color: var(--teal); }
+    .newsletter-input::placeholder { color: var(--soft); }
+    .btn-subscribe { padding: .875rem 1.75rem; background: var(--teal); border-radius: var(--r-full); font-size: .875rem; font-weight: 600; color: var(--white); border: none; cursor: pointer; white-space: nowrap; transition: background .15s; font-family: var(--font-body); }
+    .btn-subscribe:hover { background: var(--teal-dark); }
+    .newsletter-note { font-size: .75rem; color: var(--soft); margin-top: 1rem; }
+    @media(max-width:1024px){.products-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:768px){.hero-inner{grid-template-columns:1fr;}.hero-img-wrap{display:none;}.cta-inner{flex-direction:column;padding:2.5rem 2rem;text-align:center;}.newsletter-form{flex-direction:column;}}
+    @media(max-width:480px){.products-grid{grid-template-columns:1fr;}.cat-card{min-width:80px;}}
+  </style>
+</head>
+<body>
+<div class="announce">🎓 Free shipping on orders over ₵350 for all students!</div>
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo"><div class="logo-icon">CM</div><span class="logo-text">CampusMarket</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li><li><a href="catalog.html">Catalog</a></li><li><a href="account.html">Account</a></li><li><a href="#">Admin</a></li><li><a href="#">Help</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#" class="btn-outline">Sign in</a>
+      <a href="#" class="btn-primary">Sign up</a>
+      <button class="cart-btn" aria-label="Cart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg><span class="cart-badge">0</span></button>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="menuClose">✕</button>
+  <a href="index.html">Home</a><a href="catalog.html">Catalog</a><a href="account.html">Account</a><a href="#">Admin</a><a href="#">Help</a><a href="#">Sign in</a>
+  <a href="#" class="btn-primary" style="text-align:center;border-radius:9999px;padding:.75rem;">Sign up</a>
+</div>
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-content fade-up">
+      <div class="hero-label">Student Marketplace</div>
+      <h1 class="hero-heading">Discover Unique<br><em>Student-Designed</em><br>Products</h1>
+      <p class="hero-sub">Shop handmade items, custom designs, and creative works from talented students in your campus community.</p>
+      <div class="hero-actions">
+        <a href="catalog.html" class="btn-hero-primary">Browse Products</a>
+        <a href="seller.html" class="btn-hero-outline">Start Selling</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><span class="stat-value">1.2k+</span><span class="stat-label">Products Listed</span></div>
+        <div class="stat-item"><span class="stat-value">500+</span><span class="stat-label">Student Sellers</span></div>
+        <div class="stat-item"><span class="stat-value">4.9★</span><span class="stat-label">Avg. Rating</span></div>
+      </div>
+    </div>
+    <div class="hero-img-wrap fade-up delay-2">
+      <div class="hero-img-box">
+        <img src="images/hero-student.jpg" alt="Student in class" class="hero-img" />
+        <div class="hero-img-overlay"></div>
+      </div>
+      <div class="hero-float-card">
+        <div class="float-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><span class="float-label">Trusted by</span><div class="float-value">10,000+ Students</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="categories" id="categories">
+  <div class="container">
+    <div class="section-header"><h2 class="section-title">Shop by Category</h2><p class="section-sub">Find exactly what you're looking for</p></div>
+    <div class="categories-grid">
+      <a href="catalog.html" class="cat-card"><div class="cat-icon-wrap" style="background:#FDF2F8;"><svg viewBox="0 0 24 24" fill="none" stroke="#EC4899" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></div><span class="cat-name">Art &amp; Crafts</span></a>
+      <a href="catalog.html" class="cat-card"><div class="cat-icon-wrap" style="background:#FFF7ED;"><svg viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg></div><span class="cat-name">Fashion</span></a>
+      <a href="catalog.html" class="cat-card"><div class="cat-icon-wrap" style="background:#FEFCE8;"><svg viewBox="0 0 24 24" fill="none" stroke="#EAB308" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div><span class="cat-name">Stationery</span></a>
+      <a href="catalog.html" class="cat-card"><div class="cat-icon-wrap" style="background:#F0FDFA;"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div><span class="cat-name">Home Decor</span></a>
+      <a href="catalog.html" class="cat-card"><div class="cat-icon-wrap" style="background:#EEF2FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><span class="cat-name">Tech</span></a>
+      <a href="catalog.html" class="cat-card"><div class="cat-icon-wrap" style="background:#FEF2F2;"><svg viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><span class="cat-name">Beauty</span></a>
+    </div>
+  </div>
+</section>
+<section class="products-section" id="products">
+  <div class="container">
+    <div class="section-header-row"><div><h2 class="section-title">Featured Products</h2><p class="section-sub">Handpicked items from our top sellers</p></div><a href="catalog.html" class="view-all">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg></a></div>
+    <div class="products-grid" id="featured-grid"></div>
+  </div>
+</section>
+<section class="cta-banner" id="sell">
+  <div class="container"><div class="cta-inner"><div class="cta-bg-pattern"></div><div class="cta-content"><h2 class="cta-title">Start Your Creative Journey</h2><p class="cta-sub">Join hundreds of student sellers and turn your passion into profit.</p></div><a href="seller.html" class="btn-cta">Start Selling Today</a></div></div>
+</section>
+<section class="new-arrivals">
+  <div class="container">
+    <div class="section-header-row"><div><h2 class="section-title">New Arrivals</h2><p class="section-sub">Fresh products just added to our marketplace</p></div><a href="catalog.html" class="view-all">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg></a></div>
+    <div class="products-grid" id="arrivals-grid"></div>
+  </div>
+</section>
+<section class="newsletter">
+  <div class="container"><div class="newsletter-inner">
+    <div class="newsletter-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+    <h2 class="newsletter-title">Stay in the Loop</h2>
+    <p class="newsletter-sub">Get the latest products, exclusive deals, and campus marketplace news delivered to your inbox.</p>
+    <form class="newsletter-form" onsubmit="handleSubscribe(event)"><input class="newsletter-input" type="email" placeholder="Enter your email address" required /><button class="btn-subscribe" type="submit">Subscribe</button></form>
+    <p class="newsletter-note">We respect your privacy. Unsubscribe at any time.</p>
+  </div></div>
+</section>
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo"><div class="footer-logo-icon">CM</div><span class="footer-logo-name">Campus Mart</span></div>
+        <p class="footer-desc">Your trusted student marketplace for buying and selling quality products on campus.</p>
+        <div class="social-links">
+          <a href="https://twitter.com/campusmarket" class="social-btn" aria-label="Twitter" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
+          <a href="https://instagram.com/campusmarket" class="social-btn" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="https://facebook.com/campusmarket" class="social-btn" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="https://linkedin.com/company/campusmarket" class="social-btn" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col"><h3>Quick Links</h3><ul><li><a href="index.html">Home</a></li><li><a href="catalog.html">Shop</a></li><li><a href="seller.html">Sell Products</a></li><li><a href="#">Community</a></li></ul></div>
+      <div class="footer-col"><h3>Support</h3><ul><li><a href="account.html">My Account</a></li><li><a href="#">Help Center</a></li><li><a href="#">Contact Us</a></li></ul></div>
+      <div class="footer-col"><h3>Contact</h3>
+        <div class="footer-contact">
+          <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Campus Building, University Road</span></div>
+          <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>support@campusmart.com</span></div>
+          <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.57a16 16 0 006.29 6.29l.91-.74a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0121 16.92z"/></svg><span>+1 (555) 123-4567</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; <span id="current-year"></span> Campus Mart. All rights reserved.</p>
+      <nav class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookie Policy</a></nav>
+    </div>
+  </div>
+</footer>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg><span id="toastMsg"></span></div>
+<script>
+  var featuredProducts = [
+    {id:1,name:'Handcrafted Ceramic Mug',category:'Art & Crafts',price:'\u20b5220.00',seller:'Emma Wilson',rating:4.8,badge:'New',color:'#e2e8f0'},
+    {id:2,name:'Vintage Style Tote Bag',category:'Fashion',price:'\u20b5285.00',seller:'Marcus Chen',rating:4.9,badge:'New',color:'#fde68a'},
+    {id:3,name:'Custom Illustrated Notebook',category:'Stationery',price:'\u20b5150.00',seller:'Sofia Rodriguez',rating:5.0,badge:'New',color:'#ddd6fe'},
+    {id:4,name:'Macrame Wall Hanging',category:'Home Decor',price:'\u20b5410.00',seller:'Olivia Martinez',rating:4.7,badge:'New',color:'#d1fae5'},
+  ];
+  var newArrivals = [
+    {id:5,name:'Wooden Phone Stand',category:'Tech Accessories',price:'\u20b5198.00',seller:'James Anderson',rating:4.6,badge:'New',color:'#fee2e2'},
+    {id:6,name:'Handmade Soap Set',category:'Beauty & Wellness',price:'\u20b5260.00',seller:'Ava Thompson',rating:4.9,badge:'New',color:'#fce7f3'},
+    {id:7,name:'Leather Bookmark Set',category:'Stationery',price:'\u20b5170.00',seller:'Liam Foster',rating:4.8,badge:'New',color:'#fef3c7'},
+    {id:8,name:'Watercolor Art Print',category:'Art & Crafts',price:'\u20b5330.00',seller:'Isabella Clark',rating:5.0,badge:'New',color:'#ede9fe'},
+  ];
+  function starsHTML(r){return Array.from({length:5},(_,i)=>{var c=i<Math.floor(r)?'#FACC15':'#E5E7EB';return`<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:${c}"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>`;}).join('');}
+  function renderCard(p){var img=p.img?`<img src="${p.img}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">`:`<div class="product-img-placeholder" style="background:${p.color};"><span style="font-size:.65rem;color:#64748b;">${p.category}</span></div>`;return`<div class="product-card"><div class="product-img-wrap">${img}<span class="product-badge">${p.badge}</span><button class="wishlist-btn" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button></div><div class="product-info"><p class="product-category">${p.category}</p><h3 class="product-name">${p.name}</h3><div class="product-stars"><div class="stars">${starsHTML(p.rating)}</div><span class="rating-txt">${p.rating} (0)</span></div><div class="product-footer"><div><div class="product-price">${p.price}</div><div class="product-seller">by ${p.seller}</div></div><button class="add-to-cart-btn">Add to Cart</button></div></div></div>`;}
+  function handleSubscribe(e){e.preventDefault();var btn=e.target.querySelector('button');btn.textContent='Subscribed! \u2713';btn.style.background='#0D9488';e.target.querySelector('input').value='';}
+  document.addEventListener('DOMContentLoaded',function(){document.getElementById('featured-grid').innerHTML=featuredProducts.map(renderCard).join('');document.getElementById('arrivals-grid').innerHTML=newArrivals.map(renderCard).join('');});
+</script>
+<script src="shared.js"></script>
+</body>
+</html>
