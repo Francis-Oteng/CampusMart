@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,8 +76,12 @@
 <nav class="nav">
   <div class="container nav-inner">
     <a href="index.html" class="logo"><div class="logo-icon">CM</div><span class="logo-text">CampusMarket</span></a>
-    <ul class="nav-links">
-      <li><a href="index.html" class="active">Home</a></li><li><a href="catalog.html">Catalog</a></li><li><a href="account.html">Account</a></li><li><a href="#">Admin</a></li><li><a href="#">Help</a></li>
+                <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="catalog.html">Catalog</a></li>
+      <li><a href="account.html">Account</a></li>
+      <li><a href="admin.html">Admin</a></li>
+      <li><a href="help.html">Help</a></li>
     </ul>
     <div class="nav-actions">
       <a href="#" class="btn-outline">Sign in</a>
@@ -87,8 +92,8 @@
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-menu-close" id="menuClose">✕</button>
-  <a href="index.html">Home</a><a href="catalog.html">Catalog</a><a href="account.html">Account</a><a href="#">Admin</a><a href="#">Help</a><a href="#">Sign in</a>
+  <button class="mobile-menu-close" id="menuClose">&#x2715;</button>
+  <a href="index.html">Home</a><a href="catalog.html">Catalog</a><a href="account.html">Account</a><a href="admin.html">Admin</a><a href="help.html">Help</a><a href="#">Sign in</a>
   <a href="#" class="btn-primary" style="text-align:center;border-radius:9999px;padding:.75rem;">Sign up</a>
 </div>
 <section class="hero">
@@ -109,7 +114,7 @@
     </div>
     <div class="hero-img-wrap fade-up delay-2">
       <div class="hero-img-box">
-        <img src="images/hero-student.jpg" alt="Student in class" class="hero-img" />
+        <img src="Assets/images/students.jpg" alt="Student in class" class="hero-img" />
         <div class="hero-img-overlay"></div>
       </div>
       <div class="hero-float-card">
@@ -170,7 +175,7 @@
         </div>
       </div>
       <div class="footer-col"><h3>Quick Links</h3><ul><li><a href="index.html">Home</a></li><li><a href="catalog.html">Shop</a></li><li><a href="seller.html">Sell Products</a></li><li><a href="#">Community</a></li></ul></div>
-      <div class="footer-col"><h3>Support</h3><ul><li><a href="account.html">My Account</a></li><li><a href="#">Help Center</a></li><li><a href="#">Contact Us</a></li></ul></div>
+      <div class="footer-col"><h3>Support</h3><ul><li><a href="account.html">My Account</a></li><li><a href="help.html">Help Center</a></li><li><a href="#">Contact Us</a></li></ul></div>
       <div class="footer-col"><h3>Contact</h3>
         <div class="footer-contact">
           <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Campus Building, University Road</span></div>
@@ -186,24 +191,8 @@
   </div>
 </footer>
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg><span id="toastMsg"></span></div>
-<script>
-  var featuredProducts = [
-    {id:1,name:'Handcrafted Ceramic Mug',category:'Art & Crafts',price:'\u20b5220.00',seller:'Emma Wilson',rating:4.8,badge:'New',color:'#e2e8f0'},
-    {id:2,name:'Vintage Style Tote Bag',category:'Fashion',price:'\u20b5285.00',seller:'Marcus Chen',rating:4.9,badge:'New',color:'#fde68a'},
-    {id:3,name:'Custom Illustrated Notebook',category:'Stationery',price:'\u20b5150.00',seller:'Sofia Rodriguez',rating:5.0,badge:'New',color:'#ddd6fe'},
-    {id:4,name:'Macrame Wall Hanging',category:'Home Decor',price:'\u20b5410.00',seller:'Olivia Martinez',rating:4.7,badge:'New',color:'#d1fae5'},
-  ];
-  var newArrivals = [
-    {id:5,name:'Wooden Phone Stand',category:'Tech Accessories',price:'\u20b5198.00',seller:'James Anderson',rating:4.6,badge:'New',color:'#fee2e2'},
-    {id:6,name:'Handmade Soap Set',category:'Beauty & Wellness',price:'\u20b5260.00',seller:'Ava Thompson',rating:4.9,badge:'New',color:'#fce7f3'},
-    {id:7,name:'Leather Bookmark Set',category:'Stationery',price:'\u20b5170.00',seller:'Liam Foster',rating:4.8,badge:'New',color:'#fef3c7'},
-    {id:8,name:'Watercolor Art Print',category:'Art & Crafts',price:'\u20b5330.00',seller:'Isabella Clark',rating:5.0,badge:'New',color:'#ede9fe'},
-  ];
-  function starsHTML(r){return Array.from({length:5},(_,i)=>{var c=i<Math.floor(r)?'#FACC15':'#E5E7EB';return`<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:${c}"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>`;}).join('');}
-  function renderCard(p){var img=p.img?`<img src="${p.img}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">`:`<div class="product-img-placeholder" style="background:${p.color};"><span style="font-size:.65rem;color:#64748b;">${p.category}</span></div>`;return`<div class="product-card"><div class="product-img-wrap">${img}<span class="product-badge">${p.badge}</span><button class="wishlist-btn" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button></div><div class="product-info"><p class="product-category">${p.category}</p><h3 class="product-name">${p.name}</h3><div class="product-stars"><div class="stars">${starsHTML(p.rating)}</div><span class="rating-txt">${p.rating} (0)</span></div><div class="product-footer"><div><div class="product-price">${p.price}</div><div class="product-seller">by ${p.seller}</div></div><button class="add-to-cart-btn">Add to Cart</button></div></div></div>`;}
-  function handleSubscribe(e){e.preventDefault();var btn=e.target.querySelector('button');btn.textContent='Subscribed! \u2713';btn.style.background='#0D9488';e.target.querySelector('input').value='';}
-  document.addEventListener('DOMContentLoaded',function(){document.getElementById('featured-grid').innerHTML=featuredProducts.map(renderCard).join('');document.getElementById('arrivals-grid').innerHTML=newArrivals.map(renderCard).join('');});
-</script>
+
+<script src="index.js"></script>
 <script src="shared.js"></script>
 </body>
 </html>
