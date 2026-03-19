@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Campus Mart - Cart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header */
+    .header {
+      background: #4f46e5;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .header nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Page Title */
+    .title {
+      padding: 20px 30px;
+    }
+
+    .title h2 {
+      margin: 0;
+    }
+
+    /* Layout */
+    .container {
+      display: flex;
+      gap: 20px;
+      padding: 20px 30px;
+    }
+
+    /* Cart Items */
+    .cart-items {
+      flex: 2;
+    }
+
+    .cart-item {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .item-details {
+      flex: 1;
+    }
+
+    .item-details h4 {
+      margin: 0;
+    }
+
+    .price {
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    /* Quantity */
+    .quantity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity button {
+      padding: 5px 10px;
+      border: none;
+      background: #4f46e5;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .remove {
+      color: red;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* Summary */
+    .summary {
+      flex: 1;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      height: fit-content;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .summary h3 {
+      margin-top: 0;
+    }
+
+    .summary div {
+      margin: 10px 0;
+    }
+
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .checkout {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .continue {
+      background: white;
+      border: 1px solid #ccc;
+    }
+
+    /* Empty Cart */
+    .empty {
+      text-align: center;
+      padding: 50px;
+      display: none;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div>CampusMarket</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Catalog</a>
+      <a href="#">Account</a>
+    </nav>
+  </div>
+
+  <!-- Title -->
+  <div class="title">
+    <h2>🛒 Your Cart</h2>
+    <p>Review your items before checkout</p>
+  </div>
+
+  <div class="container">
+
+    <!-- Cart Items -->
+    <div class="cart-items" id="cartItems">
+
+      <!-- Item -->
+      <div class="cart-item" data-price="18.99">
+        <img src="https://via.placeholder.com/80">
+        <div class="item-details">
+          <h4>Ceramic Mug</h4>
+          <p>by Emma</p>
+          <div class="price">$18.99</div>
+        </div>
+
+        <div class="quantity">
+          <button onclick="changeQty(this, -1)">-</button>
+          <span class="qty">1</span>
+          <button onclick="changeQty(this, 1)">+</button>
+        </div>
+
+        <div class="remove" onclick="removeItem(this)">Remove</div>
+      </div>
+
+      <!-- Item -->
+      <div class="cart-item" data-price="24.50">
+        <img src="https://via.placeholder.com/80">
+        <div class="item-details">
+          <h4>Tote Bag</h4>
+          <p>by Marcus</p>
+          <div class="price">$24.50</div>
+        </div>
+
+        <div class="quantity">
+          <button onclick="changeQty(this, -1)">-</button>
+          <span class="qty">1</span>
+          <button onclick="changeQty(this, 1)">+</button>
+        </div>
+
+        <div class="remove" onclick="removeItem(this)">Remove</div>
+      </div>
+
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <h3>Order Summary</h3>
+
+      <div>Subtotal: $<span id="subtotal">0</span></div>
+      <div>Shipping: $5.00</div>
+      <div class="total">Total: $<span id="total">0</span></div>
+
+      <button class="btn checkout">Proceed to Checkout</button>
+      <button class="btn continue">Continue Shopping</button>
+    </div>
+
+  </div>
+
+  <!-- Empty Cart -->
+  <div class="empty" id="emptyCart">
+    <h3>🛒 Your cart is empty</h3>
+    <p>Add some products to get started</p>
+  </div>
+
+  <script>
+    function updateCart() {
+      let items = document.querySelectorAll(".cart-item");
+      let subtotal = 0;
+
+      items.forEach(item => {
+        let price = parseFloat(item.dataset.price);
+        let qty = parseInt(item.querySelector(".qty").innerText);
+        subtotal += price * qty;
+      });
+
+      document.getElementById("subtotal").innerText = subtotal.toFixed(2);
+      document.getElementById("total").innerText = (subtotal + 5).toFixed(2);
+
+      if (items.length === 0) {
+        document.getElementById("emptyCart").style.display = "block";
+      }
+    }
+
+    function changeQty(button, change) {
+      let qtyElement = button.parentElement.querySelector(".qty");
+      let qty = parseInt(qtyElement.innerText);
+
+      qty += change;
+      if (qty < 1) qty = 1;
+
+      qtyElement.innerText = qty;
+      updateCart();
+    }
+
+    function removeItem(el) {
+      el.parentElement.remove();
+      updateCart();
+    }
+
+    // Initial calculation
+    updateCart();
+  </script>
+
+</body>
+</html>
