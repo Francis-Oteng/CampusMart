@@ -1,10 +1,17 @@
-/* ─── account.js — Unified Buyer + Seller Account ─────── */
+/* ─── account.js ─────────────────────────────────────────
+   Logic:
+   • Not signed in → show #guestView (two buttons to auth.html)
+   • Signed in as buyer  → show #buyerDash + buyer tabs
+   • Signed in as seller → show #sellerDash + seller tabs
+   • Signed in as both   → show role-switch toggle + correct dash
+   • Sign Out button → goes to signout.html (separate page)
+   ───────────────────────────────────────────────────────── */
 
-/* ══════════════════════════════════════
-   DATA
-   ══════════════════════════════════════ */
+/* ══════════════════
+   STATIC DATA
+   ══════════════════ */
 
-var availDays = [
+var AVAIL_DAYS = [
   { day:'Monday',    hours:'08:00 – 19:00', closed:false },
   { day:'Tuesday',   hours:'08:00 – 19:00', closed:false },
   { day:'Wednesday', hours:'08:00 – 19:00', closed:false },
@@ -14,374 +21,329 @@ var availDays = [
   { day:'Sunday',    hours:'',              closed:true  },
 ];
 
-/* Seed with recent orders from checkout + some demo orders */
-function getOrders() {
-  var stored = [];
-  try { stored = JSON.parse(localStorage.getItem('cm_orders') || '[]'); } catch(e){}
-  if (stored.length) return stored;
-  /* Demo orders if none exist */
-  return [
-    { id:'#ORD-008', items:[{name:'Watercolor Art Print'}], total:330, status:'completed',  date:'Mar 12', payment:'momo' },
-    { id:'#ORD-007', items:[{name:'Handmade Soap Set'}],    total:260, status:'shipped',    date:'Mar 10', payment:'card' },
-    { id:'#ORD-006', items:[{name:'Leather Bookmark Set'}], total:170, status:'completed',  date:'Mar 07', payment:'wallet' },
-    { id:'#ORD-005', items:[{name:'Ceramic Mug'}],          total:220, status:'processing', date:'Mar 05', payment:'momo' },
-  ];
-}
-
-/* ══════════════════════════════════════
-   PROFILE  (localStorage key: cm_profile)
-   Full schema:
-   {
-     name, email, phone, campus, bio,
-     initials, role,
-     deliveryAddr, preferredPay, notifyOrders, favCat,
-     storeName, payoutMethod, payoutNumber, listingCat, storeDesc
-   }
-   ══════════════════════════════════════ */
-
-var PROFILE_KEY = 'cm_profile';
-
-function loadStoredProfile() {
-  try {
-    return JSON.parse(localStorage.getItem(PROFILE_KEY) || '{}');
-  } catch(e) { return {}; }
-}
-
-function saveStoredProfile(data) {
-  localStorage.setItem(PROFILE_KEY, JSON.stringify(data));
-}
-
-/* Map: field id → profile key */
-var FIELD_MAP = [
-  /* Personal */
-  { id:'fullName',      key:'name' },
-  { id:'email',         key:'email' },
-  { id:'phone',         key:'phone' },
-  { id:'campus',        key:'campus' },
-  { id:'bio',           key:'bio' },
-  /* Buyer */
-  { id:'deliveryAddr',  key:'deliveryAddr' },
-  { id:'preferredPay',  key:'preferredPay' },
-  { id:'notifyOrders',  key:'notifyOrders' },
-  { id:'favCat',        key:'favCat' },
-  /* Seller */
-  { id:'storeName',     key:'storeName' },
-  { id:'payoutMethod',  key:'payoutMethod' },
-  { id:'payoutNumber',  key:'payoutNumber' },
-  { id:'listingCat',    key:'listingCat' },
-  { id:'storeDesc',     key:'storeDesc' },
+var SELLER_ORDERS = [
+  { id:'#ORD-014', buyer:'Kwame A.',  product:'Ceramic Mug',   amount:'₵220', status:'completed'  },
+  { id:'#ORD-013', buyer:'Abena M.',  product:'Soap Set',      amount:'₵260', status:'shipped'    },
+  { id:'#ORD-012', buyer:'Kofi B.',   product:'Tote Bag',      amount:'₵285', status:'processing' },
+  { id:'#ORD-011', buyer:'Ama S.',    product:'Notebook',      amount:'₵150', status:'completed'  },
 ];
 
-function loadProfileIntoForm() {
-  var data = loadStoredProfile();
+var BUYER_TABS = [
+  { id:'profile',  label:'My Profile',  icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
+  { id:'orders',   label:'My Orders',   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' },
+  { id:'wishlist', label:'Saved Items', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>' },
+];
 
-  /* Also try pulling from session (set during sign-in/sign-up) */
-  var session = {};
-  try { session = JSON.parse(sessionStorage.getItem('cm_user') || '{}'); } catch(e){}
+var SELLER_TABS = [
+  { id:'profile',  label:'My Profile',  icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
+  { id:'listings', label:'My Listings', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>' },
+  { id:'orders',   label:'Orders In',   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' },
+];
 
-  /* Merge session into data (session wins for name/email) */
-  if (session.name  && !data.name)   data.name   = session.name;
-  if (session.email && !data.email)  data.email  = session.email;
-  if (session.campus && !data.campus) data.campus = session.campus;
+/* ══════════════════
+   HELPERS
+   ══════════════════ */
 
-  /* Populate form fields */
-  FIELD_MAP.forEach(function(m) {
-    var el = document.getElementById(m.id);
-    if (!el) return;
-    var val = data[m.key];
-    if (val !== undefined && val !== null && val !== '') {
-      el.value = val;
-    }
-  });
+function getUser()    { try { return JSON.parse(sessionStorage.getItem('cm_user') || 'null'); } catch(e) { return null; } }
+function getProfile() { try { return JSON.parse(localStorage.getItem('cm_profile') || '{}'); } catch(e) { return {}; } }
+function saveProfile(data) { var p = getProfile(); localStorage.setItem('cm_profile', JSON.stringify(Object.assign(p, data))); }
+function getOrders()  { try { return JSON.parse(localStorage.getItem('cm_orders') || '[]'); } catch(e) { return []; } }
+function txt(id, v)   { var e = document.getElementById(id); if(e) e.textContent = v; }
+function val(id)      { return (document.getElementById(id)||{}).value || ''; }
+function setVal(id,v) { var e = document.getElementById(id); if(e) e.value = v || ''; }
+function hide(id)     { var e = document.getElementById(id); if(e) e.style.display = 'none'; }
+function show(id, d)  { var e = document.getElementById(id); if(e) e.style.display = d || 'block'; }
+function flashErr(id) { var e = document.getElementById(id); if(!e) return; e.style.borderColor='var(--red)'; setTimeout(function(){ e.style.borderColor=''; },2500); }
 
-  /* Update profile header display */
-  updateProfileDisplay(data);
-}
+/* ══════════════════
+   MAIN INIT
+   ══════════════════ */
 
-function updateProfileDisplay(data) {
-  var name     = data.name || 'Your Name';
-  var initials = name.split(' ').filter(Boolean).map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() || 'CM';
+function init() {
+  var user = getUser();
 
-  var dispName = document.querySelector('.profile-name, #displayName');
-  var dispInit = document.querySelector('.avatar-placeholder, #avatarInitials');
-  var dispEmail= document.querySelector('.profile-email, #displayEmail');
-
-  if (dispName)  dispName.textContent  = name;
-  if (dispInit)  dispInit.textContent  = initials;
-  if (dispEmail && data.email) dispEmail.textContent = data.email;
-
-  /* Update role badge if role changed */
-  if (data.role) {
-    var badge = document.querySelector('.badge-seller');
-    if (badge) {
-      var roleLabels = { buyer:'Buyer', seller:'Seller', both:'Buyer & Seller' };
-      badge.textContent = roleLabels[data.role] || data.role;
-    }
-  }
-
-  /* Update stat counts */
-  var orders = getOrders();
-  var ordersCount = document.querySelector('.pstat-val, [data-orders]');
-  /* Only update the first stat (Orders) */
-  var statVals = document.querySelectorAll('.pstat-val');
-  if (statVals[0]) statVals[0].textContent = orders.length;
-
-  /* Wishlist count */
-  var wishlist = [];
-  try { wishlist = JSON.parse(localStorage.getItem('cm_wishlist') || '[]'); } catch(e){}
-  if (statVals[1]) statVals[1].textContent = wishlist.length;
-
-  /* Total spent */
-  var spent = orders.reduce(function(s, o){ return s + (parseFloat(o.total)||0); }, 0);
-  if (statVals[2]) {
-    statVals[2].textContent = 'GH₵' + spent.toFixed(0);
-  }
-}
-
-/* ── Save profile (called from onclick="saveProfile()") ── */
-window.saveProfile = function() {
-  /* Basic validation */
-  var nameEl  = document.getElementById('fullName');
-  var emailEl = document.getElementById('email');
-
-  if (nameEl && !nameEl.value.trim()) {
-    window.showToast('Please enter your full name.');
-    nameEl.focus();
-    nameEl.style.borderColor = 'var(--red)';
-    setTimeout(function(){ nameEl.style.borderColor = ''; }, 2000);
-    return;
-  }
-  if (emailEl && !window.validateEmail(emailEl.value.trim())) {
-    window.showToast('Please enter a valid email address.');
-    emailEl.focus();
-    emailEl.style.borderColor = 'var(--red)';
-    setTimeout(function(){ emailEl.style.borderColor = ''; }, 2000);
+  /* Not signed in */
+  if (!user || !user.loggedIn) {
+    show('guestView');
+    hide('loggedInView');
     return;
   }
 
-  /* Collect all form values */
-  var existing = loadStoredProfile();
-  FIELD_MAP.forEach(function(m) {
-    var el = document.getElementById(m.id);
-    if (el) existing[m.key] = el.value.trim ? el.value.trim() : el.value;
+  /* Signed in */
+  hide('guestView');
+  show('loggedInView');
+
+  /* Update nav buttons: replace Sign In/Sign Up with Sign Out link */
+  var si = document.getElementById('navSignin');
+  var su = document.getElementById('navSignup');
+  if(si){ si.textContent='Sign out'; si.href='signout.html'; }
+  if(su) su.style.display='none';
+
+  var role    = (getProfile().role || user.role || 'buyer').toLowerCase();
+  var profile = getProfile();
+  var name    = profile.name || user.name || 'My Account';
+  var email   = profile.email || user.email || '';
+  var initials= name.split(' ').filter(Boolean).map(function(n){return n[0];}).join('').slice(0,2).toUpperCase() || 'CM';
+
+  /* Header */
+  txt('displayName',    name);
+  txt('displayEmail',   email);
+  txt('avatarInitials', initials);
+  txt('memberSince',    'Member since ' + (profile.joinDate || new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'})));
+
+  /* Role badge */
+  var badge = document.getElementById('roleBadge');
+  var roleTag = document.getElementById('roleTag');
+  var labels = { buyer:'Buyer', seller:'Seller', both:'Buyer & Seller' };
+  if(badge){ badge.textContent = labels[role]||role; badge.className = 'role-badge ' + (role==='both'?'both':role); }
+  if(roleTag){ var sp = roleTag.querySelector('span'); if(sp) sp.textContent = labels[role]||role; }
+
+  /* Stats */
+  var orders   = getOrders();
+  var wishlist = []; try{ wishlist = JSON.parse(localStorage.getItem('cm_wishlist')||'[]'); }catch(e){}
+  var spent    = orders.reduce(function(s,o){ return s + (parseFloat(o.total)||0); }, 0);
+  txt('statOrders', orders.length);
+  txt('statSaved',  wishlist.length);
+  txt('statSpent',  'GH₵' + Math.round(spent));
+
+  /* Role switch (only for "both") */
+  var rsBar = document.getElementById('roleSwitchBar');
+  if(rsBar) rsBar.style.display = role === 'both' ? 'flex' : 'none';
+
+  /* Render based on role */
+  if (role === 'seller') {
+    activateDash('seller');
+  } else if (role === 'both') {
+    activateDash('buyer'); /* default to buyer view */
+  } else {
+    activateDash('buyer');
+  }
+
+  /* Welcome toast from auth */
+  if (document.referrer && document.referrer.includes('auth.html')) {
+    window.showToast('Welcome' + (name ? ', ' + name.split(' ')[0] : '') + '! Your dashboard is ready.');
+  }
+}
+
+/* ══════════════════
+   DASH ACTIVATION
+   ══════════════════ */
+
+function activateDash(which) {
+  hide('buyerDash');
+  hide('sellerDash');
+
+  /* Update role-switch buttons */
+  var rb = document.getElementById('rsBuyer');
+  var rs = document.getElementById('rsSeller');
+  if(rb) rb.classList.toggle('active', which === 'buyer');
+  if(rs) rs.classList.toggle('active', which === 'seller');
+
+  if (which === 'buyer') {
+    show('buyerDash');
+    buildTabs('b', BUYER_TABS);
+    loadBuyer();
+    renderBuyerOrders();
+    renderWishlist();
+  } else {
+    show('sellerDash');
+    buildTabs('s', SELLER_TABS);
+    loadSeller();
+    renderAvailability();
+    renderTodayHours();
+    renderSellerOrders();
+  }
+}
+
+window.switchView = function(which) { activateDash(which); };
+
+/* ══════════════════
+   TAB BUILDER
+   ══════════════════ */
+
+function buildTabs(prefix, tabs) {
+  var container = document.getElementById('profileTabs');
+  if (!container) return;
+  container.innerHTML = tabs.map(function(t, i) {
+    return '<button class="tab-btn' + (i===0?' active':'') + '" data-prefix="' + prefix + '" data-tab="' + t.id + '">' + t.icon + t.label + '</button>';
+  }).join('');
+
+  container.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      container.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      this.classList.add('active');
+      var p = this.dataset.prefix;
+      var t = this.dataset.tab;
+      /* Hide all panels in this dash */
+      document.querySelectorAll('#' + (p==='b'?'buyer':'seller') + 'Dash .tab-panel').forEach(function(el){ el.classList.remove('active'); });
+      var panel = document.getElementById(p + '-tab-' + t);
+      if (panel) panel.classList.add('active');
+    });
   });
+}
 
-  /* Recompute initials */
-  var name = existing.name || '';
-  existing.initials = name.split(' ').filter(Boolean).map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase();
+/* ══════════════════
+   BUYER PROFILE
+   ══════════════════ */
 
-  saveStoredProfile(existing);
-  updateProfileDisplay(existing);
-
-  /* Sync session */
-  try {
-    var session = JSON.parse(sessionStorage.getItem('cm_user') || '{}');
-    session.name  = existing.name;
-    session.email = existing.email;
-    sessionStorage.setItem('cm_user', JSON.stringify(session));
-  } catch(e){}
-
-  window.showToast('All changes saved successfully! ✓');
+window.loadBuyer = function() {
+  var p = getProfile();
+  setVal('bName',   p.name         || '');
+  setVal('bEmail',  p.email        || '');
+  setVal('bPhone',  p.phone        || '');
+  setVal('bCampus', p.campus       || '');
+  setVal('bBio',    p.bio          || '');
+  setVal('bAddr',   p.deliveryAddr || '');
+  setVal('bPay',    p.preferredPay || '');
+  setVal('bNotify', p.notifyOrders || '');
+  setVal('bFavCat', p.favCat       || '');
 };
 
-/* ── Reset form ── */
-window.resetForm = function() {
-  loadProfileIntoForm();
-  window.showToast('Changes discarded.');
+window.saveBuyer = function() {
+  var name  = val('bName');
+  var email = val('bEmail');
+  if (!name.trim())                    { flashErr('bName');  window.showToast('Please enter your full name.'); return; }
+  if (!window.validateEmail(email))    { flashErr('bEmail'); window.showToast('Please enter a valid email.'); return; }
+  saveProfile({ name:name.trim(), email:email.trim(), phone:val('bPhone'), campus:val('bCampus'), bio:val('bBio'), deliveryAddr:val('bAddr'), preferredPay:val('bPay'), notifyOrders:val('bNotify'), favCat:val('bFavCat') });
+  txt('displayName', name.trim());
+  txt('avatarInitials', name.trim().split(' ').filter(Boolean).map(function(n){return n[0];}).join('').slice(0,2).toUpperCase());
+  var user = getUser(); if(user){ user.name=name.trim(); user.email=email.trim(); sessionStorage.setItem('cm_user',JSON.stringify(user)); }
+  window.showToast('Profile saved! ✓');
 };
 
-/* ══════════════════════════════════════
-   AVAILABILITY TABLE
-   ══════════════════════════════════════ */
+/* ══════════════════
+   SELLER PROFILE
+   ══════════════════ */
+
+window.loadSeller = function() {
+  var p = getProfile();
+  setVal('sName',       p.name         || '');
+  setVal('sEmail',      p.email        || '');
+  setVal('sPhone',      p.phone        || '');
+  setVal('sCampus',     p.campus       || '');
+  setVal('sStoreName',  p.storeName    || '');
+  setVal('sListCat',    p.listingCat   || '');
+  setVal('sPayout',     p.payoutMethod || '');
+  setVal('sPayoutNum',  p.payoutNumber || '');
+  setVal('sStoreDesc',  p.storeDesc    || '');
+};
+
+window.saveSeller = function() {
+  var name  = val('sName');
+  var email = val('sEmail');
+  if (!name.trim())                 { flashErr('sName');  window.showToast('Please enter your full name.'); return; }
+  if (!window.validateEmail(email)) { flashErr('sEmail'); window.showToast('Please enter a valid email.'); return; }
+  saveProfile({ name:name.trim(), email:email.trim(), phone:val('sPhone'), campus:val('sCampus'), storeName:val('sStoreName'), listingCat:val('sListCat'), payoutMethod:val('sPayout'), payoutNumber:val('sPayoutNum'), storeDesc:val('sStoreDesc') });
+  txt('displayName', name.trim());
+  txt('avatarInitials', name.trim().split(' ').filter(Boolean).map(function(n){return n[0];}).join('').slice(0,2).toUpperCase());
+  var user = getUser(); if(user){ user.name=name.trim(); sessionStorage.setItem('cm_user',JSON.stringify(user)); }
+  window.showToast('Seller profile saved! ✓');
+};
+
+/* ══════════════════
+   UPGRADE BUYER → BOTH
+   ══════════════════ */
+
+window.upgradeToSeller = function() {
+  var user = getUser();
+  if (!user) return;
+  user.role = 'both';
+  sessionStorage.setItem('cm_user', JSON.stringify(user));
+  saveProfile({ role: 'both' });
+  window.showToast('Seller access activated! ✓');
+  setTimeout(init, 600);
+};
+
+/* ══════════════════
+   ORDERS
+   ══════════════════ */
+
+function renderBuyerOrders() {
+  var tbody = document.getElementById('bOrdersBody');
+  if (!tbody) return;
+  var orders = getOrders().slice(0, 8);
+  if (!orders.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2.5rem;">No orders yet. <a href="catalog.html" style="color:var(--teal);font-weight:600;">Start shopping →</a></td></tr>';
+    return;
+  }
+  tbody.innerHTML = orders.map(function(o) {
+    var sc  = o.status || 'pending';
+    var nm  = (o.items && o.items[0]) ? o.items[0].name : (o.product || 'Order');
+    var more = (o.items && o.items.length > 1) ? ' <span style="font-size:.6875rem;color:var(--muted);">+' + (o.items.length-1) + '</span>' : '';
+    return '<tr><td style="font-weight:700;color:var(--teal);">' + o.id + '</td><td>' + nm + more + '</td><td style="font-weight:700;color:#0284C7;">₵' + parseFloat(o.total||0).toFixed(2) + '</td><td style="color:var(--muted);">' + (o.date||'') + '</td><td><span class="status-pill ' + sc + '">' + sc.charAt(0).toUpperCase() + sc.slice(1) + '</span></td></tr>';
+  }).join('');
+}
+
+function renderSellerOrders() {
+  var tbody = document.getElementById('sOrdersBody');
+  if (!tbody) return;
+  tbody.innerHTML = SELLER_ORDERS.map(function(o) {
+    return '<tr><td style="font-weight:700;color:var(--teal);">' + o.id + '</td><td>' + o.buyer + '</td><td>' + o.product + '</td><td style="font-weight:700;color:#0284C7;">' + o.amount + '</td><td><span class="status-pill ' + o.status + '">' + o.status.charAt(0).toUpperCase() + o.status.slice(1) + '</span></td></tr>';
+  }).join('');
+}
+
+/* ══════════════════
+   WISHLIST
+   ══════════════════ */
+
+function renderWishlist() {
+  var container = document.getElementById('bWishlistBody');
+  if (!container) return;
+  var list = []; try { list = JSON.parse(localStorage.getItem('cm_wishlist')||'[]'); } catch(e){}
+  if (!list.length) {
+    container.innerHTML = '<div class="empty-inline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><p>Nothing saved yet. <a href="catalog.html">Browse products</a> and tap the ♥ icon.</p></div>';
+    return;
+  }
+  container.innerHTML = list.map(function(name) {
+    return '<div class="wl-item"><span class="wl-name">' + window.sanitize(name) + '</span><button class="wl-remove" onclick="removeWish(\'' + window.sanitize(name).replace(/'/g,"\\'") + '\')">Remove</button></div>';
+  }).join('');
+}
+
+window.removeWish = function(name) {
+  var list = []; try { list = JSON.parse(localStorage.getItem('cm_wishlist')||'[]'); } catch(e){}
+  list = list.filter(function(n){ return n !== name; });
+  localStorage.setItem('cm_wishlist', JSON.stringify(list));
+  renderWishlist();
+  txt('statSaved', list.length);
+  window.showToast('"' + name + '" removed.');
+};
+
+/* ══════════════════
+   AVAILABILITY (seller only)
+   ══════════════════ */
 
 function renderAvailability() {
   var tbody = document.getElementById('availBody');
   if (!tbody) return;
-  var dayNames  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var todayName = dayNames[new Date().getDay()];
-
-  tbody.innerHTML = availDays.map(function(d) {
-    var isToday = d.day === todayName;
+  var days  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var today = days[new Date().getDay()];
+  tbody.innerHTML = AVAIL_DAYS.map(function(d) {
+    var isToday = d.day === today;
     return '<tr' + (isToday ? ' class="avail-row-today"' : '') + '>' +
-      '<td>' + (isToday ? '<span class="avail-dot"></span>' : '') +
-        d.day + (isToday ? ' <span style="font-size:.6875rem;color:var(--teal);font-weight:600;">(Today)</span>' : '') +
-      '</td>' +
+      '<td>' + (isToday ? '<span class="avail-dot"></span>' : '') + d.day + (isToday ? ' <span style="font-size:.6875rem;color:var(--teal);">(Today)</span>' : '') + '</td>' +
       '<td>' + (d.closed ? '<span class="avail-closed">Closed</span>' : d.hours) + '</td>' +
     '</tr>';
   }).join('');
 }
 
 function renderTodayHours() {
-  var dayNames   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var shortNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  var today      = new Date().getDay();
-  var badge      = document.getElementById('todayBadge');
-  var hoursEl    = document.getElementById('todayHours');
-  if (badge)   badge.textContent   = shortNames[today];
-  var d = availDays.find(function(x){ return x.day === dayNames[today]; });
-  if (hoursEl && d) hoursEl.textContent = d.closed ? 'Closed today' : d.hours;
+  var days  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var short = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var today = new Date().getDay();
+  var badge = document.getElementById('todayBadge');
+  var hours = document.getElementById('todayHours');
+  if(badge) badge.textContent = short[today];
+  var d = AVAIL_DAYS.find(function(x){ return x.day === days[today]; });
+  if(hours && d) hours.textContent = d.closed ? 'Closed today' : d.hours;
 }
 
-window.editAvailability = function() {
-  window.showToast('Availability editor coming soon!');
-};
-
-/* ══════════════════════════════════════
-   RECENT ORDERS  (from localStorage)
-   ══════════════════════════════════════ */
-
-function renderRecentOrders() {
-  var tbody = document.getElementById('recentOrdersBody') || document.getElementById('ordersBody');
-  if (!tbody) return;
-
-  var orders = getOrders().slice(0, 5);
-  if (!orders.length) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:1.5rem;">No orders yet. <a href="catalog.html" style="color:var(--teal);font-weight:600;">Start shopping</a></td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = orders.map(function(o) {
-    var statusMap = { completed:'completed', shipped:'shipped', processing:'processing', pending:'pending', cancelled:'cancelled' };
-    var sc = statusMap[o.status] || 'pending';
-    var productName = o.items && o.items[0] ? o.items[0].name : (o.product || 'Order');
-    return '<tr>' +
-      '<td style="font-weight:700;color:var(--teal);">' + o.id + '</td>' +
-      '<td>' + productName + (o.items && o.items.length > 1 ? ' <span style="font-size:.6875rem;color:var(--muted);">+' + (o.items.length-1) + ' more</span>' : '') + '</td>' +
-      '<td style="font-weight:700;color:#0284C7;">₵' + (parseFloat(o.total)||0).toFixed(2) + '</td>' +
-      '<td style="color:var(--muted);">' + (o.date || '') + '</td>' +
-      '<td><span class="status-pill ' + sc + '">' + sc.charAt(0).toUpperCase() + sc.slice(1) + '</span></td>' +
-    '</tr>';
-  }).join('');
-}
-
-/* ══════════════════════════════════════
-   WISHLIST
-   ══════════════════════════════════════ */
-
-function renderWishlist() {
-  var container = document.getElementById('wishlistContainer');
-  if (!container) return;
-  var list = [];
-  try { list = JSON.parse(localStorage.getItem('cm_wishlist') || '[]'); } catch(e){}
-
-  if (!list.length) {
-    container.innerHTML = '<p style="color:var(--muted);font-size:.875rem;text-align:center;padding:2rem 0;">Your wishlist is empty. <a href="catalog.html" style="color:var(--teal);font-weight:600;">Browse products</a></p>';
-    return;
-  }
-  container.innerHTML = list.map(function(name) {
-    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid var(--border);">' +
-      '<span style="font-size:.875rem;font-weight:600;">' + window.sanitize(name) + '</span>' +
-      '<button onclick="removeWishItem(\'' + window.sanitize(name).replace(/'/g,"\\'") + '\')" ' +
-        'style="font-size:.75rem;color:var(--red);background:none;border:none;cursor:pointer;font-family:var(--font-body);">Remove</button>' +
-    '</div>';
-  }).join('');
-}
-
-window.removeWishItem = function(name) {
-  var list = [];
-  try { list = JSON.parse(localStorage.getItem('cm_wishlist') || '[]'); } catch(e){}
-  list = list.filter(function(n){ return n !== name; });
-  localStorage.setItem('cm_wishlist', JSON.stringify(list));
-  renderWishlist();
-  /* Update stat */
-  var statVals = document.querySelectorAll('.pstat-val');
-  if (statVals[1]) statVals[1].textContent = list.length;
-  window.showToast('"' + name + '" removed from wishlist.');
-};
-
-/* ══════════════════════════════════════
-   TAB SWITCHING (Profile / Status)
-   ══════════════════════════════════════ */
-
-function initTabs() {
-  document.querySelectorAll('.tab-btn[data-tab]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var tab = this.dataset.tab;
-
-      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
-      this.classList.add('active');
-
-      /* Show/hide panels — account uses id="tab-profile" / id="tab-status" style */
-      var profilePanel = document.getElementById('tab-profile');
-      var statusPanel  = document.getElementById('tab-status');
-
-      if (tab === 'profile') {
-        if (profilePanel) profilePanel.style.display = '';
-        if (statusPanel)  statusPanel.style.display  = 'none';
-      } else {
-        if (profilePanel) profilePanel.style.display = 'none';
-        if (statusPanel)  statusPanel.style.display  = '';
-      }
-
-      /* Generic panel-xxx approach */
-      var panel = document.getElementById('panel-' + tab);
-      if (panel) {
-        document.querySelectorAll('[id^="panel-"]').forEach(function(p){ p.classList.remove('active'); });
-        panel.classList.add('active');
-      }
-    });
-  });
-}
-
-/* ══════════════════════════════════════
-   SECURITY ACTIONS
-   ══════════════════════════════════════ */
-
-function initSecurityActions() {
-  document.querySelectorAll('.security-action').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var row   = this.closest('.security-row');
-      var label = row ? (row.querySelector('.security-label')||{}).textContent || '' : '';
-      if (label.toLowerCase().includes('password')) {
-        window.showToast('Password reset email sent! Check your inbox.');
-      } else if (label.toLowerCase().includes('notif')) {
-        window.showToast('Notification preferences updated.');
-      } else {
-        window.showToast('Setting updated.');
-      }
-    });
-  });
-}
-
-/* ══════════════════════════════════════
-   SELLER CARD BUTTON
-   ══════════════════════════════════════ */
-
-function initSellerCard() {
-  document.querySelectorAll('.btn-list').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      window.location.href = 'seller.html';
-    });
-  });
-}
-
-/* ══════════════════════════════════════
-   INIT
-   ══════════════════════════════════════ */
+/* ══════════════════
+   BOOT
+   ══════════════════ */
 
 document.addEventListener('DOMContentLoaded', function() {
-  loadProfileIntoForm();
-  renderTodayHours();
-  renderAvailability();
-  renderRecentOrders();
-  renderWishlist();
-  initTabs();
-  initSecurityActions();
-  initSellerCard();
-
-  /* Live border highlight on focus */
-  document.querySelectorAll('.form-input, .form-select, textarea.form-input').forEach(function(el) {
-    el.addEventListener('focus', function(){ this.style.borderColor = 'var(--teal)'; });
-    el.addEventListener('blur',  function(){ this.style.borderColor = ''; });
+  init();
+  document.querySelectorAll('.form-input, .form-select').forEach(function(el) {
+    el.addEventListener('input', function(){ this.style.borderColor = ''; });
   });
-
-  /* If arrived from auth.html (just signed up), show welcome toast */
-  var ref = document.referrer;
-  if (ref && ref.includes('auth.html')) {
-    var session = {};
-    try { session = JSON.parse(sessionStorage.getItem('cm_user') || '{}'); } catch(e){}
-    if (session.name) {
-      window.showToast('Welcome, ' + session.name.split(' ')[0] + '! Your profile is ready.');
-    }
-  }
 });
