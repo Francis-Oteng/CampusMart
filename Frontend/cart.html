@@ -1,276 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Campus Mart - Cart</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart — CampusMarket</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Header */
-    .header {
-      background: #4f46e5;
-      color: white;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .header nav a {
-      color: white;
-      margin: 0 10px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    /* Page Title */
-    .title {
-      padding: 20px 30px;
-    }
-
-    .title h2 {
-      margin: 0;
-    }
-
+    body { background: var(--bg-gray); }
+    .page-hdr { background: var(--white); border-bottom: 1px solid var(--border); padding: 1.25rem 0; }
+    .breadcrumb { display: flex; align-items: center; gap: .375rem; font-size: .8125rem; color: var(--muted); margin-bottom: .375rem; }
+    .breadcrumb a { color: var(--muted); transition: color .15s; }
+    .breadcrumb a:hover { color: var(--teal); }
+    .breadcrumb svg { width: 12px; height: 12px; flex-shrink: 0; }
+    .page-hdr h1 { font-size: 1.625rem; font-weight: 800; color: var(--dark); }
+    .page-hdr p  { font-size: .9375rem; color: var(--muted); margin-top: .25rem; }
+    /* Steps */
+    .steps-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: .875rem 0; }
+    .steps { display: flex; align-items: center; justify-content: center; max-width: 520px; margin: 0 auto; gap: 0; }
+    .step { display: flex; align-items: center; gap: .5rem; }
+    .step-dot { width: 30px; height: 30px; border-radius: var(--r-full); border: 2px solid var(--border); display: grid; place-items: center; font-size: .75rem; font-weight: 700; color: var(--soft); background: var(--white); flex-shrink: 0; transition: all .2s; }
+    .step-dot svg { width: 13px; height: 13px; }
+    .step-lbl { font-size: .8125rem; font-weight: 600; color: var(--soft); white-space: nowrap; }
+    .step.active .step-dot { background: var(--teal); border-color: var(--teal); color: var(--white); }
+    .step.active .step-lbl  { color: var(--teal); }
+    .step.done .step-dot   { background: var(--teal); border-color: var(--teal); color: var(--white); }
+    .step.done .step-lbl   { color: var(--dark); }
+    .step-line { flex: 1; height: 2px; background: var(--border); min-width: 32px; max-width: 72px; margin: 0 .25rem; transition: background .3s; }
+    .step-line.done { background: var(--teal); }
     /* Layout */
-    .container {
-      display: flex;
-      gap: 20px;
-      padding: 20px 30px;
-    }
-
-    /* Cart Items */
-    .cart-items {
-      flex: 2;
-    }
-
-    .cart-item {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    .cart-item img {
-      width: 80px;
-      height: 80px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-
-    .item-details {
-      flex: 1;
-    }
-
-    .item-details h4 {
-      margin: 0;
-    }
-
-    .price {
-      font-weight: bold;
-      margin-top: 5px;
-    }
-
-    /* Quantity */
-    .quantity {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .quantity button {
-      padding: 5px 10px;
-      border: none;
-      background: #4f46e5;
-      color: white;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .remove {
-      color: red;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
+    .cart-layout { display: grid; grid-template-columns: 1fr 360px; gap: 1.5rem; padding: 2rem 0 4rem; }
+    /* Card */
+    .card { background: var(--white); border-radius: var(--r-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+    .card-hdr { display: flex; align-items: center; justify-content: space-between; padding: 1.125rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .card-ttl { font-size: 1rem; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: .5rem; }
+    .card-ttl svg { width: 16px; height: 16px; color: var(--teal); }
+    .item-count { background: var(--teal); color: var(--white); border-radius: var(--r-full); font-size: .625rem; font-weight: 700; padding: .1rem .5rem; }
+    .clear-btn { font-size: .8125rem; font-weight: 600; color: var(--red); background: none; border: none; cursor: pointer; font-family: var(--font-body); }
+    .clear-btn:hover { opacity: .7; }
+    /* Cart item */
+    .cart-item { display: grid; grid-template-columns: 80px 1fr auto; gap: 1rem; align-items: center; padding: 1.125rem 1.5rem; border-bottom: 1px solid var(--light); transition: background .15s; }
+    .cart-item:last-child { border-bottom: none; }
+    .cart-item:hover { background: var(--bg-gray); }
+    .ci-img { width: 80px; height: 80px; border-radius: var(--r-sm); overflow: hidden; background: var(--light); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: .55rem; font-weight: 700; color: var(--muted); text-transform: uppercase; text-align: center; padding: .25rem; }
+    .ci-img img { width: 100%; height: 100%; object-fit: cover; }
+    .ci-cat    { font-size: .6875rem; color: var(--muted); margin-bottom: .2rem; }
+    .ci-name   { font-size: .9375rem; font-weight: 700; color: var(--dark); margin-bottom: .2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ci-seller { font-size: .75rem; color: var(--muted); margin-bottom: .625rem; }
+    .ci-actions { display: flex; align-items: center; gap: .75rem; }
+    .qty-ctrl { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: var(--r-full); overflow: hidden; }
+    .qty-btn  { width: 28px; height: 28px; display: grid; place-items: center; background: none; border: none; cursor: pointer; color: var(--mid); transition: background .15s; }
+    .qty-btn:hover { background: var(--teal-bg); color: var(--teal); }
+    .qty-btn svg { width: 11px; height: 11px; }
+    .qty-num  { font-size: .875rem; font-weight: 700; color: var(--dark); padding: 0 .5rem; min-width: 26px; text-align: center; }
+    .rm-btn   { font-size: .75rem; font-weight: 600; color: var(--red); background: none; border: none; cursor: pointer; font-family: var(--font-body); display: flex; align-items: center; gap: .2rem; padding: .25rem .5rem; border-radius: var(--r-sm); transition: background .15s; }
+    .rm-btn:hover { background: var(--red-light); }
+    .rm-btn svg { width: 12px; height: 12px; }
+    .ci-price-col { text-align: right; flex-shrink: 0; }
+    .ci-price { font-size: 1.0625rem; font-weight: 800; color: #0284C7; transition: transform .2s; }
+    .ci-unit  { font-size: .6875rem; color: var(--muted); margin-top: .125rem; }
+    /* Empty */
+    .empty-state { text-align: center; padding: 4.5rem 2rem; }
+    .empty-icon { width: 72px; height: 72px; background: var(--teal-bg); border-radius: var(--r-full); display: grid; place-items: center; margin: 0 auto 1.25rem; }
+    .empty-icon svg { width: 32px; height: 32px; color: var(--teal); }
+    .empty-state h3 { font-size: 1.125rem; font-weight: 800; color: var(--dark); margin-bottom: .5rem; }
+    .empty-state p  { font-size: .9375rem; color: var(--muted); margin-bottom: 1.75rem; }
+    .btn-browse { display: inline-flex; align-items: center; gap: .5rem; padding: .875rem 2rem; background: var(--teal); color: var(--white); border-radius: var(--r-full); font-size: .9375rem; font-weight: 700; transition: background .15s, transform .15s; }
+    .btn-browse:hover { background: var(--teal-dark); transform: translateY(-2px); }
+    /* Also like */
+    .also-section { padding: 1.25rem 1.5rem; border-top: 1px solid var(--border); }
+    .also-ttl   { font-size: .75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .75rem; }
+    .also-grid  { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; }
+    .also-card  { border: 1.5px solid var(--border); border-radius: var(--r-sm); overflow: hidden; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+    .also-card:hover { border-color: var(--teal); box-shadow: var(--shadow-sm); }
+    .also-img   { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: .5rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .also-img img { width: 100%; height: 100%; object-fit: cover; }
+    .also-info  { padding: .5rem .625rem; }
+    .also-name  { font-size: .75rem; font-weight: 600; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .also-price { font-size: .75rem; font-weight: 700; color: #0284C7; }
+    .also-cta   { font-size: .625rem; font-weight: 700; color: var(--teal); }
     /* Summary */
-    .summary {
-      flex: 1;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      height: fit-content;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    .summary h3 {
-      margin-top: 0;
-    }
-
-    .summary div {
-      margin: 10px 0;
-    }
-
-    .total {
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border: none;
-      cursor: pointer;
-      border-radius: 8px;
-    }
-
-    .checkout {
-      background: #4f46e5;
-      color: white;
-    }
-
-    .continue {
-      background: white;
-      border: 1px solid #ccc;
-    }
-
-    /* Empty Cart */
-    .empty {
-      text-align: center;
-      padding: 50px;
-      display: none;
-    }
-
+    .summary-sticky { position: sticky; top: 80px; }
+    .promo-section { padding: 1.125rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .promo-lbl  { font-size: .6875rem; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .5rem; }
+    .promo-row  { display: flex; gap: .5rem; }
+    .promo-inp  { flex: 1; padding: .575rem .75rem; border: 1.5px solid var(--border); border-radius: var(--r-sm); font-size: .875rem; font-family: var(--font-body); outline: none; transition: border-color .15s; color: var(--dark); }
+    .promo-inp:focus { border-color: var(--teal); }
+    .promo-inp::placeholder { color: var(--soft); }
+    .promo-apply { padding: .575rem 1rem; background: var(--dark); color: var(--white); border-radius: var(--r-sm); font-size: .8125rem; font-weight: 700; border: none; cursor: pointer; font-family: var(--font-body); transition: background .15s; white-space: nowrap; }
+    .promo-apply:hover { background: var(--teal); }
+    .promo-msg { font-size: .75rem; margin-top: .375rem; }
+    .promo-msg.ok  { color: var(--green); }
+    .promo-msg.err { color: var(--red); }
+    .summary-lines { padding: 1.125rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: .625rem; }
+    .srow  { display: flex; justify-content: space-between; font-size: .875rem; }
+    .srow .lbl { color: var(--muted); }
+    .srow .val { font-weight: 600; color: var(--dark); }
+    .srow.disc .val { color: var(--green); }
+    .srow .free { color: var(--green); font-weight: 700; }
+    .sdash { border: none; border-top: 1px dashed var(--border); }
+    .total-row { display: flex; justify-content: space-between; align-items: center; padding: 1.125rem 1.5rem; }
+    .total-lbl { font-size: 1rem; font-weight: 700; color: var(--dark); }
+    .total-val { font-size: 1.375rem; font-weight: 800; color: #0284C7; }
+    .btn-checkout { display: flex; align-items: center; justify-content: center; gap: .625rem; width: calc(100% - 3rem); margin: 0 1.5rem 1rem; padding: .9375rem; background: var(--teal); color: var(--white); border-radius: var(--r-full); font-size: 1rem; font-weight: 700; border: none; cursor: pointer; font-family: var(--font-body); transition: background .15s, transform .15s; box-shadow: var(--shadow-md); }
+    .btn-checkout:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .btn-checkout:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .btn-checkout svg { width: 16px; height: 16px; }
+    .btn-continue { display: flex; align-items: center; justify-content: center; gap: .375rem; font-size: .875rem; font-weight: 600; color: var(--muted); padding: 0 1.5rem 1.25rem; cursor: pointer; background: none; border: none; font-family: var(--font-body); width: 100%; transition: color .15s; }
+    .btn-continue:hover { color: var(--teal); }
+    .trust-row { display: flex; justify-content: center; gap: 1rem; padding: .875rem 1.5rem; border-top: 1px solid var(--border); }
+    .trust-item { display: flex; align-items: center; gap: .3rem; font-size: .6875rem; color: var(--muted); }
+    .trust-item svg { width: 13px; height: 13px; color: var(--teal); }
+    @media(max-width:1024px) { .cart-layout{grid-template-columns:1fr;} .summary-sticky{position:static;} }
+    @media(max-width:768px)  { .cart-item{grid-template-columns:64px 1fr;} .ci-price-col{grid-column:2;text-align:left;} .also-grid{grid-template-columns:repeat(2,1fr);} }
+    @media(max-width:480px)  { .steps .step-lbl{display:none;} }
   </style>
 </head>
 <body>
-
-  <!-- Header -->
-  <div class="header">
-    <div>CampusMarket</div>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Catalog</a>
-      <a href="#">Account</a>
-    </nav>
+<div class="announce">🎓 Free shipping on orders over ₵350 for all students!</div>
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo"><div class="logo-icon">CM</div><span class="logo-text">CampusMarket</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="catalog.html">Catalog</a></li>
+      <li><a href="account.html">Account</a></li>
+      <li><a href="admin.html">Admin</a></li>
+      <li><a href="help.html">Help</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="auth.html" class="btn-outline">Sign in</a>
+      <a href="auth.html?tab=signup" class="btn-primary">Sign up</a>
+      <button class="cart-btn" aria-label="Cart" onclick="window.location.href='cart.html'">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        <span class="cart-badge">0</span>
+      </button>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
   </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="menuClose">&#x2715;</button>
+  <a href="index.html">Home</a><a href="catalog.html">Catalog</a><a href="account.html">Account</a><a href="admin.html">Admin</a><a href="help.html">Help</a>
+  <a href="auth.html">Sign in</a>
+  <a href="auth.html?tab=signup" class="btn-primary" style="text-align:center;border-radius:9999px;padding:.75rem;">Sign up</a>
+</div>
 
-  <!-- Title -->
-  <div class="title">
-    <h2>🛒 Your Cart</h2>
-    <p>Review your items before checkout</p>
-  </div>
-
+<!-- Page Header -->
+<div class="page-hdr">
   <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+      <a href="catalog.html">Catalog</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+      <span>Cart</span>
+    </div>
+    <h1>Your Cart</h1>
+    <p id="cartSummText">Loading...</p>
+  </div>
+</div>
 
-    <!-- Cart Items -->
-    <div class="cart-items" id="cartItems">
-
-      <!-- Item -->
-      <div class="cart-item" data-price="18.99">
-        <img src="https://via.placeholder.com/80">
-        <div class="item-details">
-          <h4>Ceramic Mug</h4>
-          <p>by Emma</p>
-          <div class="price">$18.99</div>
-        </div>
-
-        <div class="quantity">
-          <button onclick="changeQty(this, -1)">-</button>
-          <span class="qty">1</span>
-          <button onclick="changeQty(this, 1)">+</button>
-        </div>
-
-        <div class="remove" onclick="removeItem(this)">Remove</div>
+<!-- Steps -->
+<div class="steps-bar">
+  <div class="container">
+    <div class="steps">
+      <div class="step active">
+        <div class="step-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
+        <span class="step-lbl">Cart</span>
       </div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-dot">2</div><span class="step-lbl">Details</span></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-dot">3</div><span class="step-lbl">Payment</span></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-dot">4</div><span class="step-lbl">Confirm</span></div>
+    </div>
+  </div>
+</div>
 
-      <!-- Item -->
-      <div class="cart-item" data-price="24.50">
-        <img src="https://via.placeholder.com/80">
-        <div class="item-details">
-          <h4>Tote Bag</h4>
-          <p>by Marcus</p>
-          <div class="price">$24.50</div>
+<main>
+  <div class="container cart-layout">
+    <!-- Items -->
+    <div>
+      <div class="card">
+        <div class="card-hdr">
+          <h2 class="card-ttl">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+            Items in Cart <span class="item-count" id="itemCountBadge">0</span>
+          </h2>
+          <button class="clear-btn" onclick="clearCart()">Clear All</button>
         </div>
-
-        <div class="quantity">
-          <button onclick="changeQty(this, -1)">-</button>
-          <span class="qty">1</span>
-          <button onclick="changeQty(this, 1)">+</button>
+        <div id="cartItemsList"></div>
+        <div id="alsoSection" style="display:none;">
+          <div class="also-section">
+            <div class="also-ttl">You may also like</div>
+            <div class="also-grid" id="alsoGrid"></div>
+          </div>
         </div>
-
-        <div class="remove" onclick="removeItem(this)">Remove</div>
       </div>
-
     </div>
 
     <!-- Summary -->
-    <div class="summary">
-      <h3>Order Summary</h3>
-
-      <div>Subtotal: $<span id="subtotal">0</span></div>
-      <div>Shipping: $5.00</div>
-      <div class="total">Total: $<span id="total">0</span></div>
-
-      <button class="btn checkout">Proceed to Checkout</button>
-      <button class="btn continue">Continue Shopping</button>
+    <div>
+      <div class="card summary-sticky">
+        <div class="card-hdr">
+          <h2 class="card-ttl">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Order Summary
+          </h2>
+        </div>
+        <div class="promo-section">
+          <div class="promo-lbl">Promo Code</div>
+          <div class="promo-row">
+            <input class="promo-inp" id="promoInput" type="text" placeholder="e.g. STUDENT10" />
+            <button class="promo-apply" onclick="applyPromo()">Apply</button>
+          </div>
+          <div class="promo-msg" id="promoMsg"></div>
+        </div>
+        <div class="summary-lines">
+          <div class="srow"><span class="lbl">Subtotal (<span id="summaryCount">0</span> items)</span><span class="val" id="subtotalVal">₵0.00</span></div>
+          <div class="srow"><span class="lbl">Delivery</span><span class="val" id="deliveryVal">₵0.00</span></div>
+          <div class="srow disc" id="discRow" style="display:none;"><span class="lbl">Promo</span><span class="val" id="discVal">−₵0.00</span></div>
+          <hr class="sdash"/>
+          <div class="srow" style="font-size:.8125rem;"><span class="lbl" style="color:var(--muted);">Free delivery over ₵350</span><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" style="width:13px;height:13px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+        <div class="total-row">
+          <span class="total-lbl">Total</span>
+          <span class="total-val" id="totalVal">₵0.00</span>
+        </div>
+        <button class="btn-checkout" id="checkoutBtn" onclick="goCheckout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Proceed to Checkout
+        </button>
+        <button class="btn-continue" onclick="window.location.href='catalog.html'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+          Continue Shopping
+        </button>
+        <div class="trust-row">
+          <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Secure</div>
+          <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>Easy returns</div>
+          <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>Protected</div>
+        </div>
+      </div>
     </div>
-
   </div>
+</main>
 
-  <!-- Empty Cart -->
-  <div class="empty" id="emptyCart">
-    <h3>🛒 Your cart is empty</h3>
-    <p>Add some products to get started</p>
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="footer-logo"><div class="footer-logo-icon">CM</div><span class="footer-logo-name">Campus Mart</span></div><p class="footer-desc">Your trusted student marketplace for buying and selling quality products on campus.</p>
+        <div class="social-links"><a href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a><a href="#" class="social-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a></div>
+      </div>
+      <div class="footer-col"><h3>Quick Links</h3><ul><li><a href="index.html">Home</a></li><li><a href="catalog.html">Shop</a></li><li><a href="seller.html">Sell Products</a></li></ul></div>
+      <div class="footer-col"><h3>Support</h3><ul><li><a href="account.html">My Account</a></li><li><a href="help.html">Help Center</a></li><li><a href="help.html#contact">Contact Us</a></li></ul></div>
+      <div class="footer-col"><h3>Contact</h3><div class="footer-contact"><div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>support@campusmart.com</span></div></div></div>
+    </div>
+    <div class="footer-bottom"><p class="footer-copy">&copy; <span id="current-year"></span> Campus Mart. All rights reserved.</p><nav class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></nav></div>
   </div>
-
-  <script>
-    function updateCart() {
-      let items = document.querySelectorAll(".cart-item");
-      let subtotal = 0;
-
-      items.forEach(item => {
-        let price = parseFloat(item.dataset.price);
-        let qty = parseInt(item.querySelector(".qty").innerText);
-        subtotal += price * qty;
-      });
-
-      document.getElementById("subtotal").innerText = subtotal.toFixed(2);
-      document.getElementById("total").innerText = (subtotal + 5).toFixed(2);
-
-      if (items.length === 0) {
-        document.getElementById("emptyCart").style.display = "block";
-      }
-    }
-
-    function changeQty(button, change) {
-      let qtyElement = button.parentElement.querySelector(".qty");
-      let qty = parseInt(qtyElement.innerText);
-
-      qty += change;
-      if (qty < 1) qty = 1;
-
-      qtyElement.innerText = qty;
-      updateCart();
-    }
-
-    function removeItem(el) {
-      el.parentElement.remove();
-      updateCart();
-    }
-
-    // Initial calculation
-    updateCart();
-  </script>
-
+</footer>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg><span id="toastMsg"></span></div>
+<script src="shared.js"></script>
+<script src="cart.js"></script>
 </body>
 </html>
