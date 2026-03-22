@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — CampusMarket</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body { background: var(--bg-gray); }
+    .auth-wrap { min-height: calc(100vh - 64px); display: flex; align-items: center; justify-content: center; padding: 2.5rem 1rem; }
+    .auth-card { background: var(--white); border-radius: var(--r-lg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); width: 100%; max-width: 500px; overflow: hidden; }
+    .card-accent { height: 4px; background: linear-gradient(90deg, #7C3AED 0%, #9333EA 100%); }
+
+    /* Brand */
+    .auth-brand { text-align: center; padding: 2.25rem 2rem 0; }
+    .auth-logo { display: inline-flex; align-items: center; gap: .625rem; margin-bottom: 1.5rem; }
+    .auth-logo-icon { width: 40px; height: 40px; background: var(--teal); border-radius: var(--r-sm); display: grid; place-items: center; color: var(--white); font-weight: 800; font-size: .875rem; }
+    .auth-logo-name { font-weight: 700; font-size: 1.25rem; color: var(--dark); }
+    .auth-heading { font-family: var(--font-display); font-size: 1.625rem; color: var(--dark); margin-bottom: .5rem; }
+    .auth-sub { font-size: .9375rem; color: var(--muted); line-height: 1.6; }
+
+    /* Steps */
+    #step1, #step2 { padding: 1.75rem 2rem 2rem; }
+    #step2 { display: none; }
+    .step-dots { display: flex; gap: .5rem; justify-content: center; margin-bottom: 1.75rem; }
+    .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all .2s; }
+    .step-dot.active { background: #7C3AED; width: 24px; border-radius: 4px; }
+    .step-dot.done   { background: var(--teal); }
+
+    /* Form fields */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .875rem; }
+    .fg { display: flex; flex-direction: column; gap: .375rem; margin-bottom: 1rem; }
+    .fl { font-size: .75rem; font-weight: 700; color: var(--mid); }
+    .fc { padding: .7rem .875rem; border: 1.5px solid var(--border); border-radius: var(--r-sm); font-size: .9375rem; font-family: var(--font-body); color: var(--dark); background: var(--white); outline: none; transition: border-color .2s, box-shadow .2s; width: 100%; }
+    .fc:focus { border-color: #7C3AED; box-shadow: 0 0 0 3px #F5F3FF; }
+    .fc::placeholder { color: var(--soft); }
+    .fc.err { border-color: var(--red); }
+    select.fc { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6,9 12,15 18,9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .75rem center; padding-right: 2.25rem; cursor: pointer; }
+    .ferr { font-size: .6875rem; color: var(--red); display: none; margin-top: .25rem; }
+    .ferr.show { display: block; }
+    .pw-wrap { position: relative; }
+    .pw-wrap .fc { padding-right: 2.75rem; }
+    .pw-eye { position: absolute; right: .875rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--soft); display: grid; place-items: center; padding: 0; }
+    .pw-eye:hover { color: var(--mid); }
+    .pw-eye svg { width: 17px; height: 17px; }
+
+    /* Password strength */
+    .pw-strength { margin-top: .5rem; }
+    .pw-bar { height: 4px; background: var(--light); border-radius: 4px; overflow: hidden; }
+    .pw-fill { height: 100%; border-radius: 4px; width: 0; transition: width .3s, background .3s; }
+    .pw-lbl { font-size: .6875rem; color: var(--muted); margin-top: .25rem; }
+
+    /* Role selection (step 2) */
+    .role-section-title { font-size: .75rem; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .875rem; }
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: .75rem; }
+    .role-card { border: 2px solid var(--border); border-radius: var(--r-md); padding: 1.25rem 1rem; cursor: pointer; text-align: center; transition: border-color .2s, background .2s, transform .15s; }
+    .role-card:hover { border-color: #7C3AED; transform: translateY(-2px); }
+    .role-card.selected { border-color: #7C3AED; background: #F5F3FF; }
+    .role-card input[type=radio] { display: none; }
+    .role-card-icon { width: 48px; height: 48px; border-radius: var(--r-md); display: grid; place-items: center; margin: 0 auto .75rem; }
+    .role-card-icon svg { width: 22px; height: 22px; }
+    .role-card-title { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: .25rem; }
+    .role-card-desc  { font-size: .75rem; color: var(--muted); line-height: 1.4; }
+    .role-card.selected .role-card-title { color: #7C3AED; }
+    .role-both { display: flex; align-items: center; gap: .875rem; border: 2px solid var(--border); border-radius: var(--r-md); padding: 1rem 1.25rem; cursor: pointer; transition: border-color .2s, background .2s; margin-bottom: 1.5rem; }
+    .role-both:hover { border-color: var(--teal); }
+    .role-both.selected { border-color: var(--teal); background: var(--teal-bg); }
+    .role-both input[type=radio] { display: none; }
+    .role-both-icon { width: 44px; height: 44px; border-radius: var(--r-sm); background: var(--teal-bg); display: grid; place-items: center; flex-shrink: 0; }
+    .role-both-icon svg { width: 22px; height: 22px; color: var(--teal); }
+    .role-both-title { font-size: 1rem; font-weight: 700; color: var(--dark); }
+    .role-both-desc  { font-size: .8125rem; color: var(--muted); margin-top: .125rem; }
+    .role-both.selected .role-both-title { color: var(--teal); }
+
+    /* Buttons */
+    .btn-purple { width: 100%; padding: .9375rem; background: #7C3AED; color: var(--white); border-radius: var(--r-sm); font-size: 1rem; font-weight: 700; border: none; cursor: pointer; font-family: var(--font-body); transition: background .15s, transform .1s; display: flex; align-items: center; justify-content: center; gap: .5rem; margin-top: .5rem; }
+    .btn-purple:hover { background: #6D28D9; transform: translateY(-1px); }
+    .btn-purple:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .btn-purple svg { width: 17px; height: 17px; }
+    .btn-back { width: 100%; padding: .75rem; background: none; color: var(--muted); border: 1.5px solid var(--border); border-radius: var(--r-sm); font-size: .9375rem; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: border-color .15s, color .15s; margin-top: .625rem; display: flex; align-items: center; justify-content: center; gap: .5rem; }
+    .btn-back:hover { border-color: var(--teal); color: var(--teal); }
+    .btn-back svg { width: 15px; height: 15px; }
+    .terms-note { font-size: .8125rem; color: var(--muted); text-align: center; margin-top: 1rem; line-height: 1.6; }
+    .terms-note a { color: #7C3AED; font-weight: 600; }
+
+    /* Footer */
+    .auth-footer { text-align: center; padding: 1.125rem 2rem 1.5rem; background: var(--bg-gray); border-top: 1px solid var(--border); font-size: .9375rem; color: var(--muted); }
+    .auth-footer a { color: var(--teal); font-weight: 700; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media(max-width:480px) { #step1,#step2{padding:1.5rem 1.25rem 1.75rem;} .auth-brand{padding:1.75rem 1.25rem 0;} .auth-footer{padding:1rem 1.25rem 1.25rem;} .form-row{grid-template-columns:1fr;} .role-grid{grid-template-columns:1fr 1fr;} }
+  </style>
+</head>
+<body>
+
+<div class="announce">🎓 Free shipping on orders over ₵350 for all students!</div>
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo"><div class="logo-icon">CM</div><span class="logo-text">CampusMarket</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="catalog.html">Catalog</a></li>
+      <li><a href="account.html">Account</a></li>
+      <li><a href="admin.html">Admin</a></li>
+      <li><a href="help.html">Help</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="signin.html" class="btn-outline">Sign in</a>
+      <a href="signup.html" class="btn-primary active">Sign up</a>
+      <button class="cart-btn" aria-label="Cart" onclick="window.location.href='cart.html'">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        <span class="cart-badge">0</span>
+      </button>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="menuClose">&#x2715;</button>
+  <a href="index.html">Home</a><a href="catalog.html">Catalog</a><a href="account.html">Account</a><a href="admin.html">Admin</a><a href="help.html">Help</a>
+  <a href="signin.html">Sign in</a>
+  <a href="signup.html" class="btn-primary" style="text-align:center;border-radius:9999px;padding:.75rem;">Sign up</a>
+</div>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="card-accent"></div>
+
+    <div class="auth-brand">
+      <a href="index.html" class="auth-logo">
+        <div class="auth-logo-icon">CM</div>
+        <span class="auth-logo-name">CampusMarket</span>
+      </a>
+      <h1 class="auth-heading">Join CampusMarket</h1>
+      <p class="auth-sub">Create your free account. It takes under two minutes.</p>
+    </div>
+
+    <!-- ── STEP 1: Personal details ── -->
+    <div id="step1">
+      <div class="step-dots">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label class="fl" for="suFirst">First Name</label><input class="fc" id="suFirst" type="text" placeholder="Kwame" /><span class="ferr" id="suFirstErr">Required</span></div>
+        <div class="fg"><label class="fl" for="suLast">Last Name</label><input class="fc" id="suLast" type="text" placeholder="Asante" /><span class="ferr" id="suLastErr">Required</span></div>
+      </div>
+      <div class="fg"><label class="fl" for="suEmail">Campus Email</label><input class="fc" id="suEmail" type="email" placeholder="you@campus.edu" /><span class="ferr" id="suEmailErr">Enter a valid campus email</span></div>
+      <div class="fg"><label class="fl" for="suUni">University / Campus</label>
+        <select class="fc" id="suUni">
+          <option value="">Select your campus...</option>
+          <option>KNUST</option>
+          <option>University of Ghana, Legon</option>
+          <option>Ashesi University</option>
+          <option>UCC</option>
+          <option>University of Professional Studies</option>
+          <option>Other</option>
+        </select>
+        <span class="ferr" id="suUniErr">Please select your campus</span>
+      </div>
+      <div class="fg"><label class="fl" for="suPw">Password</label>
+        <div class="pw-wrap">
+          <input class="fc" id="suPw" type="password" placeholder="Create a strong password (min. 8 chars)" oninput="checkStr(this.value)" />
+          <button class="pw-eye" type="button" onclick="togglePw('suPw',this)" aria-label="Toggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="pw-strength"><div class="pw-bar"><div class="pw-fill" id="pwFill"></div></div><div class="pw-lbl" id="pwLbl">Enter a password</div></div>
+        <span class="ferr" id="suPwErr">Password must be at least 8 characters</span>
+      </div>
+      <button class="btn-purple" onclick="suGoStep2()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+        Next — Choose Your Role
+      </button>
+    </div>
+
+    <!-- ── STEP 2: Role selection ── -->
+    <div id="step2">
+      <div class="step-dots">
+        <div class="step-dot done"></div>
+        <div class="step-dot active"></div>
+      </div>
+
+      <p class="role-section-title">How will you use CampusMarket?</p>
+
+      <div class="role-grid">
+        <label class="role-card selected" id="rcBuyer" onclick="pickRole('buyer')">
+          <input type="radio" name="role" value="buyer" checked />
+          <div class="role-card-icon" style="background:#DBEAFE;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+          </div>
+          <div class="role-card-title">Buyer</div>
+          <div class="role-card-desc">Browse &amp; purchase student-made products</div>
+        </label>
+        <label class="role-card" id="rcSeller" onclick="pickRole('seller')">
+          <input type="radio" name="role" value="seller" />
+          <div class="role-card-icon" style="background:#F5F3FF;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          </div>
+          <div class="role-card-title">Seller</div>
+          <div class="role-card-desc">List your handmade &amp; custom products</div>
+        </label>
+      </div>
+
+      <label class="role-both selected-both" id="rcBoth" onclick="pickRole('both')">
+        <input type="radio" name="role" value="both" />
+        <div class="role-both-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div>
+          <div class="role-both-title">Both — Buyer &amp; Seller</div>
+          <div class="role-both-desc">Full access: browse, purchase, list and sell your own products</div>
+        </div>
+      </label>
+
+      <button class="btn-purple" id="suCreateBtn" onclick="doSignUp()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Create My Account
+      </button>
+      <button class="btn-back" onclick="suBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+        Back — Edit my details
+      </button>
+      <p class="terms-note">By signing up you agree to our <a href="#">Terms of Service</a> &amp; <a href="#">Privacy Policy</a>.</p>
+    </div>
+
+    <div class="auth-footer">
+      Already have an account? <a href="signin.html">Sign in →</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg><span id="toastMsg"></span></div>
+<script src="shared.js"></script>
+<script>
+  var chosenRole = 'buyer';
+
+  document.addEventListener('DOMContentLoaded', function () {
+    try {
+      var u = JSON.parse(sessionStorage.getItem('cm_user') || 'null');
+      if (u && u.loggedIn) { window.location.href = 'account.html'; return; }
+    } catch(e){}
+    document.querySelectorAll('.fc').forEach(function(el) {
+      el.addEventListener('input', function() { this.classList.remove('err'); });
+    });
+  });
+
+  /* ── Step 1 validation ── */
+  function suGoStep2() {
+    var first = document.getElementById('suFirst').value.trim();
+    var last  = document.getElementById('suLast').value.trim();
+    var email = document.getElementById('suEmail').value.trim();
+    var uni   = document.getElementById('suUni').value;
+    var pw    = document.getElementById('suPw').value;
+    var ok    = true;
+    if (!first) { mark('suFirst','suFirstErr',true); ok=false; }
+    if (!last)  { mark('suLast','suLastErr',true);   ok=false; }
+    if (!window.validateEmail(email)) { mark('suEmail','suEmailErr',true); ok=false; }
+    if (!uni)   { mark('suUni','suUniErr',true); ok=false; }
+    if (pw.length < 8) { mark('suPw','suPwErr',true); ok=false; }
+    if (!ok) return;
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'block';
+  }
+
+  function suBack() {
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('step1').style.display = 'block';
+  }
+
+  /* ── Role selection ── */
+  function pickRole(role) {
+    chosenRole = role;
+    document.getElementById('rcBuyer').classList.toggle('selected',  role==='buyer');
+    document.getElementById('rcSeller').classList.toggle('selected', role==='seller');
+    document.getElementById('rcBoth').classList.toggle('selected',   role==='both');
+  }
+
+  /* ── Create account ── */
+  function doSignUp() {
+    var btn = document.getElementById('suCreateBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px;animation:spin .7s linear infinite;"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Creating account...';
+
+    setTimeout(function () {
+      var first    = document.getElementById('suFirst').value.trim();
+      var last     = document.getElementById('suLast').value.trim();
+      var email    = document.getElementById('suEmail').value.trim();
+      var uni      = document.getElementById('suUni').value;
+      var name     = first + ' ' + last;
+      var initials = (first[0]||'') + (last[0]||'');
+      var joinDate = new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+
+      var user = { name:name, email:email, role:chosenRole, loggedIn:true, joinDate:joinDate };
+      sessionStorage.setItem('cm_user', JSON.stringify(user));
+      localStorage.setItem('cm_profile', JSON.stringify({ name:name, email:email, campus:uni, role:chosenRole, initials:initials.toUpperCase(), joinDate:joinDate }));
+
+      window.location.href = 'account.html';
+    }, 1100);
+  }
+
+  /* ── Password strength ── */
+  function checkStr(pw) {
+    var fill = document.getElementById('pwFill');
+    var lbl  = document.getElementById('pwLbl');
+    if (!fill || !lbl) return;
+    var score = [pw.length>=8, /[A-Z]/.test(pw), /[0-9]/.test(pw), /[^A-Za-z0-9]/.test(pw)].filter(Boolean).length;
+    var levels = [
+      {w:'0%',   bg:'var(--border)', t:'Enter a password'},
+      {w:'25%',  bg:'var(--red)',    t:'Too weak'},
+      {w:'50%',  bg:'#F59E0B',      t:'Fair'},
+      {w:'75%',  bg:'#0284C7',      t:'Good'},
+      {w:'100%', bg:'var(--green)', t:'Strong ✓'},
+    ];
+    var l = levels[pw.length===0 ? 0 : score];
+    fill.style.width = l.w; fill.style.background = l.bg;
+    lbl.textContent = l.t; lbl.style.color = l.bg==='var(--border)' ? 'var(--muted)' : l.bg;
+  }
+
+  /* ── Password toggle ── */
+  function togglePw(id, btn) {
+    var inp = document.getElementById(id);
+    var show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    var svg = btn.querySelector('svg');
+    if (svg) svg.innerHTML = show
+      ? '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+      : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  }
+
+  function mark(fid, eid, show) {
+    var f=document.getElementById(fid); var e=document.getElementById(eid);
+    if(f) f.classList.toggle('err',show); if(e) e.classList.toggle('show',show);
+  }
+</script>
+</body>
+</html>
