@@ -190,13 +190,13 @@
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="catalog.html">Catalog</a></li>
-      <li><a href="Account.html" class="active">Account</a></li>
+      <li><a href="account.html" class="active">Account</a></li>
       <li><a href="admin.html">Admin</a></li>
       <li><a href="help.html">Help</a></li>
     </ul>
     <div class="nav-actions">
-      <a href="Sign-in.html" class="btn-outline" id="navSignin">Sign in</a>
-      <a href="Sign-up.html" class="btn-primary" id="navSignup">Sign up</a>
+      <a href="signin.html" class="btn-outline" id="navSign">Sign in</a>
+      <a href="signup.html" class="btn-primary" id="navSignup">Sign up</a>
       <button class="cart-btn" aria-label="Cart" onclick="window.location.href='cart.html'">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
         <span class="cart-badge">0</span>
@@ -208,12 +208,12 @@
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-menu-close" id="menuClose">&#x2715;</button>
   <a href="index.html">Home</a><a href="catalog.html">Catalog</a><a href="account.html">Account</a><a href="admin.html">Admin</a><a href="help.html">Help</a>
-  <a href="Sign-in.html" class="btn-outline" id="menuSignin">Sign in</a>
-  <a href="Sign-up.html" class="btn-primary" style="text-align:center;border-radius:9999px;padding:.75rem;">Sign up</a>
+  <a href="signin.html">Sign in</a>
+  <a href="signup.html" class="btn-primary" style="text-align:center;border-radius:9999px;padding:.75rem;">Sign up</a>
 </div>
 
 <!-- ══════════════════════════════════════════
-     NOT SIGNED IN — prompt to go to auth.html
+     NOT SIGNED IN — prompt to sign in or sign up
      ══════════════════════════════════════════ -->
 <div id="guestView">
   <div class="guest-prompt-wrap">
@@ -227,7 +227,7 @@
       <h2>Your Account</h2>
       <p>Sign in to view your orders, wishlist, and profile settings. New to CampusMarket? Create a free account in under two minutes.</p>
       <div class="guest-prompt-btns">
-        <button class="btn-go-signin" onclick="window.location.href='Sign-in.html'">
+        <button class="btn-go-signin" onclick="window.location.href='signin.html'">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/>
             <polyline points="10,17 15,12 10,7"/>
@@ -235,7 +235,7 @@
           </svg>
           Sign In to My Account
         </button>
-        <button class="btn-go-signup" onclick="window.location.href='Sign-up.html?tab=signup'">
+        <button class="btn-go-signup" onclick="window.location.href='signup.html'">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
             <circle cx="8.5" cy="7" r="4"/>
@@ -278,7 +278,7 @@
           </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.875rem;">
-          <div class="role-switch" id="roleSwitchBar" style="display:none;">
+          <div class="role-switch" id="roleSwitchBar">
             <button class="rs-btn active" id="rsBuyer" onclick="switchView('buyer')">Buyer</button>
             <button class="rs-btn" id="rsSeller" onclick="switchView('seller')">Seller</button>
           </div>
@@ -372,7 +372,7 @@
   </div><!-- /buyerDash -->
 
   <!-- ── SELLER DASHBOARD ── -->
-  <div id="sellerDash" style="display:none;">
+  <div id="sellerDash">
     <div class="container acct-layout">
       <!-- Left -->
       <div class="left-col">
@@ -389,7 +389,7 @@
                 <div class="form-group"><label class="form-label" for="sPhone">Phone Number</label><input class="form-input" id="sPhone" type="tel" placeholder="024 000 0000" /></div>
                 <div class="form-group"><label class="form-label" for="sCampus">University</label><input class="form-input" id="sCampus" type="text" placeholder="e.g. KNUST" /></div>
               </div>
-              <div class="sec-hd" style="margin-top:1.5rem;"><div class="sec-hd-icon" style="background:#FDF4FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#9333EA" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><span class="sec-hd-lbl">Store Settings</span><a href="Account.html" class="card-lnk" style="margin-left:auto;font-size:.75rem;font-weight:700;color:var(--teal);display:flex;align-items:center;gap:.25rem;">Full Dashboard <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;"><polyline points="9,18 15,12 9,6"/></svg></a></div>
+              <div class="sec-hd" style="margin-top:1.5rem;"><div class="sec-hd-icon" style="background:#FDF4FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#9333EA" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><span class="sec-hd-lbl">Store Settings</span><a href="SellerDashboard.html" style="margin-left:auto;font-size:.75rem;font-weight:700;color:var(--teal);display:flex;align-items:center;gap:.25rem;">Full Dashboard <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;"><polyline points="9,18 15,12 9,6"/></svg></a></div>
               <div class="form-grid">
                 <div class="form-group"><label class="form-label" for="sStoreName">Store Name</label><input class="form-input" id="sStoreName" type="text" placeholder="e.g. Ama's Crafts" /></div>
                 <div class="form-group"><label class="form-label" for="sListCat">Primary Category</label><select class="form-select" id="sListCat"><option value="">Select...</option><option>Art &amp; Crafts</option><option>Fashion</option><option>Stationery</option><option>Home Decor</option><option>Tech Accessories</option><option>Beauty &amp; Wellness</option></select></div>
@@ -411,15 +411,79 @@
           </div>
         </div>
 
-        <!-- Listings tab — SELLER ONLY -->
+        <!-- SELLER OVERVIEW TAB -->
+        <div class="tab-panel" id="s-tab-overview">
+          <!-- Stat cards -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem;" class="s-stat-grid">
+            <div class="card" style="padding:1.25rem;display:flex;align-items:center;gap:.875rem;">
+              <div style="width:42px;height:42px;border-radius:var(--r-sm);background:#F5F3FF;display:grid;place-items:center;flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="#9333EA" stroke-width="2" style="width:19px;height:19px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+              <div><div style="font-size:1.375rem;font-weight:800;color:var(--dark);line-height:1;" id="sStatListings">6</div><div style="font-size:.6875rem;color:var(--muted);margin-top:.25rem;">Listings</div></div>
+            </div>
+            <div class="card" style="padding:1.25rem;display:flex;align-items:center;gap:.875rem;">
+              <div style="width:42px;height:42px;border-radius:var(--r-sm);background:#FEF3C7;display:grid;place-items:center;flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" style="width:19px;height:19px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+              <div><div style="font-size:1.375rem;font-weight:800;color:var(--dark);line-height:1;" id="sStatOrders">6</div><div style="font-size:.6875rem;color:var(--muted);margin-top:.25rem;">Orders</div></div>
+            </div>
+            <div class="card" style="padding:1.25rem;display:flex;align-items:center;gap:.875rem;">
+              <div style="width:42px;height:42px;border-radius:var(--r-sm);background:#DCFCE7;display:grid;place-items:center;flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" style="width:19px;height:19px;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+              <div><div style="font-size:1.1rem;font-weight:800;color:var(--dark);line-height:1;" id="sStatRevenue">GH₵2,840</div><div style="font-size:.6875rem;color:var(--muted);margin-top:.25rem;">Earned</div></div>
+            </div>
+            <div class="card" style="padding:1.25rem;display:flex;align-items:center;gap:.875rem;">
+              <div style="width:42px;height:42px;border-radius:var(--r-sm);background:#FFFBEB;display:grid;place-items:center;flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" style="width:19px;height:19px;"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+              <div><div style="font-size:1.375rem;font-weight:800;color:#F59E0B;line-height:1;">4.9★</div><div style="font-size:.6875rem;color:var(--muted);margin-top:.25rem;">Rating</div></div>
+            </div>
+          </div>
+          <!-- Sales chart -->
+          <div class="card" style="margin-bottom:1.25rem;">
+            <div class="card-hdr"><h2 class="card-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>Sales Overview — Last 6 Months</h2></div>
+            <div class="card-body"><div style="position:relative;height:200px;"><canvas id="sellerChart"></canvas></div></div>
+          </div>
+          <!-- Recent orders preview -->
+          <div class="card">
+            <div class="card-hdr"><h2 class="card-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Recent Orders</h2><button class="card-lnk" onclick="activateDash('seller','orders')">View all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg></button></div>
+            <div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Order ID</th><th>Buyer</th><th>Product</th><th>Amount</th><th>Status</th></tr></thead><tbody id="sRecentOrdersBody"></tbody></table></div>
+          </div>
+        </div>
+
+        <!-- SELLER LISTINGS TAB -->
         <div class="tab-panel" id="s-tab-listings">
           <div class="card">
-            <div class="card-hdr"><h2 class="card-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>My Listings</h2><a href="Categories.html" class="card-lnk">Manage all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg></a></div>
-            <div style="padding:2.5rem;text-align:center;">
-              <div style="width:56px;height:56px;background:var(--teal-bg);border-radius:var(--r-full);display:grid;place-items:center;margin:0 auto 1rem;"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" style="width:26px;height:26px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
-              <p style="font-size:.9375rem;font-weight:600;color:var(--dark);margin-bottom:.5rem;">Manage listings in your Seller Dashboard</p>
-              <p style="font-size:.875rem;color:var(--muted);margin-bottom:1.5rem;">Add products, track stock, view orders received, and see your earnings all in one place.</p>
-              <a href="Account.html" class="btn-go-seller" style="display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 2rem;background:var(--teal);color:var(--white);border-radius:var(--r-full);font-size:.9375rem;font-weight:700;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Go to Seller Dashboard</a>
+            <div class="card-hdr">
+              <h2 class="card-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>My Listings</h2>
+              <button class="card-lnk" onclick="activateDash('seller','add-listing')">+ Add New</button>
+            </div>
+            <div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody id="sListingsBody"></tbody></table></div>
+          </div>
+        </div>
+
+        <!-- ADD LISTING TAB -->
+        <div class="tab-panel" id="s-tab-add-listing">
+          <div class="card">
+            <div class="card-hdr"><h2 class="card-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span id="addListingTitle">Add New Listing</span></h2></div>
+            <div class="card-body">
+              <form id="addListingForm">
+                <div class="form-grid">
+                  <div class="form-group full"><label class="form-label" for="lName">Product Name *</label><input class="form-input" id="lName" type="text" placeholder="e.g. Handcrafted Ceramic Mug"/></div>
+                  <div class="form-group"><label class="form-label" for="lCat">Category *</label><select class="form-select" id="lCat"><option value="">Select category...</option><option>Art &amp; Crafts</option><option>Fashion</option><option>Stationery</option><option>Home Decor</option><option>Tech Accessories</option><option>Beauty &amp; Wellness</option></select></div>
+                  <div class="form-group"><label class="form-label" for="lPrice">Price (GH₵) *</label><input class="form-input" id="lPrice" type="number" placeholder="0.00" min="0" step="0.01"/></div>
+                  <div class="form-group"><label class="form-label" for="lStock">Stock Qty *</label><input class="form-input" id="lStock" type="number" placeholder="0" min="0"/></div>
+                  <div class="form-group"><label class="form-label" for="lCond">Condition</label><select class="form-select" id="lCond"><option>New</option><option>Like New</option><option>Handmade (Original)</option><option>Custom Order</option></select></div>
+                  <div class="form-group full"><label class="form-label" for="lDesc">Description</label><textarea class="form-input" id="lDesc" rows="3" placeholder="Describe materials, size, care instructions, customisation options..."></textarea></div>
+                  <div class="form-group full">
+                    <label class="form-label">Product Photo</label>
+                    <label style="display:block;border:2px dashed var(--border);border-radius:var(--r-sm);padding:2rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;" for="lImg" id="lImgLabel">
+                      <input type="file" id="lImg" accept="image/*" style="display:none;"/>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:var(--soft);margin:0 auto .75rem;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                      <p style="font-size:.875rem;color:var(--muted);">Click to upload a photo</p>
+                      <p style="font-size:.75rem;color:var(--soft);margin-top:.25rem;">PNG, JPG up to 5MB</p>
+                    </label>
+                    <img id="lImgPreview" src="" alt="Preview" style="display:none;width:100%;max-height:160px;object-fit:cover;border-radius:var(--r-sm);margin-top:.75rem;"/>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="btn-save" type="submit" id="lSubmitBtn">Submit Listing</button>
+                  <button class="btn-cancel" type="button" onclick="resetListingForm()">Clear</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -427,7 +491,7 @@
         <!-- Orders received tab — SELLER ONLY -->
         <div class="tab-panel" id="s-tab-orders">
           <div class="card">
-            <div class="card-hdr"><h2 class="card-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Orders Received</h2><a href="Account.html" class="card-lnk">Full view <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg></a></div>
+            <div class="card-hdr"><h2 class="card-ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Orders Received</h2><a href="SellerDashboard.html" class="card-lnk">Full view <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg></a></div>
             <div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Order ID</th><th>Buyer</th><th>Product</th><th>Amount</th><th>Status</th></tr></thead><tbody id="sOrdersBody"></tbody></table></div>
           </div>
         </div>
@@ -445,7 +509,7 @@
         <div class="seller-promo">
           <h3>Seller Dashboard</h3>
           <p>Add listings, manage orders, view your store rating and earnings all in one place.</p>
-          <button class="btn-promo" onclick="window.location.href='Account.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Open Dashboard</button>
+          <button class="btn-promo" onclick="window.location.href='SellerDashboard.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Open Dashboard</button>
         </div>
         <div class="card">
           <div class="card-hdr"><h2 class="card-ttl" style="font-size:.875rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Security</h2></div>
@@ -470,7 +534,7 @@
       <div class="footer-brand"><div class="footer-logo"><div class="footer-logo-icon">CM</div><span class="footer-logo-name">Campus Mart</span></div><p class="footer-desc">Your trusted student marketplace for buying and selling quality products on campus.</p>
         <div class="social-links"><a href="https://twitter.com/campusmarket" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a><a href="https://instagram.com/campusmarket" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a><a href="https://facebook.com/campusmarket" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a></div>
       </div>
-      <div class="footer-col"><h3>Quick Links</h3><ul><li><a href="index.html">Home</a></li><li><a href="catalog.html">Shop</a></li><li><a href="Account.html">Sell Products</a></li></ul></div>
+      <div class="footer-col"><h3>Quick Links</h3><ul><li><a href="index.html">Home</a></li><li><a href="catalog.html">Shop</a></li><li><a href="SellerDashboard.html">Sell Products</a></li></ul></div>
       <div class="footer-col"><h3>Support</h3><ul><li><a href="account.html">My Account</a></li><li><a href="help.html">Help Center</a></li><li><a href="help.html#contact">Contact Us</a></li></ul></div>
       <div class="footer-col"><h3>Contact</h3><div class="footer-contact"><div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>support@campusmart.com</span></div></div></div>
     </div>
@@ -479,7 +543,8 @@
 </footer>
 
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg><span id="toastMsg"></span></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="shared.js"></script>
-<script src="Account.js"></script>
+<script src="account.js"></script>
 </body>
 </html>
