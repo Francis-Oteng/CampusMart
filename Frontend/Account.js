@@ -54,81 +54,6 @@ var SELLER_TABS = [
 ];
 
 /* ══ HELPERS ═══════════════════════════════════════════════ */
-<<<<<<< HEAD
-
-function getUser()    { try { return JSON.parse(sessionStorage.getItem('cm_user') || 'null'); } catch(e) { return null; } }
-function getProfile() { try { return JSON.parse(localStorage.getItem('cm_profile') || '{}');  } catch(e) { return {}; }  }
-function putProfile(data) { var p = getProfile(); localStorage.setItem('cm_profile', JSON.stringify(Object.assign(p, data))); }
-function getOrders()  { try { return JSON.parse(localStorage.getItem('cm_orders') || '[]'); } catch(e) { return []; } }
-function txt(id,v)    { var e = document.getElementById(id); if (e) e.textContent = v; }
-function gv(id)       { return (document.getElementById(id) || {}).value || ''; }
-function sv(id, v)    { var e = document.getElementById(id); if (e) e.value = v || ''; }
-function show(id, d)  { var e = document.getElementById(id); if (e) e.style.display = d || 'block'; }
-function hide(id)     { var e = document.getElementById(id); if (e) e.style.display = 'none'; }
-function flash(id)    { var e = document.getElementById(id); if (!e) return; e.style.borderColor = 'var(--red)'; setTimeout(function(){ e.style.borderColor = ''; }, 2500); }
-function pill(s)      { return '<span class="status-pill ' + s + '">' + s.charAt(0).toUpperCase() + s.slice(1) + '</span>'; }
-
-/* ══ INIT ══════════════════════════════════════════════════ */
-
-function init() {
-  var user = getUser();
-  if (!user || !user.loggedIn) {
-    show('guestView');
-    hide('loggedInView');
-    return;
-  }
-  hide('guestView');
-  show('loggedInView');
-
-  /* When logged in: hide Sign In/Sign Up, show Sign Out */
-  var si = document.getElementById('navSignin');
-  var su = document.getElementById('navSignup');
-  if (si) {
-    si.textContent = 'Sign Out';
-    si.href = 'signout.html';
-    si.className = 'btn-outline';
-    si.removeAttribute('onclick');
-  }
-  if (su) su.style.display = 'none';
-
-  /* Also hide from mobile menu */
-  document.querySelectorAll('.mobile-menu a[href="auth.html"], .mobile-menu a[href="auth.html?tab=signup"]').forEach(function(a) {
-    a.style.display = 'none';
-  });
-
-  var role    = (getProfile().role || user.role || 'buyer').toLowerCase();
-  var profile = getProfile();
-  var name    = profile.name  || user.name  || 'Student';
-  var email   = profile.email || user.email || '';
-  var ini     = name.split(' ').filter(Boolean).map(function(n){ return n[0]; }).join('').slice(0,2).toUpperCase() || 'CM';
-  var join    = profile.joinDate || new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
-
-  txt('displayName',    name);
-  txt('displayEmail',   email);
-  txt('avatarInitials', ini);
-  txt('memberSince',    'Member since ' + join);
-
-  var badge = document.getElementById('roleBadge');
-  var roleTag = document.getElementById('roleTag');
-  var labels = { buyer:'Buyer', seller:'Seller', both:'Buyer & Seller' };
-  if (badge)   { badge.textContent = labels[role] || role; badge.className = 'role-badge ' + (role === 'both' ? 'both' : role); }
-  if (roleTag) { var sp = roleTag.querySelector('span'); if (sp) sp.textContent = labels[role] || role; }
-
-  /* Stats */
-  var orders   = getOrders();
-  var wishlist = []; try { wishlist = JSON.parse(localStorage.getItem('cm_wishlist') || '[]'); } catch(e){}
-  var spent    = orders.reduce(function(s,o){ return s + parseFloat(o.total || 0); }, 0);
-  txt('statOrders', orders.length);
-  txt('statSaved',  wishlist.length);
-  txt('statSpent',  'GH₵' + Math.round(spent));
-
-  /* Role switch bar (for "both") */
-  var rsBar = document.getElementById('roleSwitchBar');
-  if (rsBar) rsBar.style.display = role === 'both' ? 'flex' : 'none';
-
-  activateDash(role === 'seller' ? 'seller' : 'buyer');
-
-=======
 
 function getUser()    { try { return JSON.parse(sessionStorage.getItem('cm_user') || 'null'); } catch(e) { return null; } }
 function getProfile() { try { return JSON.parse(localStorage.getItem('cm_profile') || '{}');  } catch(e) { return {}; }  }
@@ -192,7 +117,6 @@ function init() {
 
   activateDash(role === 'seller' ? 'seller' : 'buyer');
 
->>>>>>> 54e29d4cc97a9af0952c226ff1b365dc18104516
   /* Welcome toast from auth */
   if (document.referrer && document.referrer.includes('auth')) {
     window.showToast('Welcome, ' + name.split(' ')[0] + '! Your dashboard is ready. 👋');
