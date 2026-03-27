@@ -31,8 +31,9 @@ app.get('/', (req, res) => res.send('CampusMart API Running'));
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => {
-    console.error('❌ Database connection error:', err.message);
-    process.exit(1);
+    console.error('⚠️  MongoDB not available:', err.message);
+    console.log('   Server will run but database features won\'t work.');
+    console.log('   Set MONGO_URI in .env to a valid MongoDB connection string.');
   });
 
 // ── Start Server ──

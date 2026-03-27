@@ -2,31 +2,22 @@ const jwt = require('jsonwebtoken');
 
 /**
  * JWT Authentication Middleware
- * Extracts and verifies a Bearer token from the Authorization header.
- * On success, attaches `req.user` = { id, role }.
+ * Verifies the Bearer token and attaches user payload to req.user
  */
 module.exports = function (req, res, next) {
-  // Get token from header
-  const authHeader = req.header('Authorization');
-
-  if (!authHeader) {
-    return res.status(401).json({ msg: 'No token, authorization denied' });
+  const header = req.header('Authorization');
+  if (!header) {
+    return res.status(401).json({ msg: 'No token — authorisation denied' });
   }
 
   // Support "Bearer <token>" format
-  const token = authHeader.startsWith('Bearer ')
-    ? authHeader.slice(7)
-    : authHeader;
-
-  if (!token) {
-    return res.status(401).json({ msg: 'No token, authorization denied' });
-  }
+  const token = header.startsWith('Bearer ') ? header.slice(7) : header;
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded.user; // { id, role }
+    req.user = decoded;          // { id, role, iat, exp }
     next();
   } catch (err) {
-    res.status(401).json({ msg: 'Token is not valid' });
+    return res.status(401).json({ msg: 'Token is invalid or expired' });
   }
 };
