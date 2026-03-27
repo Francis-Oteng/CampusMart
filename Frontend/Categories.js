@@ -1,6 +1,7 @@
+/* ─── categories.js — Product Catalog with API Integration ── */
+/* Tries to load from backend API; falls back to hardcoded data */
 
-
-var allProducts = [
+var localProducts = [
   { id:1,  name:'Handcrafted Ceramic Mug',      category:'Art & Crafts',      price:220,  seller:'Emma Wilson',     rating:4.8, reviews:12, badge:'New',  color:'#e2e8f0', img:'assets/images/product-1.jpg'  },
   { id:2,  name:'Vintage Style Tote Bag',        category:'Fashion',            price:285,  seller:'Marcus Chen',     rating:4.9, reviews:8,  badge:'New',  color:'#fde68a', img:'assets/images/product-2.jpg'  },
   { id:3,  name:'Custom Illustrated Notebook',   category:'Stationery',         price:150,  seller:'Sofia Rodriguez', rating:5.0, reviews:21, badge:'New',  color:'#ddd6fe', img:'assets/images/product-3.jpg'  },
@@ -18,10 +19,12 @@ var allProducts = [
   { id:15, name:'Phone Case with Dried Flowers',  category:'Tech Accessories',   price:160,  seller:'Amara Owusu',     rating:4.5, reviews:8,  badge:'New',  color:'#fee2e2', img:'assets/images/product-15.jpg' },
 ];
 
+var allProducts  = localProducts.slice();
 var filtered     = allProducts.slice();
 var currentSort  = 'featured';
 var currentPage  = 1;
 var PER_PAGE     = 9;
+var usingAPI     = false;
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -35,6 +38,35 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   if (urlQ && searchEl) {
     searchEl.value = urlQ;
+  }
+
+  /* ── Try loading from API ── */
+  function loadProductsFromAPI() {
+    if (!window.api || !window.apiFetch) {
+      applyFilters();
+      return;
+    }
+
+    window.api.getProducts({ limit: 100 })
+      .then(function (data) {
+        if (data.products && data.products.length > 0) {
+          allProducts = data.products.map(function (p) {
+            return {
+              id: p._id, name: p.name, category: p.category,
+              price: p.price, seller: p.sellerName || 'Unknown',
+              rating: p.rating || 4.5, reviews: p.reviewCount || 0,
+              badge: p.badge || 'New', color: p.color || '#e2e8f0',
+              img: p.images && p.images.length ? p.images[0] : ''
+            };
+          });
+          usingAPI = true;
+        }
+        applyFilters();
+      })
+      .catch(function () {
+        allProducts = localProducts.slice();
+        applyFilters();
+      });
   }
 
   function applyFilters() {
@@ -78,13 +110,12 @@ document.addEventListener('DOMContentLoaded', function () {
       if (empty) empty.style.display = 'none';
       var html = page.map(function (p) {
         return window.renderProductCard(Object.assign({}, p, {
-          price: '\u20b5' + p.price.toFixed(2)
+          price: '\u20b5' + parseFloat(p.price).toFixed(2)
         }));
       }).join('');
       grid.insertAdjacentHTML('beforeend', html);
       window.bindCards();
     }
-
 
     var rc = document.getElementById('resultCount');
     var tc = document.getElementById('totalCount');
@@ -94,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
     renderPagination();
   }
 
-  
   function renderPagination() {
     var pg    = document.getElementById('pagination');
     var total = Math.ceil(filtered.length / PER_PAGE);
@@ -128,7 +158,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (grid) window.scrollTo({ top: grid.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
   };
 
-
   function validatePrices() {
     var minEl = document.getElementById('priceMin');
     var maxEl = document.getElementById('priceMax');
@@ -154,10 +183,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  
   if (catEl) catEl.addEventListener('change', applyFilters);
 
-  
   document.querySelectorAll('.chip[data-sort]').forEach(function (chip) {
     chip.addEventListener('click', function () {
       document.querySelectorAll('.chip[data-sort]').forEach(function (c) { c.classList.remove('active'); });
@@ -167,5 +194,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  applyFilters();
+  loadProductsFromAPI();
 });

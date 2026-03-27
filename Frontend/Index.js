@@ -1,4 +1,5 @@
 /* ─── index.js — Homepage ─────────────────────────────── */
+/* Now loads products from backend API with local fallback */
 
 var featuredProducts = [
   { id:1, name:'Handcrafted Ceramic Mug',    category:'Art & Crafts',     price:'\u20b5220.00', seller:'Emma Wilson',     rating:4.8, reviews:12, badge:'Featured', color:'#e2e8f0', img:'assets/images/product-1.jpg' },
@@ -23,8 +24,61 @@ document.addEventListener('DOMContentLoaded', function () {
     el.innerHTML = products.map(function (p) { return window.renderProductCard(p); }).join('');
     window.bindCards();
   }
-  renderGrid('featured-grid', featuredProducts);
-  renderGrid('arrivals-grid', newArrivals);
+
+  /* ── Try loading from API, fall back to hardcoded data ── */
+  function loadFromAPI() {
+    if (!window.api || !window.apiFetch) {
+      renderGrid('featured-grid', featuredProducts);
+      renderGrid('arrivals-grid', newArrivals);
+      return;
+    }
+
+    // Load featured products
+    window.api.getProducts({ featured: 'true', limit: 4 })
+      .then(function (data) {
+        if (data.products && data.products.length > 0) {
+          var mapped = data.products.map(function (p) {
+            return {
+              id: p._id, name: p.name, category: p.category,
+              price: '\u20b5' + p.price.toFixed(2), seller: p.sellerName || 'Unknown',
+              rating: p.rating || 4.5, reviews: p.reviewCount || 0,
+              badge: p.badge || 'Featured', color: p.color || '#e2e8f0',
+              img: p.images && p.images.length ? p.images[0] : ''
+            };
+          });
+          renderGrid('featured-grid', mapped);
+        } else {
+          renderGrid('featured-grid', featuredProducts);
+        }
+      })
+      .catch(function () {
+        renderGrid('featured-grid', featuredProducts);
+      });
+
+    // Load new arrivals
+    window.api.getProducts({ sort: 'newest', limit: 4 })
+      .then(function (data) {
+        if (data.products && data.products.length > 0) {
+          var mapped = data.products.map(function (p) {
+            return {
+              id: p._id, name: p.name, category: p.category,
+              price: '\u20b5' + p.price.toFixed(2), seller: p.sellerName || 'Unknown',
+              rating: p.rating || 4.5, reviews: p.reviewCount || 0,
+              badge: p.badge || 'New', color: p.color || '#e2e8f0',
+              img: p.images && p.images.length ? p.images[0] : ''
+            };
+          });
+          renderGrid('arrivals-grid', mapped);
+        } else {
+          renderGrid('arrivals-grid', newArrivals);
+        }
+      })
+      .catch(function () {
+        renderGrid('arrivals-grid', newArrivals);
+      });
+  }
+
+  loadFromAPI();
 
   /* ── Newsletter ── */
   var nlForm = document.getElementById('newsletterForm') || document.querySelector('.newsletter-form');
@@ -59,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var h = this.querySelector('h3,h4,.cat-name,.cat-title');
         if (h) cat = h.textContent.trim();
       }
-      if (cat) window.location.href = 'catalog.html?category=' + encodeURIComponent(cat);
+      if (cat) window.location.href = 'Categories.html?category=' + encodeURIComponent(cat);
     });
   });
 

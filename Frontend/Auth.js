@@ -1,9 +1,11 @@
 /* ─── auth.js — Sign In / Sign Up (2-step flows) ────────── */
+/* Now integrated with backend API via api.js              */
 
 /* ── STATE ── */
 var siRole     = 'buyer';   /* selected role during sign-in step 2  */
 var suRole     = 'buyer';   /* selected role during sign-up step 2  */
 var siEmail_v  = '';        /* verified email from step 1            */
+var siPw_v     = '';        /* verified password from step 1         */
 
 /* ══════════════════════════════════════
    TOP-LEVEL TAB SWITCHER
@@ -31,6 +33,7 @@ window.siGoStep2 = function() {
   if (!ok) return;
 
   siEmail_v = email;
+  siPw_v    = pw;
 
   /* Fill welcome chip */
   var namePart = email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); });
@@ -66,32 +69,34 @@ window.doSignIn = function() {
   if (btn) { btn.disabled = true; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;animation:spin .8s linear infinite;"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Signing in...'; }
   addSpinStyle();
 
-  setTimeout(function() {
-    var email    = siEmail_v || g('siEmail').value.trim();
-    var namePart = email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); });
-    var initials = namePart.split(' ').map(function(n){ return n[0]||''; }).join('').slice(0,2).toUpperCase();
+  var email = siEmail_v || g('siEmail').value.trim();
+  var pw    = siPw_v    || g('siPassword').value;
 
-    /* Save session + profile */
-    var profile = {};
-    try { profile = JSON.parse(localStorage.getItem('cm_profile') || '{}'); } catch(e){}
-    if (!profile.name)  profile.name     = namePart;
-    if (!profile.email) profile.email    = email;
-    profile.role     = siRole;
-    profile.initials = initials;
-    localStorage.setItem('cm_profile', JSON.stringify(profile));
+  /* ── Call backend API ── */
+  window.api.login({ email: email, password: pw })
+    .then(function(data) {
+      /* Save token + user profile */
+      window.api.saveLogin(data);
 
-    sessionStorage.setItem('cm_user', JSON.stringify({
-      name: namePart, email: email, role: siRole, initials: initials, loggedIn: true
-    }));
+      /* Update role if different from what backend returned */
+      if (siRole !== data.user.role) {
+        window.api.updateProfile({ role: siRole }).catch(function(){});
+      }
 
-    window.showToast('Welcome back, ' + namePart.split(' ')[0] + '!');
+      var namePart = data.user.name || email.split('@')[0];
+      window.showToast('Welcome back, ' + namePart.split(' ')[0] + '!');
 
-    /* Route based on role */
-    setTimeout(function() {
-      var dest = siRole === 'seller' ? 'seller-dashboard.html' : 'buyer-dashboard.html';
-      window.location.href = dest;
-    }, 700);
-  }, 1200);
+      /* Route based on role */
+      setTimeout(function() {
+        var dest = siRole === 'seller' ? 'SellerDashboard.html' : 'BuyerDashboard.html';
+        window.location.href = dest;
+      }, 700);
+    })
+    .catch(function(err) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Enter CampusMarket'; }
+      var msg = (err.data && err.data.msg) ? err.data.msg : 'Login failed. Please try again.';
+      window.showToast(msg);
+    });
 };
 
 /* ══════════════════════════════════════
@@ -139,31 +144,37 @@ window.doSignUp = function() {
   if (btn) { btn.disabled = true; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;animation:spin .8s linear infinite;"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Creating account...'; }
   addSpinStyle();
 
-  setTimeout(function() {
-    var first    = g('suFirst').value.trim();
-    var last     = g('suLast').value.trim();
-    var email    = g('suEmail').value.trim();
-    var uni      = g('suUniversity').value;
-    var fullName = first + ' ' + last;
-    var initials = (first[0]||'') + (last[0]||'');
+  var first    = g('suFirst').value.trim();
+  var last     = g('suLast').value.trim();
+  var email    = g('suEmail').value.trim();
+  var uni      = g('suUniversity').value;
+  var pw       = g('suPassword').value;
+  var fullName = first + ' ' + last;
 
-    /* Save profile */
-    localStorage.setItem('cm_profile', JSON.stringify({
-      name: fullName, email: email, campus: uni,
-      role: suRole, initials: initials.toUpperCase(),
-    }));
-    sessionStorage.setItem('cm_user', JSON.stringify({
-      name: fullName, email: email, role: suRole,
-      campus: uni, initials: initials.toUpperCase(), loggedIn: true
-    }));
+  /* ── Call backend API ── */
+  window.api.register({
+    name: fullName,
+    email: email,
+    password: pw,
+    role: suRole,
+    campus: uni
+  })
+    .then(function(data) {
+      /* Save token + user profile */
+      window.api.saveLogin(data);
 
-    window.showToast('Welcome to CampusMarket, ' + first + '! 🎉');
+      window.showToast('Welcome to CampusMarket, ' + first + '! 🎉');
 
-    /* Route based on role */
-    setTimeout(function() {
-      window.location.href = suRole === 'seller' ? 'seller-dashboard.html' : 'buyer-dashboard.html';
-    }, 800);
-  }, 1400);
+      /* Route based on role */
+      setTimeout(function() {
+        window.location.href = suRole === 'seller' ? 'SellerDashboard.html' : 'BuyerDashboard.html';
+      }, 800);
+    })
+    .catch(function(err) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Create My Account'; }
+      var msg = (err.data && err.data.msg) ? err.data.msg : 'Registration failed. Please try again.';
+      window.showToast(msg);
+    });
 };
 
 /* ══════════════════════════════════════
@@ -254,14 +265,16 @@ document.addEventListener('DOMContentLoaded', function() {
   var params = new URLSearchParams(window.location.search);
   if (params.get('tab') === 'signup') switchTab('signup');
 
-  /* If already logged in → skip straight to account */
-  try {
-    var u = JSON.parse(sessionStorage.getItem('cm_user') || '{}');
-    if (u.loggedIn) {
-      var dest = u.role === 'seller' ? 'seller-dashboard.html' : 'buyer-dashboard.html';
-      window.location.href = dest; return;
-    }
-  } catch(e){}
+  /* If already logged in → skip straight to dashboard */
+  if (window.api && window.api.isLoggedIn()) {
+    try {
+      var u = JSON.parse(sessionStorage.getItem('cm_user') || '{}');
+      if (u.loggedIn) {
+        var dest = u.role === 'seller' ? 'SellerDashboard.html' : 'BuyerDashboard.html';
+        window.location.href = dest; return;
+      }
+    } catch(e){}
+  }
 
   /* Clear field errors on input */
   document.querySelectorAll('.fc').forEach(function(inp) {

@@ -1,4 +1,5 @@
 /* ─── account.js — Unified Buyer + Seller Dashboard ─────────────────────────
+   Now integrated with backend API via api.js
    Single page. Three states:
      guestView    — not logged in: two buttons → auth.html
      buyerDash    — overview | orders | saved | profile
@@ -7,7 +8,7 @@
    ──────────────────────────────────────────────────────────────────────────── */
 
 /* ══════════════════════════════════════
-   SAMPLE DATA
+   SAMPLE DATA (fallback if API unavailable)
 ══════════════════════════════════════ */
 var BUYER_ORDERS = (function () {
   try {
@@ -96,6 +97,85 @@ function flashErr(id) {
 }
 
 /* ══════════════════════════════════════
+   API DATA LOADING
+══════════════════════════════════════ */
+function loadDataFromAPI() {
+  if (!window.api || !window.api.isLoggedIn()) return;
+
+  // Load profile from API
+  window.api.getProfile()
+    .then(function(user) {
+      saveProfile({
+        name: user.name, email: user.email, phone: user.phone || '',
+        campus: user.campus || '', bio: user.bio || '', role: user.role,
+        storeName: user.storeName || '', storeDesc: user.storeDesc || '',
+        listingCat: user.listingCat || '', payoutMethod: user.payoutMethod || '',
+        payoutNumber: user.payoutNumber || '', deliveryAddr: user.deliveryAddr || '',
+        preferredPay: user.preferredPay || '', notifyOrders: user.notifyOrders || '',
+        favCat: user.favCat || '', joinDate: user.joinDate
+      });
+    })
+    .catch(function() {});
+
+  // Load buyer orders
+  window.api.getOrders()
+    .then(function(data) {
+      if (data.orders && data.orders.length > 0) {
+        BUYER_ORDERS = data.orders.map(function(o) {
+          var d = new Date(o.createdAt);
+          var dateStr = d.toLocaleDateString('en-GB', { month:'short', day:'numeric' });
+          return {
+            id: '#' + o._id.slice(-6).toUpperCase(),
+            product: o.items && o.items[0] ? o.items[0].name : 'Order',
+            total: o.total || 0, date: dateStr, status: o.status || 'processing'
+          };
+        });
+        renderBuyerOverview();
+        renderBuyerOrders();
+      }
+    })
+    .catch(function() {});
+
+  // Load seller orders
+  window.api.getSellerOrders()
+    .then(function(data) {
+      if (data.orders && data.orders.length > 0) {
+        SELLER_ORDERS = data.orders.map(function(o) {
+          var d = new Date(o.createdAt);
+          var dateStr = d.toLocaleDateString('en-GB', { month:'short', day:'numeric' });
+          var buyerName = o.buyer ? o.buyer.name : 'Unknown';
+          var ini = buyerName.split(' ').filter(Boolean).map(function(n){return n[0];}).join('').slice(0,2).toUpperCase();
+          return {
+            id: '#' + o._id.slice(-6).toUpperCase(),
+            buyer: buyerName, ini: ini,
+            product: o.items && o.items[0] ? o.items[0].name : 'Order',
+            amount: fmt(o.total), date: dateStr, status: o.status || 'processing'
+          };
+        });
+        renderSellerOverview();
+        renderSellerOrders();
+      }
+    })
+    .catch(function() {});
+
+  // Load seller listings
+  window.api.getMyProducts()
+    .then(function(data) {
+      if (data.products && data.products.length > 0) {
+        LISTINGS = data.products.map(function(p) {
+          return {
+            id: p._id, name: p.name, cat: p.category,
+            price: p.price, stock: p.stock,
+            status: p.status || 'pending', description: p.description || ''
+          };
+        });
+        renderListings();
+      }
+    })
+    .catch(function() {});
+}
+
+/* ══════════════════════════════════════
    MAIN INIT
 ══════════════════════════════════════ */
 function init() {
@@ -130,10 +210,11 @@ function init() {
   var rtBuyer  = document.getElementById('rtBuyer');
   var rtSeller = document.getElementById('rtSeller');
 
-  /* If role is buyer-only, dim the seller tab but keep it clickable
-     (they can upgrade by clicking it) */
   activeRole = (role === 'seller') ? 'seller' : 'buyer';
   applyRole(activeRole, name, email, initials, profile, role);
+
+  /* Load real data from API */
+  loadDataFromAPI();
 }
 
 /* ── UPDATE NAV when logged in ── */
@@ -142,9 +223,9 @@ function updateNavForLogin() {
   var su = document.getElementById('navSignup');
   var ms = document.getElementById('mobileSignin');
   var mu = document.getElementById('mobileSignup');
-  if (si) { si.textContent = 'Sign Out'; si.href = 'signout.html'; }
+  if (si) { si.textContent = 'Sign Out'; si.href = 'Signout.html'; }
   if (su) su.style.display = 'none';
-  if (ms) { ms.textContent = 'Sign Out'; ms.href = 'signout.html'; }
+  if (ms) { ms.textContent = 'Sign Out'; ms.href = 'Signout.html'; }
   if (mu) mu.style.display = 'none';
 }
 
@@ -289,7 +370,7 @@ function renderBuyerOverview() {
   /* Saved preview */
   var wc = document.getElementById('bOvWishBody'); if (!wc) return;
   if (!wishlist.length) {
-    wc.innerHTML = '<p style="font-size:.875rem;color:var(--muted);">Nothing saved yet. <a href="catalog.html" style="color:var(--teal);font-weight:600;">Browse products</a></p>';
+    wc.innerHTML = '<p style="font-size:.875rem;color:var(--muted);">Nothing saved yet. <a href="Categories.html" style="color:var(--teal);font-weight:600;">Browse products</a></p>';
     return;
   }
   wc.innerHTML = wishlist.slice(0, 3).map(function (n) {
@@ -304,7 +385,7 @@ function renderBuyerOverview() {
 function renderBuyerOrders() {
   var tb = document.getElementById('bAllOrdersBody'); if (!tb) return;
   if (!BUYER_ORDERS.length) {
-    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2.5rem;">No orders yet. <a href="catalog.html" style="color:var(--teal);font-weight:600;">Start shopping →</a></td></tr>';
+    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2.5rem;">No orders yet. <a href="Categories.html" style="color:var(--teal);font-weight:600;">Start shopping →</a></td></tr>';
     return;
   }
   tb.innerHTML = BUYER_ORDERS.map(function (o) {
@@ -326,7 +407,7 @@ function renderWishlist() {
   var container = document.getElementById('bWishlistBody'); if (!container) return;
   var list = []; try { list = JSON.parse(localStorage.getItem('cm_wishlist') || '[]'); } catch (e) {}
   if (!list.length) {
-    container.innerHTML = '<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><h3>Nothing saved yet</h3><p>Tap the ♥ on any product to save it here.</p><a href="catalog.html">Browse Products</a></div>';
+    container.innerHTML = '<div class="empty"><div class="empty-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><h3>Nothing saved yet</h3><p>Tap the ♥ on any product to save it here.</p><a href="Categories.html">Browse Products</a></div>';
     return;
   }
   container.innerHTML = list.map(function (n) {
@@ -368,13 +449,26 @@ window.saveBuyer = function () {
   var name = val('bName'), email = val('bEmail');
   if (!name)  { flashErr('bName');  window.showToast('Please enter your name.'); return; }
   if (!window.validateEmail(email)) { flashErr('bEmail'); window.showToast('Valid email required.'); return; }
-  saveProfile({ name:name, email:email, phone:val('bPhone'), campus:val('bCampus'),
+
+  var profileData = {
+    name:name, email:email, phone:val('bPhone'), campus:val('bCampus'),
     bio:val('bBio'), deliveryAddr:val('bAddr'), preferredPay:val('bPay'),
-    notifyOrders:val('bNotify'), favCat:val('bFavCat') });
+    notifyOrders:val('bNotify'), favCat:val('bFavCat')
+  };
+
+  saveProfile(profileData);
   var ini = name.split(' ').filter(Boolean).map(function(n){return n[0];}).join('').slice(0,2).toUpperCase();
   txt('avIni', ini); txt('dispName', name);
   var u = getUser(); if (u) { u.name=name; u.email=email; sessionStorage.setItem('cm_user',JSON.stringify(u)); }
-  window.showToast('Profile saved! ✓');
+
+  /* Save to API */
+  if (window.api && window.api.isLoggedIn()) {
+    window.api.updateProfile(profileData)
+      .then(function() { window.showToast('Profile saved! ✓'); })
+      .catch(function() { window.showToast('Profile saved locally! ✓'); });
+  } else {
+    window.showToast('Profile saved! ✓');
+  }
 };
 
 /* ══════════════════════════════════════
@@ -463,15 +557,15 @@ function renderListings() {
       '<td>' + (l.stock > 0 ? l.stock + ' left' : '<span style="color:var(--red);font-weight:600;">Out</span>') + '</td>' +
       '<td>' + pill(l.status) + '</td>' +
       '<td><div style="display:flex;gap:.375rem;">' +
-        '<button style="font-size:.75rem;color:var(--teal);background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);" onclick="editListing(' + l.id + ')">Edit</button>' +
-        '<button style="font-size:.75rem;color:var(--red);background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);" onclick="deleteListing(' + l.id + ')">Delete</button>' +
+        '<button style="font-size:.75rem;color:var(--teal);background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);" onclick="editListing(\'' + l.id + '\')">Edit</button>' +
+        '<button style="font-size:.75rem;color:var(--red);background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);" onclick="deleteListing(\'' + l.id + '\')">Delete</button>' +
       '</div></td>' +
     '</tr>';
   }).join('');
 }
 
 window.editListing = function (id) {
-  var l = LISTINGS.find(function (x) { return x.id === id; }); if (!l) return;
+  var l = LISTINGS.find(function (x) { return String(x.id) === String(id); }); if (!l) return;
   editId = id; switchTab('s', 'add');
   setTimeout(function () {
     setVal('lName', l.name); setVal('lCat', l.cat);
@@ -483,10 +577,24 @@ window.editListing = function (id) {
 };
 
 window.deleteListing = function (id) {
-  var l = LISTINGS.find(function (x) { return x.id === id; }); if (!l) return;
+  var l = LISTINGS.find(function (x) { return String(x.id) === String(id); }); if (!l) return;
   if (!confirm('Remove "' + l.name + '"? This cannot be undone.')) return;
-  LISTINGS.splice(LISTINGS.indexOf(l), 1);
-  renderListings(); window.showToast('"' + l.name + '" removed.');
+
+  /* Delete via API */
+  if (window.api && window.api.isLoggedIn()) {
+    window.api.deleteProduct(id)
+      .then(function() {
+        LISTINGS.splice(LISTINGS.indexOf(l), 1);
+        renderListings(); window.showToast('"' + l.name + '" removed.');
+      })
+      .catch(function() {
+        LISTINGS.splice(LISTINGS.indexOf(l), 1);
+        renderListings(); window.showToast('"' + l.name + '" removed locally.');
+      });
+  } else {
+    LISTINGS.splice(LISTINGS.indexOf(l), 1);
+    renderListings(); window.showToast('"' + l.name + '" removed.');
+  }
 };
 
 window.resetAddForm = function () {
@@ -537,13 +645,26 @@ window.saveSeller = function () {
   var name = val('sName'), email = val('sEmail');
   if (!name)  { flashErr('sName');  window.showToast('Please enter your name.'); return; }
   if (!window.validateEmail(email)) { flashErr('sEmail'); window.showToast('Valid email required.'); return; }
-  saveProfile({ name:name, email:email, phone:val('sPhone'), campus:val('sCampus'),
+
+  var profileData = {
+    name:name, email:email, phone:val('sPhone'), campus:val('sCampus'),
     storeName:val('sStoreName'), listingCat:val('sListCat'), payoutMethod:val('sPayout'),
-    payoutNumber:val('sPayoutNum'), storeDesc:val('sStoreDesc') });
+    payoutNumber:val('sPayoutNum'), storeDesc:val('sStoreDesc')
+  };
+
+  saveProfile(profileData);
   var ini = name.split(' ').filter(Boolean).map(function(n){return n[0];}).join('').slice(0,2).toUpperCase();
   txt('avIni', ini); txt('dispName', name);
   var u = getUser(); if (u) { u.name=name; sessionStorage.setItem('cm_user',JSON.stringify(u)); }
-  window.showToast('Seller profile saved! ✓');
+
+  /* Save to API */
+  if (window.api && window.api.isLoggedIn()) {
+    window.api.updateProfile(profileData)
+      .then(function() { window.showToast('Seller profile saved! ✓'); })
+      .catch(function() { window.showToast('Seller profile saved locally! ✓'); });
+  } else {
+    window.showToast('Seller profile saved! ✓');
+  }
 };
 
 /* ══════════════════════════════════════
@@ -597,7 +718,7 @@ function renderRating() {
 document.addEventListener('DOMContentLoaded', function () {
   init();
 
-  /* Add listing form */
+  /* Add listing form — now calls API */
   var addForm = document.getElementById('addListingForm');
   if (addForm) {
     addForm.addEventListener('submit', function (e) {
@@ -610,16 +731,64 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!cat)                { window.showToast('Please select a category.'); return; }
       if (isNaN(price)||price<=0){ window.showToast('Please enter a valid price.'); return; }
       if (isNaN(stock)||stock<0) { window.showToast('Please enter a valid stock quantity.'); return; }
-      if (editId) {
-        var idx = LISTINGS.findIndex(function (l) { return l.id === editId; });
-        if (idx > -1) LISTINGS[idx] = Object.assign(LISTINGS[idx], { name:name, cat:cat, price:price, stock:stock, description:desc });
-        window.showToast('"' + name + '" updated!'); editId = null;
-      } else {
-        var nid = LISTINGS.reduce(function (m, l) { return Math.max(m, l.id); }, 0) + 1;
-        LISTINGS.push({ id:nid, name:name, cat:cat, price:price, stock:stock, status:'pending', description:desc });
-        window.showToast('"' + name + '" submitted for review!');
+
+      /* Build FormData for API (supports image upload) */
+      var formData = new FormData();
+      formData.append('name', name);
+      formData.append('category', cat);
+      formData.append('price', price);
+      formData.append('stock', stock);
+      formData.append('description', desc);
+
+      var imgInput = document.getElementById('lImg');
+      if (imgInput && imgInput.files && imgInput.files.length > 0) {
+        for (var i = 0; i < imgInput.files.length; i++) {
+          formData.append('images', imgInput.files[i]);
+        }
       }
-      resetAddForm(); switchTab('s', 'listings');
+
+      if (window.api && window.api.isLoggedIn()) {
+        if (editId) {
+          window.api.updateProduct(editId, formData)
+            .then(function(product) {
+              var idx = LISTINGS.findIndex(function (l) { return String(l.id) === String(editId); });
+              if (idx > -1) LISTINGS[idx] = Object.assign(LISTINGS[idx], { name:name, cat:cat, price:price, stock:stock, description:desc });
+              window.showToast('"' + name + '" updated!'); editId = null;
+              resetAddForm(); switchTab('s', 'listings');
+            })
+            .catch(function() {
+              window.showToast('Update failed. Saved locally.');
+              var idx = LISTINGS.findIndex(function (l) { return String(l.id) === String(editId); });
+              if (idx > -1) LISTINGS[idx] = Object.assign(LISTINGS[idx], { name:name, cat:cat, price:price, stock:stock, description:desc });
+              editId = null; resetAddForm(); switchTab('s', 'listings');
+            });
+        } else {
+          window.api.createProduct(formData)
+            .then(function(product) {
+              LISTINGS.push({ id: product._id, name:name, cat:cat, price:price, stock:stock, status:'pending', description:desc });
+              window.showToast('"' + name + '" submitted for review!');
+              resetAddForm(); switchTab('s', 'listings');
+            })
+            .catch(function() {
+              window.showToast('Submit failed. Saved locally.');
+              var nid = LISTINGS.reduce(function (m, l) { return Math.max(m, typeof l.id === 'number' ? l.id : 0); }, 0) + 1;
+              LISTINGS.push({ id:nid, name:name, cat:cat, price:price, stock:stock, status:'pending', description:desc });
+              resetAddForm(); switchTab('s', 'listings');
+            });
+        }
+      } else {
+        /* Offline fallback */
+        if (editId) {
+          var idx = LISTINGS.findIndex(function (l) { return String(l.id) === String(editId); });
+          if (idx > -1) LISTINGS[idx] = Object.assign(LISTINGS[idx], { name:name, cat:cat, price:price, stock:stock, description:desc });
+          window.showToast('"' + name + '" updated!'); editId = null;
+        } else {
+          var nid = LISTINGS.reduce(function (m, l) { return Math.max(m, typeof l.id === 'number' ? l.id : 0); }, 0) + 1;
+          LISTINGS.push({ id:nid, name:name, cat:cat, price:price, stock:stock, status:'pending', description:desc });
+          window.showToast('"' + name + '" submitted for review!');
+        }
+        resetAddForm(); switchTab('s', 'listings');
+      }
     });
   }
 
