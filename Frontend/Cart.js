@@ -1,4 +1,4 @@
-/* ─── cart.js ─── */
+/* ─── cart.js — Cart with API Integration ─── */
 var PROMOS = { 'STUDENT10':{type:'pct',value:10,label:'10% student discount'}, 'CAMPUS20':{type:'pct',value:20,label:'20% campus discount'}, 'FLAT50':{type:'fixed',value:50,label:'₵50 off'}, 'NEWUSER':{type:'pct',value:15,label:'15% first-order discount'} };
 var SUGGESTIONS = [
   {id:101,name:'Resin Earrings',cat:'Fashion',price:120,color:'#fde68a',img:'assets/images/Resin Earrings.jpg'},
@@ -27,6 +27,38 @@ function seed(){
     {id:6,name:'Handmade Soap Set',cat:'Beauty & Wellness',price:260,qty:1,seller:'Ava Thompson',color:'#fce7f3',img:'assets/images/Handmade Soap Set.jpg'},
   ]);
 }
+
+/* ── Sync cart with backend if logged in ── */
+function syncCartWithAPI() {
+  if (!window.api || !window.api.isLoggedIn()) return;
+
+  // Try to load cart from API
+  window.api.getCart()
+    .then(function(cart) {
+      if (cart && cart.items && cart.items.length > 0) {
+        // Merge API cart with local cart
+        var apiItems = cart.items.map(function(item) {
+          var p = item.product;
+          if (!p) return null;
+          return {
+            id: p._id, name: p.name, cat: p.category,
+            price: p.price, qty: item.qty,
+            seller: p.sellerName || 'CampusMarket',
+            color: p.color || '#e2e8f0',
+            img: p.images && p.images.length ? p.images[0] : ''
+          };
+        }).filter(Boolean);
+
+        if (apiItems.length > 0) {
+          saveItems(apiItems);
+          if (cart.promo) savePromo(cart.promo);
+          renderCart();
+        }
+      }
+    })
+    .catch(function() { /* Silently fail — use local cart */ });
+}
+
 function renderCart(){
   var items=getItems(), t=totals(items), count=items.reduce(function(s,i){return s+i.qty;},0);
   /* Badges */
@@ -36,7 +68,7 @@ function renderCart(){
   var cb=document.getElementById('checkoutBtn'); if(cb) cb.disabled=!items.length;
   var list=document.getElementById('cartItemsList'); if(!list) return;
   if(!items.length){
-    list.innerHTML='<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div><h3>Your cart is empty</h3><p>Discover unique student-made products.</p><a href="catalog.html" class="btn-browse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Browse Products</a></div>';
+    list.innerHTML='<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div><h3>Your cart is empty</h3><p>Discover unique student-made products.</p><a href="Categories.html" class="btn-browse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Browse Products</a></div>';
     var as=document.getElementById('alsoSection'); if(as) as.style.display='none';
     updateSummary(t,count); return;
   }
@@ -46,11 +78,11 @@ function renderCart(){
       '<div class="ci-img" style="background:'+(item.color||'#F3F4F6')+';">'+img+'</div>'+
       '<div><div class="ci-cat">'+item.cat+'</div><div class="ci-name">'+item.name+'</div><div class="ci-seller">by '+item.seller+'</div>'+
       '<div class="ci-actions"><div class="qty-ctrl">'+
-        '<button class="qty-btn" onclick="chQty('+item.id+',-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>'+
+        '<button class="qty-btn" onclick="chQty(\''+item.id+'\',-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>'+
         '<span class="qty-num" id="qty-'+item.id+'">'+item.qty+'</span>'+
-        '<button class="qty-btn" onclick="chQty('+item.id+',1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>'+
+        '<button class="qty-btn" onclick="chQty(\''+item.id+'\',1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>'+
       '</div>'+
-      '<button class="rm-btn" onclick="rmItem('+item.id+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m5 0V4a1 1 0 011-1h2a1 1 0 011 1v2"/></svg>Remove</button>'+
+      '<button class="rm-btn" onclick="rmItem(\''+item.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m5 0V4a1 1 0 011-1h2a1 1 0 011 1v2"/></svg>Remove</button>'+
       '</div></div>'+
       '<div class="ci-price-col"><div class="ci-price" id="price-'+item.id+'">'+fmt(item.price*item.qty)+'</div><div class="ci-unit">'+fmt(item.price)+' each</div></div>'+
     '</div>';
@@ -82,12 +114,42 @@ function renderAlso(items){
   }).join('');
 }
 window.addSug=function(id){var p=SUGGESTIONS.find(function(s){return s.id===id;});if(!p)return;var items=getItems();var f=items.find(function(i){return i.id===p.id;});if(f)f.qty++;else items.push({id:p.id,name:p.name,cat:p.cat,price:p.price,qty:1,seller:'CampusMarket',color:p.color,img:p.img});saveItems(items);renderCart();window.showToast('"'+p.name+'" added!');};
-window.chQty=function(id,d){var items=getItems();var item=items.find(function(i){return i.id===id;});if(!item)return;item.qty+=d;if(item.qty<1){rmItem(id);return;}saveItems(items);var qe=document.getElementById('qty-'+id);if(qe)qe.textContent=item.qty;var pe=document.getElementById('price-'+id);if(pe){pe.textContent=fmt(item.price*item.qty);pe.style.transform='scale(1.2)';setTimeout(function(){pe.style.transform='';},250);}var t=totals(items);var c=items.reduce(function(s,i){return s+i.qty;},0);updateSummary(t,c);var ib=document.getElementById('itemCountBadge');if(ib)ib.textContent=c;var nb=document.querySelector('.cart-badge');if(nb)nb.textContent=String(c);};
-window.rmItem=function(id){var items=getItems();var item=items.find(function(i){return i.id===id;});var row=document.getElementById('item-'+id);if(row){row.style.transition='opacity .25s,transform .25s';row.style.opacity='0';row.style.transform='translateX(16px)';setTimeout(function(){items=items.filter(function(i){return i.id!==id;});saveItems(items);renderCart();},240);}else{items=items.filter(function(i){return i.id!==id;});saveItems(items);renderCart();}if(item)window.showToast('"'+item.name+'" removed.');};
+window.chQty=function(id,d){var items=getItems();var item=items.find(function(i){return String(i.id)===String(id);});if(!item)return;item.qty+=d;if(item.qty<1){rmItem(id);return;}saveItems(items);var qe=document.getElementById('qty-'+id);if(qe)qe.textContent=item.qty;var pe=document.getElementById('price-'+id);if(pe){pe.textContent=fmt(item.price*item.qty);pe.style.transform='scale(1.2)';setTimeout(function(){pe.style.transform='';},250);}var t=totals(items);var c=items.reduce(function(s,i){return s+i.qty;},0);updateSummary(t,c);var ib=document.getElementById('itemCountBadge');if(ib)ib.textContent=c;var nb=document.querySelector('.cart-badge');if(nb)nb.textContent=String(c);};
+window.rmItem=function(id){var items=getItems();var item=items.find(function(i){return String(i.id)===String(id);});var row=document.getElementById('item-'+id);if(row){row.style.transition='opacity .25s,transform .25s';row.style.opacity='0';row.style.transform='translateX(16px)';setTimeout(function(){items=items.filter(function(i){return String(i.id)!==String(id);});saveItems(items);renderCart();},240);}else{items=items.filter(function(i){return String(i.id)!==String(id);});saveItems(items);renderCart();}if(item)window.showToast('"'+item.name+'" removed.');};
 window.clearCart=function(){if(!getItems().length)return;if(!confirm('Remove all items from your cart?'))return;saveItems([]);savePromo('');renderCart();window.showToast('Cart cleared.');};
 window.applyPromo=function(){var inp=document.getElementById('promoInput');var code=(inp?inp.value.trim().toUpperCase():'');var pm=document.getElementById('promoMsg');if(!code){if(pm){pm.textContent='Please enter a promo code.';pm.className='promo-msg err';}return;}if(PROMOS[code]){savePromo(code);if(pm){pm.textContent=PROMOS[code].label+' applied! 🎉';pm.className='promo-msg ok';}window.showToast('Promo "'+code+'" applied!');updateSummary(totals(getItems()),getItems().reduce(function(s,i){return s+i.qty;},0));}else{savePromo('');if(pm){pm.textContent='Invalid code. Try STUDENT10, CAMPUS20, FLAT50, or NEWUSER.';pm.className='promo-msg err';}updateSummary(totals(getItems()),getItems().reduce(function(s,i){return s+i.qty;},0));}};
-window.goCheckout=function(){if(!getItems().length){window.showToast('Add some items first!');return;}window.location.href='checkout.html';};
+
+window.goCheckout=function(){
+  if(!getItems().length){window.showToast('Add some items first!');return;}
+
+  /* If logged in, create order via API */
+  if (window.api && window.api.isLoggedIn()) {
+    var btn = document.getElementById('checkoutBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Processing...'; }
+
+    window.api.createOrder({
+      address: '',
+      phone: '',
+      note: ''
+    })
+      .then(function(order) {
+        saveItems([]);
+        savePromo('');
+        window.showToast('Order placed successfully! 🎉');
+        setTimeout(function() { window.location.href = 'account.html'; }, 1000);
+      })
+      .catch(function(err) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Proceed to Checkout'; }
+        /* Fallback: go to checkout page */
+        window.location.href = 'Checkout.html';
+      });
+  } else {
+    window.location.href = 'Checkout.html';
+  }
+};
+
 document.addEventListener('DOMContentLoaded',function(){
   seed(); renderCart();
+  syncCartWithAPI();
   var pi=document.getElementById('promoInput'); if(pi) pi.addEventListener('keydown',function(e){if(e.key==='Enter')window.applyPromo();});
 });
