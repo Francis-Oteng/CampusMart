@@ -2,21 +2,21 @@
 /* Tries to load from backend API; falls back to hardcoded data */
 
 var localProducts = [
-  { id:1,  name:'Handcrafted Ceramic Mug',      category:'Art & Crafts',      price:220,  seller:'Emma Wilson',     rating:4.8, reviews:12, badge:'New',  color:'#e2e8f0', img:'assets/images/product-1.jpg'  },
-  { id:2,  name:'Vintage Style Tote Bag',        category:'Fashion',            price:285,  seller:'Marcus Chen',     rating:4.9, reviews:8,  badge:'New',  color:'#fde68a', img:'assets/images/product-2.jpg'  },
-  { id:3,  name:'Custom Illustrated Notebook',   category:'Stationery',         price:150,  seller:'Sofia Rodriguez', rating:5.0, reviews:21, badge:'New',  color:'#ddd6fe', img:'assets/images/product-3.jpg'  },
-  { id:4,  name:'Macrame Wall Hanging',           category:'Home Decor',         price:410,  seller:'Olivia Martinez', rating:4.7, reviews:5,  badge:'New',  color:'#d1fae5', img:'assets/images/product-4.jpg'  },
-  { id:5,  name:'Wooden Phone Stand',             category:'Tech Accessories',   price:198,  seller:'James Anderson',  rating:4.6, reviews:3,  badge:'New',  color:'#fee2e2', img:'assets/images/product-5.jpg'  },
-  { id:6,  name:'Handmade Soap Set',              category:'Beauty & Wellness',  price:260,  seller:'Ava Thompson',    rating:4.9, reviews:14, badge:'New',  color:'#fce7f3', img:'assets/images/product-6.jpg'  },
-  { id:7,  name:'Leather Bookmark Set',           category:'Stationery',         price:170,  seller:'Liam Foster',     rating:4.8, reviews:9,  badge:'New',  color:'#fef3c7', img:'assets/images/product-7.jpg'  },
-  { id:8,  name:'Watercolor Art Print',           category:'Art & Crafts',       price:330,  seller:'Isabella Clark',  rating:5.0, reviews:17, badge:'New',  color:'#ede9fe', img:'assets/images/product-8.jpg'  },
-  { id:9,  name:'Crochet Plant Hanger',           category:'Home Decor',         price:145,  seller:'Mia Johnson',     rating:4.5, reviews:6,  badge:'New',  color:'#d1fae5', img:'assets/images/product-9.jpg'  },
-  { id:10, name:'Hand-painted Tote Bag',          category:'Fashion',            price:310,  seller:'Noah Williams',   rating:4.7, reviews:11, badge:'New',  color:'#fde68a', img:'assets/images/product-10.jpg' },
-  { id:11, name:'Embroidered Bookmark',           category:'Stationery',         price:90,   seller:'Ella Brown',      rating:4.6, reviews:4,  badge:'New',  color:'#fef3c7', img:'assets/images/product-11.jpg' },
-  { id:12, name:'Scented Soy Candle',             category:'Beauty & Wellness',  price:185,  seller:'Lucas Davis',     rating:4.8, reviews:22, badge:'New',  color:'#fce7f3', img:'assets/images/product-12.jpg' },
-  { id:13, name:'Resin Earrings Set',             category:'Fashion',            price:120,  seller:'Grace Osei',      rating:4.7, reviews:7,  badge:'New',  color:'#fde68a', img:'assets/images/product-13.jpg' },
-  { id:14, name:'Linocut Art Print',              category:'Art & Crafts',       price:240,  seller:'Felix Mensah',    rating:4.9, reviews:3,  badge:'New',  color:'#ede9fe', img:'assets/images/product-14.jpg' },
-  { id:15, name:'Phone Case with Dried Flowers',  category:'Tech Accessories',   price:160,  seller:'Amara Owusu',     rating:4.5, reviews:8,  badge:'New',  color:'#fee2e2', img:'assets/images/product-15.jpg' },
+  { id:1,  name:'Handcrafted Ceramic Mug',      category:'Art & Crafts',      price:220,  seller:'Emma Wilson',     rating:4.8, reviews:12, badge:'New',  color:'#e2e8f0', img:'assets/images/Handcrafted Ceramic Mug.jpg'  },
+  { id:2,  name:'Vintage Style Tote Bag',        category:'Fashion',            price:285,  seller:'Marcus Chen',     rating:4.9, reviews:8,  badge:'New',  color:'#fde68a', img:'assets/images/Vintage Style Tote Bag.jpg'  },
+  { id:3,  name:'Custom Illustrated Notebook',   category:'Stationery',         price:150,  seller:'Sofia Rodriguez', rating:5.0, reviews:21, badge:'New',  color:'#ddd6fe', img:'assets/images/Custom Illustrated Notebook.jpg'  },
+  { id:4,  name:'Macrame Wall Hanging',           category:'Home Decor',         price:410,  seller:'Olivia Martinez', rating:4.7, reviews:5,  badge:'New',  color:'#d1fae5', img:'assets/images/Macrame Wall Hanging.jpg'  },
+  { id:5,  name:'Wooden Phone Stand',             category:'Tech Accessories',   price:198,  seller:'James Anderson',  rating:4.6, reviews:3,  badge:'New',  color:'#fee2e2', img:'assets/images/Wooden Phone Stand.jpg'  },
+  { id:6,  name:'Handmade Soap Set',              category:'Beauty & Wellness',  price:260,  seller:'Ava Thompson',    rating:4.9, reviews:14, badge:'New',  color:'#fce7f3', img:'assets/images/Handmade soap set.jpg'  },
+  { id:7,  name:'Leather Bookmark Set',           category:'Stationery',         price:170,  seller:'Liam Foster',     rating:4.8, reviews:9,  badge:'New',  color:'#fef3c7', img:'assets/images/Leather Bookmark set.jpg'  },
+  { id:8,  name:'Watercolor Art Print',           category:'Art & Crafts',       price:330,  seller:'Isabella Clark',  rating:5.0, reviews:17, badge:'New',  color:'#ede9fe', img:'assets/images/Watercolor Art print.jpg'  },
+  { id:9,  name:'Crochet Plant Hanger',           category:'Home Decor',         price:145,  seller:'Mia Johnson',     rating:4.5, reviews:6,  badge:'New',  color:'#d1fae5', img:'assets/images/Crochet Plant Hanger.jpg'  },
+  { id:10, name:'Hand-painted Tote Bag',          category:'Fashion',            price:310,  seller:'Noah Williams',   rating:4.7, reviews:11, badge:'New',  color:'#fde68a', img:'assets/images/Hand-painted Tote Bag.jpg' },
+  { id:11, name:'Embroidered Bookmark',           category:'Stationery',         price:90,   seller:'Ella Brown',      rating:4.6, reviews:4,  badge:'New',  color:'#fef3c7', img:'assets/images/Embroidered Bookmark.jpg' },
+  { id:12, name:'Scented Soy Candle',             category:'Beauty & Wellness',  price:185,  seller:'Lucas Davis',     rating:4.8, reviews:22, badge:'New',  color:'#fce7f3', img:'assets/images/Scented Soy Candle.jpg' },
+  { id:13, name:'Resin Earrings Set',             category:'Fashion',            price:120,  seller:'Grace Osei',      rating:4.7, reviews:7,  badge:'New',  color:'#fde68a', img:'assets/images/Resin Earrings.jpg' },
+  { id:14, name:'Linocut Art Print',              category:'Art & Crafts',       price:240,  seller:'Felix Mensah',    rating:4.9, reviews:3,  badge:'New',  color:'#ede9fe', img:'assets/images/Linocut Art Print.jpg' },
+  { id:15, name:'Phone Case with Dried Flowers',  category:'Tech Accessories',   price:160,  seller:'Amara Owusu',     rating:4.5, reviews:8,  badge:'New',  color:'#fee2e2', img:'' },
 ];
 
 var allProducts  = localProducts.slice();

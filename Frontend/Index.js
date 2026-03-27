@@ -2,17 +2,17 @@
 /* Now loads products from backend API with local fallback */
 
 var featuredProducts = [
-  { id:1, name:'Handcrafted Ceramic Mug',    category:'Art & Crafts',     price:'\u20b5220.00', seller:'Emma Wilson',     rating:4.8, reviews:12, badge:'Featured', color:'#e2e8f0', img:'assets/images/product-1.jpg' },
-  { id:2, name:'Vintage Style Tote Bag',      category:'Fashion',           price:'\u20b5285.00', seller:'Marcus Chen',     rating:4.9, reviews:8,  badge:'Popular',  color:'#fde68a', img:'assets/images/product-2.jpg' },
-  { id:3, name:'Custom Illustrated Notebook', category:'Stationery',        price:'\u20b5150.00', seller:'Sofia Rodriguez', rating:5.0, reviews:21, badge:'Top Rated',color:'#ddd6fe', img:'assets/images/product-3.jpg' },
-  { id:4, name:'Macrame Wall Hanging',         category:'Home Decor',        price:'\u20b5410.00', seller:'Olivia Martinez', rating:4.7, reviews:5,  badge:'New',      color:'#d1fae5', img:'assets/images/product-4.jpg' },
+  { id:1, name:'Handcrafted Ceramic Mug',    category:'Art & Crafts',     price:'\u20b5220.00', seller:'Emma Wilson',     rating:4.8, reviews:12, badge:'Featured', color:'#e2e8f0', img:'assets/images/Handcrafted Ceramic Mug.jpg' },
+  { id:2, name:'Vintage Style Tote Bag',      category:'Fashion',           price:'\u20b5285.00', seller:'Marcus Chen',     rating:4.9, reviews:8,  badge:'Popular',  color:'#fde68a', img:'assets/images/Vintage Style Tote Bag.jpg' },
+  { id:3, name:'Custom Illustrated Notebook', category:'Stationery',        price:'\u20b5150.00', seller:'Sofia Rodriguez', rating:5.0, reviews:21, badge:'Top Rated',color:'#ddd6fe', img:'assets/images/Custom Illustrated Notebook.jpg' },
+  { id:4, name:'Macrame Wall Hanging',         category:'Home Decor',        price:'\u20b5410.00', seller:'Olivia Martinez', rating:4.7, reviews:5,  badge:'New',      color:'#d1fae5', img:'assets/images/Macrame Wall Hanging.jpg' },
 ];
 
 var newArrivals = [
-  { id:5, name:'Wooden Phone Stand',    category:'Tech Accessories',  price:'\u20b5198.00', seller:'James Anderson', rating:4.6, reviews:3,  badge:'New', color:'#fee2e2', img:'assets/images/product-5.jpg' },
-  { id:6, name:'Handmade Soap Set',     category:'Beauty & Wellness', price:'\u20b5260.00', seller:'Ava Thompson',   rating:4.9, reviews:14, badge:'New', color:'#fce7f3', img:'assets/images/product-6.jpg' },
-  { id:7, name:'Leather Bookmark Set',  category:'Stationery',        price:'\u20b5170.00', seller:'Liam Foster',    rating:4.8, reviews:9,  badge:'New', color:'#fef3c7', img:'assets/images/product-7.jpg' },
-  { id:8, name:'Watercolor Art Print',  category:'Art & Crafts',      price:'\u20b5330.00', seller:'Isabella Clark', rating:5.0, reviews:17, badge:'New', color:'#ede9fe', img:'assets/images/product-8.jpg' },
+  { id:5, name:'Wooden Phone Stand',    category:'Tech Accessories',  price:'\u20b5198.00', seller:'James Anderson', rating:4.6, reviews:3,  badge:'New', color:'#fee2e2', img:'assets/images/Wooden Phone Stand.jpg' },
+  { id:6, name:'Handmade Soap Set',     category:'Beauty & Wellness', price:'\u20b5260.00', seller:'Ava Thompson',   rating:4.9, reviews:14, badge:'New', color:'#fce7f3', img:'assets/images/Handmade soap set.jpg' },
+  { id:7, name:'Leather Bookmark Set',  category:'Stationery',        price:'\u20b5170.00', seller:'Liam Foster',    rating:4.8, reviews:9,  badge:'New', color:'#fef3c7', img:'assets/images/Leather Bookmark set.jpg' },
+  { id:8, name:'Watercolor Art Print',  category:'Art & Crafts',      price:'\u20b5330.00', seller:'Isabella Clark', rating:5.0, reviews:17, badge:'New', color:'#ede9fe', img:'assets/images/Watercolor Art print.jpg' },
 ];
 
 document.addEventListener('DOMContentLoaded', function () {

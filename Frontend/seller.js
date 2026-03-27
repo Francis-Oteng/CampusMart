@@ -1,12 +1,12 @@
 /* ─── seller.js — Seller Dashboard (API-integrated) ────────────────────── */
 
 var listings = [
-  { id:1, name:'Handcrafted Ceramic Mug',    cat:'Art & Crafts',     price:220, stock:4, status:'active',  img:'assets/images/product-1.jpg' },
-  { id:2, name:'Vintage Style Tote Bag',      cat:'Fashion',           price:285, stock:2, status:'active',  img:'assets/images/product-2.jpg' },
-  { id:3, name:'Custom Illustrated Notebook', cat:'Stationery',        price:150, stock:8, status:'active',  img:'assets/images/product-3.jpg' },
-  { id:4, name:'Macrame Wall Hanging',         cat:'Home Decor',        price:410, stock:1, status:'pending', img:'assets/images/product-4.jpg' },
-  { id:5, name:'Watercolor Art Print',         cat:'Art & Crafts',      price:330, stock:0, status:'sold',    img:'assets/images/product-8.jpg' },
-  { id:6, name:'Leather Bookmark Set',         cat:'Stationery',        price:170, stock:5, status:'active',  img:'assets/images/product-7.jpg' },
+  { id:1, name:'Handcrafted Ceramic Mug',    cat:'Art & Crafts',     price:220, stock:4, status:'active',  img:'assets/images/Handcrafted Ceramic Mug.jpg' },
+  { id:2, name:'Vintage Style Tote Bag',      cat:'Fashion',           price:285, stock:2, status:'active',  img:'assets/images/Vintage Style Tote Bag.jpg' },
+  { id:3, name:'Custom Illustrated Notebook', cat:'Stationery',        price:150, stock:8, status:'active',  img:'assets/images/Custom Illustrated Notebook.jpg' },
+  { id:4, name:'Macrame Wall Hanging',         cat:'Home Decor',        price:410, stock:1, status:'pending', img:'assets/images/Macrame Wall Hanging.jpg' },
+  { id:5, name:'Watercolor Art Print',         cat:'Art & Crafts',      price:330, stock:0, status:'sold',    img:'assets/images/Watercolor Art print.jpg' },
+  { id:6, name:'Leather Bookmark Set',         cat:'Stationery',        price:170, stock:5, status:'active',  img:'assets/images/Leather Bookmark set.jpg' },
 ];
 
 /* ── Load real data from API ── */
