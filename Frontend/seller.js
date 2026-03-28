@@ -1,4 +1,4 @@
-/* ─── seller.js — Seller Dashboard ────────────────────── */
+/* ─── seller.js — Seller Dashboard (API-integrated) ────────────────────── */
 
 var listings = [
   { id:1, name:'Handcrafted Ceramic Mug',    cat:'Art & Crafts',     price:220, stock:4, status:'active',  img:'assets/images/Handcrafted Ceramic Mug.jpg' },
@@ -199,18 +199,32 @@ document.addEventListener('DOMContentLoaded', function () {
     window.showToast('Editing "' + l.name + '"');
   };
 
-  /* ── Delete listing ── */
+  /* ── Delete listing (with API) ── */
   window.deleteListing = function (id) {
-    var l = listings.find(function (x) { return x.id === id; });
+    var l = listings.find(function (x) { return String(x.id) === String(id); });
     if (!l) return;
     if (!confirm('Remove "' + l.name + '" from your listings? This cannot be undone.')) return;
-    listings = listings.filter(function (x) { return x.id !== id; });
-    renderListings();
-    updateOverviewStats();
-    window.showToast('"' + l.name + '" removed successfully.');
+
+    if (window.api && window.api.isLoggedIn()) {
+      window.api.deleteProduct(id)
+        .then(function() {
+          listings = listings.filter(function (x) { return String(x.id) !== String(id); });
+          renderListings(); updateOverviewStats();
+          window.showToast('"' + l.name + '" removed successfully.');
+        })
+        .catch(function() {
+          listings = listings.filter(function (x) { return String(x.id) !== String(id); });
+          renderListings(); updateOverviewStats();
+          window.showToast('"' + l.name + '" removed locally.');
+        });
+    } else {
+      listings = listings.filter(function (x) { return x.id !== id; });
+      renderListings(); updateOverviewStats();
+      window.showToast('"' + l.name + '" removed successfully.');
+    }
   };
 
-  /* ── Add / edit listing form ── */
+  /* ── Add / edit listing form (API-integrated) ── */
   var addForm = document.getElementById('addListingForm');
   if (addForm) {
     addForm.addEventListener('submit', function (e) {
@@ -227,29 +241,72 @@ document.addEventListener('DOMContentLoaded', function () {
       if (isNaN(price) || price <= 0) { window.showToast('Please enter a valid price.'); return; }
       if (isNaN(stock) || stock < 0)  { window.showToast('Please enter a valid stock quantity.'); return; }
 
-      if (editingId) {
-        /* Update existing */
-        var idx = listings.findIndex(function (l) { return l.id === editingId; });
-        if (idx > -1) {
-          listings[idx] = Object.assign(listings[idx], { name: name, cat: cat, price: price, stock: stock, description: desc });
-          window.showToast('"' + name + '" updated!');
+      /* Build FormData for API */
+      var formData = new FormData();
+      formData.append('name', name);
+      formData.append('category', cat);
+      formData.append('price', price);
+      formData.append('stock', stock);
+      formData.append('description', desc);
+
+      var imgInput = document.getElementById('listingImage') || document.querySelector('input[type="file"][accept*="image"]');
+      if (imgInput && imgInput.files && imgInput.files.length > 0) {
+        for (var fi = 0; fi < imgInput.files.length; fi++) {
+          formData.append('images', imgInput.files[fi]);
         }
-        editingId = null;
-      } else {
-        /* Add new */
-        var newId = listings.reduce(function (max, l) { return Math.max(max, l.id); }, 0) + 1;
-        listings.push({ id: newId, name: name, cat: cat, price: price, stock: stock, status: 'pending', description: desc });
-        window.showToast('"' + name + '" submitted for review!');
       }
 
-      addForm.reset();
-      /* Reset button text */
-      var btn = addForm.querySelector('button[type="submit"]');
-      if (btn) btn.textContent = 'Submit Listing';
-      var heading = document.querySelector('#panel-add h2, #panel-add .section-title');
-      if (heading) heading.textContent = 'Add New Listing';
+      function resetForm() {
+        addForm.reset();
+        var btn = addForm.querySelector('button[type="submit"]');
+        if (btn) btn.textContent = 'Submit Listing';
+        var heading = document.querySelector('#panel-add h2, #panel-add .section-title');
+        if (heading) heading.textContent = 'Add New Listing';
+        window.switchTab('listings');
+      }
 
-      window.switchTab('listings');
+      if (window.api && window.api.isLoggedIn()) {
+        if (editingId) {
+          window.api.updateProduct(editingId, formData)
+            .then(function() {
+              var idx = listings.findIndex(function (l) { return String(l.id) === String(editingId); });
+              if (idx > -1) listings[idx] = Object.assign(listings[idx], { name:name, cat:cat, price:price, stock:stock, description:desc });
+              window.showToast('"' + name + '" updated!');
+              editingId = null; resetForm();
+            })
+            .catch(function() {
+              var idx = listings.findIndex(function (l) { return String(l.id) === String(editingId); });
+              if (idx > -1) listings[idx] = Object.assign(listings[idx], { name:name, cat:cat, price:price, stock:stock, description:desc });
+              window.showToast('"' + name + '" updated locally.');
+              editingId = null; resetForm();
+            });
+        } else {
+          window.api.createProduct(formData)
+            .then(function(product) {
+              listings.push({ id: product._id, name:name, cat:cat, price:price, stock:stock, status:'pending', description:desc });
+              window.showToast('"' + name + '" submitted for review!');
+              resetForm();
+            })
+            .catch(function() {
+              var newId = listings.reduce(function (max, l) { return Math.max(max, typeof l.id === 'number' ? l.id : 0); }, 0) + 1;
+              listings.push({ id: newId, name:name, cat:cat, price:price, stock:stock, status:'pending', description:desc });
+              window.showToast('"' + name + '" saved locally.');
+              resetForm();
+            });
+        }
+      } else {
+        if (editingId) {
+          var idx = listings.findIndex(function (l) { return l.id === editingId; });
+          if (idx > -1) listings[idx] = Object.assign(listings[idx], { name:name, cat:cat, price:price, stock:stock, description:desc });
+          window.showToast('"' + name + '" updated!');
+          editingId = null;
+        } else {
+          var newId = listings.reduce(function (max, l) { return Math.max(max, l.id); }, 0) + 1;
+          listings.push({ id: newId, name:name, cat:cat, price:price, stock:stock, status:'pending', description:desc });
+          window.showToast('"' + name + '" submitted for review!');
+        }
+        resetForm();
+      }
     });
   }
 
@@ -363,4 +420,7 @@ document.addEventListener('DOMContentLoaded', function () {
   renderRecentOrders();
   renderTodayHours();
   renderRating();
+
+  /* Load real data from API */
+  loadSellerDataFromAPI();
 });
