@@ -286,21 +286,46 @@
     btn.disabled = true;
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px;animation:spin .7s linear infinite;"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Creating account...';
 
-    setTimeout(function () {
-      var first    = document.getElementById('suFirst').value.trim();
-      var last     = document.getElementById('suLast').value.trim();
-      var email    = document.getElementById('suEmail').value.trim();
-      var uni      = document.getElementById('suUni').value;
-      var name     = first + ' ' + last;
-      var initials = (first[0]||'') + (last[0]||'');
-      var joinDate = new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+    var first    = document.getElementById('suFirst').value.trim();
+    var last     = document.getElementById('suLast').value.trim();
+    var email    = document.getElementById('suEmail').value.trim();
+    var uni      = document.getElementById('suUni').value;
+    var pw       = document.getElementById('suPw').value;
+    var fullName = first + ' ' + last;
 
-      var user = { name:name, email:email, role:chosenRole, loggedIn:true, joinDate:joinDate };
-      sessionStorage.setItem('cm_user', JSON.stringify(user));
-      localStorage.setItem('cm_profile', JSON.stringify({ name:name, email:email, campus:uni, role:chosenRole, initials:initials.toUpperCase(), joinDate:joinDate }));
+    if (window.api && window.api.register) {
+      window.api.register({
+        name: fullName,
+        email: email,
+        password: pw,
+        role: chosenRole,
+        campus: uni
+      })
+      .then(function(data) {
+        window.api.saveLogin(data);
+        window.showToast('Welcome to CampusMarket, ' + first + '! 🎉');
+        setTimeout(function() {
+          window.location.href = chosenRole === 'seller' ? 'SellerDashboard.html' : 'BuyerDashboard.html';
+        }, 800);
+      })
+      .catch(function(err) {
+        btn.disabled = false;
+        btn.textContent = 'Create My Account';
+        var msg = (err.data && err.data.msg) ? err.data.msg : 'Registration failed. Please try again.';
+        window.showToast(msg);
+      });
+    } else {
+      /* Fallback if api is broken */
+      setTimeout(function () {
+        var initials = (first[0]||'') + (last[0]||'');
+        var joinDate = new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+        var user = { name:fullName, email:email, role:chosenRole, loggedIn:true, joinDate:joinDate };
+        sessionStorage.setItem('cm_user', JSON.stringify(user));
+        localStorage.setItem('cm_profile', JSON.stringify({ name:fullName, email:email, campus:uni, role:chosenRole, initials:initials.toUpperCase(), joinDate:joinDate }));
 
-      window.location.href = 'account.html';
-    }, 1100);
+        window.location.href = chosenRole === 'seller' ? 'SellerDashboard.html' : 'BuyerDashboard.html';
+      }, 1100);
+    }
   }
 
   /* ── Password strength ── */

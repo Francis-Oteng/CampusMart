@@ -400,25 +400,48 @@
     btn.disabled = true;
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px;animation:spin .7s linear infinite;"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Signing in...';
 
-    setTimeout(function () {
-      var profile = {};
-      try { profile = JSON.parse(localStorage.getItem('cm_profile') || '{}'); } catch(e){}
-      var name     = profile.name || document.getElementById('siName').textContent;
-      var initials = name.split(' ').filter(Boolean).map(function(n){return n[0];}).join('').slice(0,2).toUpperCase();
-      var joinDate = profile.joinDate || new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+    var pw = document.getElementById('siPw').value;
 
-      var user = { name:name, email:enteredEmail, role:chosenRole, loggedIn:true, joinDate:joinDate };
-      sessionStorage.setItem('cm_user', JSON.stringify(user));
+    if (window.api && window.api.login) {
+      window.api.login({ email: enteredEmail, password: pw })
+      .then(function(data) {
+        window.api.saveLogin(data);
+        if (chosenRole !== data.user.role) {
+          window.api.updateProfile({ role: chosenRole }).catch(function(){});
+        }
+        var namePart = data.user.name || enteredEmail.split('@')[0];
+        window.showToast('Welcome back, ' + namePart.split(' ')[0] + '!');
+        setTimeout(function() {
+          var dest = chosenRole === 'seller' ? 'SellerDashboard.html' : 'BuyerDashboard.html';
+          window.location.href = dest;
+        }, 700);
+      })
+      .catch(function(err) {
+        btn.disabled = false;
+        btn.textContent = 'Sign In to My Account';
+        var msg = (err.data && err.data.msg) ? err.data.msg : 'Login failed. Please try again.';
+        window.showToast(msg);
+      });
+    } else {
+      setTimeout(function () {
+        var profile = {};
+        try { profile = JSON.parse(localStorage.getItem('cm_profile') || '{}'); } catch(e){}
+        var name     = profile.name || document.getElementById('siName').textContent;
+        var initials = name.split(' ').filter(Boolean).map(function(n){return n[0];}).join('').slice(0,2).toUpperCase();
+        var joinDate = profile.joinDate || new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
 
-      /* Update profile if name/email differs */
-      if (!profile.name)  profile.name  = name;
-      if (!profile.email) profile.email = enteredEmail;
-      profile.role     = chosenRole;
-      profile.joinDate = joinDate;
-      localStorage.setItem('cm_profile', JSON.stringify(profile));
+        var user = { name:name, email:enteredEmail, role:chosenRole, loggedIn:true, joinDate:joinDate };
+        sessionStorage.setItem('cm_user', JSON.stringify(user));
 
-      window.location.href = 'account.html';
-    }, 900);
+        if (!profile.name)  profile.name  = name;
+        if (!profile.email) profile.email = enteredEmail;
+        profile.role     = chosenRole;
+        profile.joinDate = joinDate;
+        localStorage.setItem('cm_profile', JSON.stringify(profile));
+
+        window.location.href = chosenRole === 'seller' ? 'SellerDashboard.html' : 'BuyerDashboard.html';
+      }, 900);
+    }
   }
 
   /* ── Forgot password ── */
