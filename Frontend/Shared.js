@@ -157,8 +157,13 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   window.renderProductCard = function (p) {
-    var img = p.img
-      ? '<img src="' + p.img + '" alt="' + window.sanitize(p.name) + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;">'
+    var imgSrc = p.img || '';
+    if (imgSrc.startsWith('/uploads/')) {
+      imgSrc = 'http://localhost:5000' + imgSrc;
+    }
+    
+    var img = imgSrc
+      ? '<img src="' + imgSrc + '" alt="' + window.sanitize(p.name) + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;">'
       : '<div class="product-img-placeholder" style="background:' + (p.color || '#F3F4F6') + ';"><span style="font-size:.65rem;color:#64748b;">' + window.sanitize(p.category) + '</span></div>';
     return (
       '<div class="product-card">' +
