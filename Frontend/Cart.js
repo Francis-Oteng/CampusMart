@@ -1,11 +1,11 @@
 /* ─── cart.js — Cart with API Integration ─── */
 var PROMOS = { 'STUDENT10':{type:'pct',value:10,label:'10% student discount'}, 'CAMPUS20':{type:'pct',value:20,label:'20% campus discount'}, 'FLAT50':{type:'fixed',value:50,label:'₵50 off'}, 'NEWUSER':{type:'pct',value:15,label:'15% first-order discount'} };
 var SUGGESTIONS = [
-  {id:101,name:'Resin Earrings',cat:'Fashion',price:120,color:'#fde68a',img:'assets/images/Resin Earrings.jpg'},
-  {id:102,name:'Linocut Art Print',cat:'Art & Crafts',price:240,color:'#ede9fe',img:'assets/images/Linocut Art Print.jpg'},
-  {id:103,name:'Scented Soy Candle',cat:'Beauty & Wellness',price:185,color:'#fce7f3',img:'assets/images/Scented Soy Candle.jpg'},
-  {id:104,name:'Embroidered Bookmark',cat:'Stationery',price:90,color:'#fef3c7',img:'assets/images/Embroidered Bookmark.jpg'},
-  {id:105,name:'Crochet Plant Hanger',cat:'Home Decor',price:145,color:'#d1fae5',img:'assets/images/Crochet Plant Hanger.jpg'},
+  {id:101,name:'Resin Earrings',cat:'Fashion',price:120,color:'#fde68a',img:'Assets/images/resin-earrings.jpg'},
+  {id:102,name:'Linocut Art Print',cat:'Art & Crafts',price:240,color:'#ede9fe',img:'Assets/images/linocut-art-print.jpg'},
+  {id:103,name:'Scented Soy Candle',cat:'Beauty & Wellness',price:185,color:'#fce7f3',img:'Assets/images/scented-soy-candle.jpg'},
+  {id:104,name:'Embroidered Bookmark',cat:'Stationery',price:90,color:'#fef3c7',img:'Assets/images/embroidered-bookmark.jpg'},
+  {id:105,name:'Crochet Plant Hanger',cat:'Home Decor',price:145,color:'#d1fae5',img:'Assets/images/crochet-plant-hanger.jpg'},
 ];
 function getItems(){ try{return JSON.parse(sessionStorage.getItem('cm_cart_items')||'[]');}catch(e){return[];} }
 function saveItems(items){ sessionStorage.setItem('cm_cart_items',JSON.stringify(items)); sessionStorage.setItem('cm_cart',String(items.reduce(function(s,i){return s+i.qty;},0))); }
@@ -22,9 +22,9 @@ function totals(items){
 function seed(){
   if(getItems().length) return;
   saveItems([
-    {id:1,name:'Handcrafted Ceramic Mug',cat:'Art & Crafts',price:220,qty:1,seller:'Emma Wilson',color:'#e2e8f0',img:'assets/images/Handcrafted Ceramic Mug.jpg'},
-    {id:3,name:'Custom Illustrated Notebook',cat:'Stationery',price:150,qty:2,seller:'Sofia Rodriguez',color:'#ddd6fe',img:'assets/images/Custom Illustrated Notebook.jpg'},
-    {id:6,name:'Handmade Soap Set',cat:'Beauty & Wellness',price:260,qty:1,seller:'Ava Thompson',color:'#fce7f3',img:'assets/images/Handmade Soap Set.jpg'},
+    {id:1,name:'Handcrafted Ceramic Mug',cat:'Art & Crafts',price:220,qty:1,seller:'Emma Wilson',color:'#e2e8f0',img:'Assets/images/handcrafted-ceramic-mug.jpg'},
+    {id:3,name:'Custom Illustrated Notebook',cat:'Stationery',price:150,qty:2,seller:'Sofia Rodriguez',color:'#ddd6fe',img:'Assets/images/custom-illustrated-notebook.jpg'},
+    {id:6,name:'Handmade Soap Set',cat:'Beauty & Wellness',price:260,qty:1,seller:'Ava Thompson',color:'#fce7f3',img:'Assets/images/handmade-soap-set.jpg'},
   ]);
 }
 
