@@ -136,41 +136,68 @@
     @media(max-width:1024px){ .stats-row{grid-template-columns:repeat(2,1fr);} .two-col{grid-template-columns:1fr;} }
     @media(max-width:768px){ .stats-row{grid-template-columns:1fr 1fr;} .table-search input{width:160px;} }
     @media(max-width:480px){ .stats-row{grid-template-columns:1fr;} }
+  /* ── Internal admin nav bar ── */
+  .admin-nav {
+    background: #0F172A;
+    border-bottom: 1px solid #1E293B;
+    padding: 0;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .admin-nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .admin-nav-left { display: flex; align-items: center; gap: 1rem; }
+  .admin-logo { display: flex; align-items: center; gap: .5rem; text-decoration: none; }
+  .admin-logo-icon { width: 32px; height: 32px; background: #14B8A6; border-radius: 7px; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: .75rem; }
+  .admin-logo-text { color: #F8FAFC; font-weight: 700; font-size: .9375rem; }
+  .admin-badge { background: rgba(20,184,166,.15); color: #5EEAD4; border: 1px solid rgba(20,184,166,.2); border-radius: 99px; font-size: .6875rem; font-weight: 700; padding: .2rem .625rem; letter-spacing: .04em; text-transform: uppercase; }
+  .admin-nav-right { display: flex; align-items: center; gap: .75rem; }
+  .admin-user { display: flex; align-items: center; gap: .5rem; }
+  .admin-avatar { width: 30px; height: 30px; background: #14B8A6; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .6875rem; }
+  .admin-user-name { font-size: .8125rem; font-weight: 600; color: #CBD5E1; }
+  .admin-logout-btn { background: none; border: 1px solid #334155; color: #94A3B8; border-radius: 7px; padding: .35rem .75rem; font-size: .75rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .15s; display: flex; align-items: center; gap: .375rem; }
+  .admin-logout-btn:hover { border-color: #F87171; color: #F87171; }
+  .admin-logout-btn svg { width: 13px; height: 13px; }
   </style>
 </head>
 <body>
 
-<div class="announce">🎓 Free shipping on orders over ₵350 for all students!</div>
+<!-- ── INTERNAL AUTH GUARD — runs before any content renders ── -->
+<script>
+(function () {
+  var admin = null;
+  try { admin = JSON.parse(localStorage.getItem('cm_admin') || 'null'); } catch(e){}
+  if (!admin || !admin.isAdmin) {
+    window.location.replace('admin-login.html');
+  }
+})();
+</script>
 
-
-<nav class="nav">
-  <div class="container nav-inner">
-    <a href="index.html" class="logo"><div class="logo-icon">CM</div><span class="logo-text">CampusMarket</span></a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="catalog.html">Catalog</a></li>
-      <li><a href="account.html">Account</a></li>
-      <li><a href="admin.html" class="active">Admin</a></li>
-      <li><a href="help.html">Help</a></li>
-    </ul>
-    <div class="nav-actions">
-      <a href="account.html" class="btn-outline">Sign in</a>
-      <a href="account.html" class="btn-primary">Sign up</a>
-      <button class="cart-btn" aria-label="Cart">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
-        <span class="cart-badge">0</span>
+<!-- ── INTERNAL-ONLY ADMIN NAV — not linked from any public page ── -->
+<nav class="admin-nav">
+  <div class="admin-nav-inner">
+    <div class="admin-nav-left">
+      <a href="admin.html" class="admin-logo">
+        <div class="admin-logo-icon">CM</div>
+        <span class="admin-logo-text">CampusMarket</span>
+      </a>
+      <span class="admin-badge">Admin Portal</span>
+    </div>
+    <div class="admin-nav-right">
+      <div class="admin-user">
+        <div class="admin-avatar" id="adminAvatar">AD</div>
+        <span class="admin-user-name" id="adminName">Admin</span>
+      </div>
+      <button class="admin-logout-btn" onclick="doAdminLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
       </button>
-      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
-
-
-<div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-menu-close" id="menuClose">✕</button>
-  <a href="index.html">Home</a><a href="catalog.html">Catalog</a><a href="account.html">Account</a><a href="admin.html">Admin</a><a href="#">Help</a><a href="#">Sign in</a>
-  <a href="#" class="btn-primary" style="text-align:center;border-radius:9999px;padding:.75rem;">Sign up</a>
-</div>
 
 
 <div class="page-header">
@@ -641,6 +668,31 @@
     initChart();
   });
 </script>
+<script src="api.js"></script>
 <script src="shared.js"></script>
+<script>
+  /* ── Admin session: populate nav name + handle logout ── */
+  (function () {
+    var admin = null;
+    try { admin = JSON.parse(localStorage.getItem('cm_admin') || 'null'); } catch(e){}
+    if (!admin || !admin.isAdmin) {
+      window.location.replace('admin-login.html');
+      return;
+    }
+    var avatarEl = document.getElementById('adminAvatar');
+    var nameEl   = document.getElementById('adminName');
+    if (avatarEl) avatarEl.textContent = admin.initials || admin.name.slice(0,2).toUpperCase();
+    if (nameEl)   nameEl.textContent   = admin.name || 'Admin';
+  })();
+
+  window.doAdminLogout = function () {
+    if (window.api) window.api.adminLogout();
+    else {
+      localStorage.removeItem('cm_admin_token');
+      localStorage.removeItem('cm_admin');
+    }
+    window.location.href = 'admin-login.html';
+  };
+</script>
 </body>
 </html>

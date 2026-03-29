@@ -18,6 +18,8 @@ const UserSchema = new mongoose.Schema({
   preferredPay:  { type: String },
   notifyOrders:  { type: String },
   favCat:        { type: String },
+  isAdmin:       { type: Boolean, default: false },
+  isSuspended:   { type: Boolean, default: false },
   wishlist:      [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
   joinDate:      { type: Date, default: Date.now },
   createdAt:     { type: Date, default: Date.now }

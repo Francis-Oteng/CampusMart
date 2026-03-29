@@ -171,3 +171,61 @@ window.api.logout = function () {
   localStorage.removeItem('cm_profile');
   sessionStorage.removeItem('cm_user');
 };
+
+/* ── ADMIN helpers (separate session — never mixed with buyer/seller) ── */
+window.api.saveAdminLogin = function (data) {
+  // data = { token, user: { ..., isAdmin: true } }
+  localStorage.setItem('cm_admin_token', data.token);
+  localStorage.setItem('cm_admin', JSON.stringify({
+    id:      data.user.id,
+    name:    data.user.name,
+    email:   data.user.email,
+    isAdmin: data.user.isAdmin,
+    initials: data.user.initials || ''
+  }));
+};
+
+window.api.getAdminSession = function () {
+  try { return JSON.parse(localStorage.getItem('cm_admin') || 'null'); } catch(e) { return null; }
+};
+
+window.api.isAdmin = function () {
+  var a = window.api.getAdminSession();
+  return !!(a && a.isAdmin);
+};
+
+window.api.adminLogout = function () {
+  localStorage.removeItem('cm_admin_token');
+  localStorage.removeItem('cm_admin');
+};
+
+/* Admin-authenticated fetch (uses cm_admin_token instead of cm_token) */
+window.apiFetchAdmin = function (path, opts) {
+  opts = opts || {};
+  var headers = {};
+  var token = localStorage.getItem('cm_admin_token');
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+
+  var fetchOpts = { method: opts.method || 'GET', headers: headers };
+
+  if (opts.formData) {
+    fetchOpts.body = opts.formData;
+  } else if (opts.body) {
+    headers['Content-Type'] = 'application/json';
+    fetchOpts.headers = headers;
+    fetchOpts.body = JSON.stringify(opts.body);
+  }
+
+  return fetch('http://localhost:5000/api' + path, fetchOpts)
+    .then(function (res) {
+      if (!res.ok) {
+        return res.json().then(function (data) {
+          var err = new Error(data.msg || 'API Error');
+          err.status = res.status;
+          err.data = data;
+          throw err;
+        });
+      }
+      return res.json();
+    });
+};
