@@ -35,7 +35,7 @@
     .fg { display: flex; flex-direction: column; gap: .375rem; margin-bottom: 1rem; }
     .fl { font-size: .75rem; font-weight: 700; color: var(--mid); }
     .fc { padding: .7rem .875rem; border: 1.5px solid var(--border); border-radius: var(--r-sm); font-size: .9375rem; font-family: var(--font-body); color: var(--dark); background: var(--white); outline: none; transition: border-color .2s, box-shadow .2s; width: 100%; }
-    .fc:focus { border-color:     --teal #14B8A6; box-shadow: 0 0 0 3px #F5F3FF; }
+    .fc:focus { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-bg); }
     .fc::placeholder { color: var(--soft); }
     .fc.err { border-color: var(--red); }
     select.fc { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6,9 12,15 18,9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .75rem center; padding-right: 2.25rem; cursor: pointer; }
@@ -57,37 +57,37 @@
     .role-section-title { font-size: .75rem; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .875rem; }
     .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: .75rem; }
     .role-card { border: 2px solid var(--border); border-radius: var(--r-md); padding: 1.25rem 1rem; cursor: pointer; text-align: center; transition: border-color .2s, background .2s, transform .15s; }
-    .role-card:hover { border-color:     --teal #14B8A6; transform: translateY(-2px); }
-    .role-card.selected { border-color:    --teal#14B8A6; background: #F5F3FF; }
+    .role-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+    .role-card.selected { border-color: var(--teal); background: var(--teal-bg); }
     .role-card input[type=radio] { display: none; }
     .role-card-icon { width: 48px; height: 48px; border-radius: var(--r-md); display: grid; place-items: center; margin: 0 auto .75rem; }
     .role-card-icon svg { width: 22px; height: 22px; }
     .role-card-title { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: .25rem; }
     .role-card-desc  { font-size: .75rem; color: var(--muted); line-height: 1.4; }
-    .role-card.selected .role-card-title { color:     --teal #14B8A6; }
+    .role-card.selected .role-card-title { color: var(--teal); }
     .role-both { display: flex; align-items: center; gap: .875rem; border: 2px solid var(--border); border-radius: var(--r-md); padding: 1rem 1.25rem; cursor: pointer; transition: border-color .2s, background .2s; margin-bottom: 1.5rem; }
-    .role-both:hover { border-color:    --teal #14B8A6; }
-    .role-both.selected { border-color:    --teal #14B8A6;background: var(--teal-bg); }
+    .role-both:hover { border-color: var(--teal); }
+    .role-both.selected { border-color: var(--teal); background: var(--teal-bg); }
     .role-both input[type=radio] { display: none; }
     .role-both-icon { width: 44px; height: 44px; border-radius: var(--r-sm); background: var(--teal-bg); display: grid; place-items: center; flex-shrink: 0; }
     .role-both-icon svg { width: 22px; height: 22px; color: var(--teal); }
     .role-both-title { font-size: 1rem; font-weight: 700; color: var(--dark); }
     .role-both-desc  { font-size: .8125rem; color: var(--muted); margin-top: .125rem; }
-    .role-both.selected .role-both-title { color:    --teal #14B8A6; }
+    .role-both.selected .role-both-title { color: var(--teal); }
 
     /* Buttons */
-    .btn-purple { width: 100%; padding: .9375rem; background:    --teal #14B8A6; color: var(--white); border-radius: var(--r-sm); font-size: 1rem; font-weight: 700; border: none; cursor: pointer; font-family: var(--font-body); transition: background .15s, transform .1s; display: flex; align-items: center; justify-content: center; gap: .5rem; margin-top: .5rem; }
-    .btn-purple:hover { background:    --teal #14B8A6; transform: translateY(-1px); }
-    .btn-purple:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-    .btn-purple svg { width: 17px; height: 17px; }
+    .btn-teal { width: 100%; padding: .9375rem; background: var(--teal); color: var(--white); border-radius: var(--r-sm); font-size: 1rem; font-weight: 700; border: none; cursor: pointer; font-family: var(--font-body); transition: background .15s, transform .1s; display: flex; align-items: center; justify-content: center; gap: .5rem; margin-top: .5rem; }
+    .btn-teal:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .btn-teal:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .btn-teal svg { width: 17px; height: 17px; }
     .btn-back { width: 100%; padding: .75rem; background: none; color: var(--muted); border: 1.5px solid var(--border); border-radius: var(--r-sm); font-size: .9375rem; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: border-color .15s, color .15s; margin-top: .625rem; display: flex; align-items: center; justify-content: center; gap: .5rem; }
     .btn-back:hover { border-color: var(--teal); color: var(--teal); }
     .btn-back svg { width: 15px; height: 15px; }
     .terms-note { font-size: .8125rem; color: var(--muted); text-align: center; margin-top: 1rem; line-height: 1.6; }
-    .terms-note a { color:    --teal #14B8A6; font-weight: 600; }
+    .terms-note a { color: var(--teal); font-weight: 600; }
     /* Footer */
     .auth-footer { text-align: center; padding: 1.125rem 2rem 1.5rem; background: var(--bg-gray); border-top: 1px solid var(--border); font-size: .9375rem; color: var(--muted); }
-    .auth-footer a { color:    --teal #14B8A6; font-weight: 600; }
+    .auth-footer a { color: var(--teal); font-weight: 600; }
 
     @keyframes spin { to { transform: rotate(360deg); } }
     @media(max-width:480px) { #step1,#step2{padding:1.5rem 1.25rem 1.75rem;} .auth-brand{padding:1.75rem 1.25rem 0;} .auth-footer{padding:1rem 1.25rem 1.25rem;} .form-row{grid-template-columns:1fr;} .role-grid{grid-template-columns:1fr 1fr;} }
@@ -170,7 +170,7 @@
         <div class="pw-strength"><div class="pw-bar"><div class="pw-fill" id="pwFill"></div></div><div class="pw-lbl" id="pwLbl">Enter a password</div></div>
         <span class="ferr" id="suPwErr">Password must be at least 8 characters</span>
       </div>
-      <button class="btn-purple" onclick="suGoStep2()">
+      <button class="btn-teal" onclick="suGoStep2()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
         Next — Choose Your Role
       </button>
@@ -215,7 +215,7 @@
         </div>
       </label>
 
-      <button class="btn-purple" id="suCreateBtn" onclick="doSignUp()">
+      <button class="btn-teal" id="suCreateBtn" onclick="doSignUp()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
         Create My Account
       </button>
