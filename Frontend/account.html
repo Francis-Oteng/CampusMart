@@ -252,7 +252,7 @@
     /* ── RESPONSIVE ── */
     @media(max-width:1200px){ .stat-row{grid-template-columns:repeat(2,1fr);} .ov-grid{grid-template-columns:1fr;} }
     @media(max-width:1024px){ .dash-layout{grid-template-columns:1fr;} }
-    @media(max-width:768px) { .fgrid{grid-template-columns:1fr;} .phdr-inner{flex-direction:column;align-items:flex-start;} .pstats{gap:1.25rem;} .stat-row{grid-template-columns:1fr 1fr;} .summary-grid{grid-template-columns:1fr 1fr 1fr;} }
+    @media(max-width:768px) { .fgrid{grid-template-columns:1fr;} .phdr-inner{flex-direction:column;align-items:flex-start;} .pstats{gap:1.25rem;flex-wrap:wrap;} .pstat-div{display:none;} .stat-row{grid-template-columns:1fr 1fr;} .summary-grid{grid-template-columns:1fr 1fr 1fr;} }
     @media(max-width:480px) { .pstats{flex-wrap:wrap;} .ptab span{display:none;} .stat-row{grid-template-columns:1fr;} .summary-grid{grid-template-columns:1fr;} .guest-card{padding:2.5rem 1.5rem;} #guestView{padding:2rem .75rem;} }
   </style>
 </head>
