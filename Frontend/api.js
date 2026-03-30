@@ -1,6 +1,6 @@
 /* ─── api.js — Central API Client for CampusMart ──────── */
 
-var API_BASE = 'http://localhost:5000/api';
+var API_BASE = 'https://campusmart-jr8p.onrender.com/api';
 
 /**
  * Core fetch wrapper — auto-attaches JWT and handles errors.
@@ -216,7 +216,7 @@ window.apiFetchAdmin = function (path, opts) {
     fetchOpts.body = JSON.stringify(opts.body);
   }
 
-  return fetch('http://localhost:5000/api' + path, fetchOpts)
+  return fetch('https://campusmart-jr8p.onrender.com/api' + path, fetchOpts)
     .then(function (res) {
       if (!res.ok) {
         return res.json().then(function (data) {

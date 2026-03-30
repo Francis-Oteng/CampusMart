@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.renderProductCard = function (p) {
     var imgSrc = p.img || '';
     if (imgSrc.startsWith('/uploads/')) {
-      imgSrc = 'http://localhost:5000' + imgSrc;
+      imgSrc = 'https://campusmart-jr8p.onrender.com' + imgSrc;
     }
     
     var img = imgSrc
