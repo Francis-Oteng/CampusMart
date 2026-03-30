@@ -1,0 +1,27 @@
+# ── Environment variables (secrets — never commit these) ──
+.env
+.env.local
+.env.production
+.env.*
+
+# ── Dependencies ──
+node_modules/
+
+# ── Uploaded files ──
+Backend/uploads/*
+!Backend/uploads/.gitkeep
+
+# ── OS files ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor files ──
+.vscode/
+.idea/
+*.suo
+*.user
+
+# ── Logs ──
+*.log
+npm-debug.log*
