@@ -129,6 +129,13 @@
 ];
 
 
+  // Read URL params immediately (script is at end of body, DOM is ready)
+  var _urlParams = new URLSearchParams(window.location.search);
+  var _urlCat    = _urlParams.get('category') || '';
+  var _urlQ      = _urlParams.get('q') || '';
+  if (_urlCat) { var _catEl = document.getElementById('categoryFilter'); if (_catEl) _catEl.value = _urlCat; }
+  if (_urlQ)   { var _srEl  = document.getElementById('searchInput');    if (_srEl)  _srEl.value  = _urlQ;  }
+
   let filtered = [...allProducts];
   let currentSort = 'featured';
   let currentPage = 1;
@@ -273,13 +280,6 @@
 
 
   document.addEventListener('DOMContentLoaded', function() {
-
-    // Read ?category= and ?q= from URL and pre-set filters
-    var params = new URLSearchParams(window.location.search);
-    var urlCat = params.get('category') || '';
-    var urlQ   = params.get('q') || '';
-    if (urlCat) document.getElementById('categoryFilter').value = urlCat;
-    if (urlQ)   document.getElementById('searchInput').value   = urlQ;
 
     var yr = document.getElementById('current-year');
     if (yr) yr.textContent = new Date().getFullYear();
