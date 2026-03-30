@@ -46,6 +46,10 @@
     .pw-eye { position: absolute; right: .875rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--soft); display: grid; place-items: center; padding: 0; }
     .pw-eye:hover { color: var(--mid); }
     .pw-eye svg { width: 17px; height: 17px; }
+    /* Hide browser's native password-reveal eye (Edge/Chrome on Windows) */
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear,
+    input[type="password"]::-webkit-credentials-auto-fill-button { display: none !important; }
 
     /* Password strength */
     .pw-strength { margin-top: .5rem; }
