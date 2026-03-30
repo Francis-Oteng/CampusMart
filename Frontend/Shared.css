@@ -1,5 +1,12 @@
 /* ─── RESET & VARIABLES ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Suppress browser-native password reveal buttons (Edge / Chrome on Windows)
+   so they don't double up with the custom .pw-eye toggle button */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-strong-password-auto-fill-button { display: none !important; }
 :root {
   --teal:        #14B8A6;
   --teal-dark:   #0D9488;

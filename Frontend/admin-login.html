@@ -71,6 +71,10 @@
 
     .pw-wrap { position: relative; }
     .pw-wrap .fc { padding-right: 2.75rem; }
+    /* Hide browser's native password-reveal eye (Edge/Chrome on Windows) */
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear,
+    input[type="password"]::-webkit-credentials-auto-fill-button { display: none !important; }
     .pw-eye {
       position: absolute; right: .875rem; top: 50%; transform: translateY(-50%);
       background: none; border: none; cursor: pointer; color: #475569;
