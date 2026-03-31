@@ -13,10 +13,10 @@
        BUYER DASHBOARD — Teal / Clean design
        ─────────────────────────────────────── */
     :root {
-      --accent:        #14B8A6;
-      --accent-dark:   #0D9488;
-      --accent-light:  #CCFBF1;
-      --accent-bg:     #F0FDFA;
+      --accent:        #16A34A;
+      --accent-dark:   #15803D;
+      --accent-light:  #BBF7D0;
+      --accent-bg:     #F0FDF4;
       --purple:        #7C3AED;
       --purple-light:  #F5F3FF;
     }
@@ -25,7 +25,7 @@
     /* ── BANNER ── */
     .banner {
       height: 130px;
-      background: linear-gradient(130deg, #0F766E 0%, #14B8A6 45%, #06B6D4 100%);
+      background: linear-gradient(130deg, #0F766E 0%, #16A34A 45%, #06B6D4 100%);
       position: relative; overflow: hidden;
     }
     .banner::before {
@@ -357,7 +357,7 @@
     .upgrade-card p  { font-size: .8125rem; color: rgba(255,255,255,.75); line-height: 1.55; margin-bottom: 1.125rem; position: relative; }
     .upgrade-btn {
       width: 100%; padding: .6875rem;
-      background: rgba(255,255,255,.95); color: #0D9488;
+      background: rgba(255,255,255,.95); color: #15803D;
       border-radius: 10px; font-size: .875rem; font-weight: 700;
       border: none; cursor: pointer; font-family: var(--font-body);
       display: flex; align-items: center; justify-content: center; gap: .4rem;
@@ -428,7 +428,7 @@
     .back-to-seller svg { width: 13px; height: 13px; }
 
     /* ── GETTING STARTED ── */
-    .gs-banner { background: linear-gradient(135deg, #F0FDFA 0%, #E0F2FE 100%); border: 1.5px solid var(--teal-light); border-radius: var(--r-md); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .gs-banner { background: linear-gradient(135deg, #F0FDF4 0%, #E0F2FE 100%); border: 1.5px solid var(--teal-light); border-radius: var(--r-md); padding: 1.5rem; margin-bottom: 1.5rem; }
     .gs-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
     .gs-title { font-size: 1.0625rem; font-weight: 700; color: var(--dark); margin-bottom: .25rem; }
     .gs-sub { font-size: .875rem; color: var(--muted); }
@@ -1251,7 +1251,7 @@ function initSellerMode () {
   var chip = document.getElementById('roleChip');
   if (chip) {
     chip.textContent = 'Buyer & Seller';
-    chip.style.background = 'linear-gradient(90deg,#0D9488,#7C3AED)';
+    chip.style.background = 'linear-gradient(90deg,#15803D,#7C3AED)';
     chip.style.color = '#fff';
   }
 }

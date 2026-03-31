@@ -8,10 +8,10 @@ input[type="password"]::-ms-clear,
 input[type="password"]::-webkit-credentials-auto-fill-button,
 input[type="password"]::-webkit-strong-password-auto-fill-button { display: none !important; }
 :root {
-  --teal:        #14B8A6;
-  --teal-dark:   #0D9488;
-  --teal-light:  #CCFBF1;
-  --teal-bg:     #F0FDFA;
+  --teal:        #16A34A;
+  --teal-dark:   #15803D;
+  --teal-light:  #BBF7D0;
+  --teal-bg:     #F0FDF4;
   --navy:        #0F172A;
   --dark:        #111827;
   --mid:         #374151;
@@ -22,7 +22,7 @@ input[type="password"]::-webkit-strong-password-auto-fill-button { display: none
   --bg-gray:     #F9FAFB;
   --white:       #FFFFFF;
   --blue:        #0284C7;
-  --green:       #16A34A;
+  --green:       #22C55E;
   --green-light: #DCFCE7;
   --red:         #EF4444;
   --red-light:   #FEE2E2;

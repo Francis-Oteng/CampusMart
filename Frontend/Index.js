@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       var orig = btn.textContent;
       btn.textContent = 'Subscribed! \u2713';
-      btn.style.background = '#0D9488';
+      btn.style.background = '#15803D';
       btn.disabled = true;
       input.value  = '';
       window.showToast('You\u2019re subscribed! Welcome to CampusMarket.');

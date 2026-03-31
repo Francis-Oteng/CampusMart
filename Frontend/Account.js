@@ -510,8 +510,8 @@ function initChart() {
       labels: ['Jan','Feb','Mar','Apr','May','Jun'],
       datasets: [
         { label:'Revenue (GH₵)', data:[320,580,460,840,620,980],
-          borderColor:'#14B8A6', backgroundColor:'rgba(20,184,166,.1)',
-          borderWidth:2.5, pointBackgroundColor:'#14B8A6', pointBorderColor:'#fff',
+          borderColor:'#16A34A', backgroundColor:'rgba(20,184,166,.1)',
+          borderWidth:2.5, pointBackgroundColor:'#16A34A', pointBorderColor:'#fff',
           pointBorderWidth:2, pointRadius:5, fill:true, tension:0.4, yAxisID:'y' },
         { label:'Orders', data:[4,8,6,12,9,14],
           borderColor:'#0284C7', backgroundColor:'transparent',
@@ -528,7 +528,7 @@ function initChart() {
       scales:{
         x:{ grid:{ color:'rgba(0,0,0,.04)' }, ticks:{ font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#6B7280' } },
         y:{ position:'left', grid:{ color:'rgba(0,0,0,.04)' },
-            ticks:{ font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#14B8A6',callback:function(v){return 'GH₵'+v;} } },
+            ticks:{ font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#16A34A',callback:function(v){return 'GH₵'+v;} } },
         y1:{ position:'right', grid:{ drawOnChartArea:false },
              ticks:{ font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#0284C7' } }
       }

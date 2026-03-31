@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btn) {
       var orig = btn.textContent;
       btn.textContent = 'Added!';
-      btn.style.background = '#0D9488';
+      btn.style.background = '#15803D';
       btn.disabled = true;
       setTimeout(function () {
         btn.textContent = orig;
@@ -141,10 +141,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var card     = btn.closest('.product-card, .approval-card');
     var nameEl   = card ? card.querySelector('.product-name, .approval-name') : null;
     var name     = nameEl ? nameEl.textContent.trim() : '';
-    var isActive = svg && svg.getAttribute('fill') === '#14B8A6';
+    var isActive = svg && svg.getAttribute('fill') === '#16A34A';
     if (svg) {
-      svg.setAttribute('fill',   isActive ? 'none'         : '#14B8A6');
-      svg.setAttribute('stroke', isActive ? 'currentColor' : '#14B8A6');
+      svg.setAttribute('fill',   isActive ? 'none'         : '#16A34A');
+      svg.setAttribute('stroke', isActive ? 'currentColor' : '#16A34A');
     }
     if (isActive) {
       wishlisted = wishlisted.filter(function (n) { return n !== name; });

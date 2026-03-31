@@ -258,9 +258,9 @@
     document.querySelectorAll('.wishlist-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         const svg = this.querySelector('svg');
-        const isActive = svg.getAttribute('fill') === '#14B8A6';
-        svg.setAttribute('fill',   isActive ? 'none'          : '#14B8A6');
-        svg.setAttribute('stroke', isActive ? 'currentColor'  : '#14B8A6');
+        const isActive = svg.getAttribute('fill') === '#16A34A';
+        svg.setAttribute('fill',   isActive ? 'none'          : '#16A34A');
+        svg.setAttribute('stroke', isActive ? 'currentColor'  : '#16A34A');
       });
     });
 
@@ -269,7 +269,7 @@
         const badge = document.querySelector('.cart-badge');
         if (badge) badge.textContent = String(parseInt(badge.textContent) + 1);
         this.textContent = 'Added!';
-        this.style.background = '#0D9488';
+        this.style.background = '#15803D';
         var self = this;
         setTimeout(function() {
           self.textContent = 'Add to Cart';
