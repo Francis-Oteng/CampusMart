@@ -48,7 +48,8 @@
     .page-btn:disabled { opacity: .4; cursor: not-allowed; }
     @media(max-width:1024px){.catalog-grid{grid-template-columns:repeat(2,1fr);}}
     @media(max-width:768px){.filter-inner{gap:.5rem;}.filter-chips{margin-left:0;}.price-range-wrap{flex-wrap:wrap;border-radius:var(--r-md);}}
-    @media(max-width:560px){.catalog-grid{grid-template-columns:1fr;}.search-wrap{max-width:100%;flex-basis:100%;}.filter-select{flex:1;min-width:0;}.price-range-wrap{width:100%;box-sizing:border-box;}}
+    @media(max-width:560px){.catalog-grid{grid-template-columns:1fr;}.search-wrap{max-width:100%;flex-basis:100%;min-width:0;}.filter-select{flex:1;min-width:0;}.price-range-wrap{width:100%;box-sizing:border-box;}.price-input{width:60px;}}
+    @media(max-width:360px){.catalog-grid{grid-template-columns:1fr;}.filter-chips{gap:.375rem;}.chip{padding:.3rem .625rem;font-size:.6875rem;}}
   </style>
 </head>
 <body>

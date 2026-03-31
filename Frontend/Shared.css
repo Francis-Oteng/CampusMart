@@ -254,4 +254,7 @@ img, video, iframe, table { max-width: 100%; }
 @media (max-width: 360px) {
   .logo-text { display: none; }
   .nav-inner { gap: .5rem; }
+  .footer-guide-links { flex-direction: column; width: 100%; }
+  .fgl-link { justify-content: center; }
+  .section-title { font-size: 1.125rem; }
 }

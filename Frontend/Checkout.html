@@ -99,8 +99,9 @@
     .btn-keep-shopping { padding: .875rem 1.75rem; background: none; border: 2px solid var(--border); color: var(--mid); border-radius: var(--r-full); font-size: .9375rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); transition: border-color .15s, color .15s; }
     .btn-keep-shopping:hover { border-color: var(--teal); color: var(--teal); }
     @media(max-width:1024px){ .co-layout{grid-template-columns:1fr;} .sticky-summary{position:static;} }
-    @media(max-width:768px){ .grid2{grid-template-columns:1fr;} .full{grid-column:1;} }
-    @media(max-width:480px){ .steps .step-lbl{display:none;} .confirm-meta{grid-template-columns:1fr 1fr;} }
+    @media(max-width:768px){ .grid2{grid-template-columns:1fr;} .full{grid-column:1;} .card-body{padding:1.125rem;} .del-opts,.pay-opts{padding:1rem;} }
+    @media(max-width:480px){ .steps .step-lbl{display:none;} .confirm-meta{grid-template-columns:1fr 1fr;} .page-hdr h1{font-size:1.25rem;} .btn-place,.btn-view-orders,.btn-keep-shopping{width:100%;} .confirm-btns{flex-direction:column;} }
+    @media(max-width:360px){ .confirm-meta{grid-template-columns:1fr;} #confirmScreen{padding:2.5rem 1rem;} }
     @keyframes spin { to{transform:rotate(360deg);} }
   </style>
 </head>
