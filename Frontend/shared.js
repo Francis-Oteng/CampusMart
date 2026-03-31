@@ -37,11 +37,21 @@ document.addEventListener('DOMContentLoaded', function () {
           '<span class="nav-user-name">' + firstName + '</span>';
         actions.insertBefore(navUser, actions.querySelector('.cart-btn'));
 
-        var signoutLink = document.createElement('a');
-        signoutLink.href = 'Signout.html';
-        signoutLink.className = 'nav-signout';
-        signoutLink.textContent = 'Sign out';
-        actions.insertBefore(signoutLink, actions.querySelector('.cart-btn'));
+        /* Check if a signout link already exists in nav-actions */
+        var existingSignout = null;
+        actions.querySelectorAll('a').forEach(function (a) {
+          if (/signout/i.test(a.getAttribute('href') || '')) existingSignout = a;
+        });
+        if (existingSignout) {
+          /* Re-style the existing link to match the nav-signout appearance */
+          existingSignout.className = 'nav-signout';
+        } else {
+          var signoutLink = document.createElement('a');
+          signoutLink.href = 'Signout.html';
+          signoutLink.className = 'nav-signout';
+          signoutLink.textContent = 'Sign out';
+          actions.insertBefore(signoutLink, actions.querySelector('.cart-btn'));
+        }
       }
     }
 
@@ -52,13 +62,19 @@ document.addEventListener('DOMContentLoaded', function () {
         var href = a.getAttribute('href') || '';
         if (/signin|signup|sign-in|sign-up|login/i.test(href)) a.style.display = 'none';
       });
-      /* Add sign-out to mobile menu if not there */
-      if (!mobileMenu.querySelector('.mob-signout')) {
+      /* Add sign-out to mobile menu only if one doesn't already exist */
+      var existingMobSignout = null;
+      mobileMenu.querySelectorAll('a').forEach(function (a) {
+        if (/signout/i.test(a.getAttribute('href') || '')) existingMobSignout = a;
+      });
+      if (!existingMobSignout) {
         var mobOut = document.createElement('a');
         mobOut.href = 'Signout.html';
         mobOut.className = 'mob-signout';
         mobOut.textContent = 'Sign out';
         mobileMenu.appendChild(mobOut);
+      } else {
+        existingMobSignout.className = 'mob-signout';
       }
     }
   })();
@@ -327,13 +343,19 @@ document.addEventListener('DOMContentLoaded', function () {
     var guide = document.createElement('div');
     guide.className = 'footer-guide';
     var isLoggedIn = false;
+    var isAdminIn  = false;
     try { isLoggedIn = !!(JSON.parse(sessionStorage.getItem('cm_user') || 'null') || {}).loggedIn; } catch (e) {}
+    try { isAdminIn  = !!(JSON.parse(localStorage.getItem('cm_admin')  || 'null') || {}).isAdmin;  } catch (e) {}
+    var anyLoggedIn = isLoggedIn || isAdminIn;
     var links = [
       { href: 'Categories.html', icon: '<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>', label: 'Browse Products' },
       { href: 'cart.html',       icon: '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>', label: 'View Cart' },
-      { href: isLoggedIn ? 'account.html' : 'Signin.html', icon: '<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>', label: isLoggedIn ? 'My Account' : 'Sign In' },
+      { href: anyLoggedIn ? 'account.html' : 'Signin.html', icon: '<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>', label: anyLoggedIn ? 'My Account' : 'Sign In' },
       { href: 'Help.html',       icon: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>', label: 'Help Center' }
     ];
+    if (anyLoggedIn) {
+      links.push({ href: 'Signout.html', icon: '<path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/>', label: 'Sign Out' });
+    }
     guide.innerHTML =
       '<div class="container footer-guide-inner">' +
         '<span class="footer-guide-lbl">Quick Links</span>' +
