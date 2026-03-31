@@ -13,7 +13,7 @@
     body{background:var(--bg-gray);}
 
     /* ── BANNER ── */
-    .banner{height:120px;background:linear-gradient(135deg,#7C3AED 0%,#6D28D9 55%,#4C1D95 100%);position:relative;overflow:hidden;}
+    .banner{height:120px;background:linear-gradient(135deg,#16A34A 0%,#15803D 55%,#166534 100%);position:relative;overflow:hidden;}
     .banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75% 40%,rgba(255,255,255,.13) 0%,transparent 55%);}
     .banner-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px;}
 
@@ -22,15 +22,15 @@
     .phdr-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;}
     .phdr-left{display:flex;align-items:flex-end;gap:1.25rem;}
     .avatar-wrap{margin-top:-50px;flex-shrink:0;}
-    .avatar{width:88px;height:88px;border-radius:50%;border:4px solid var(--white);box-shadow:var(--shadow-lg);background:#EDE9FE;display:grid;place-items:center;overflow:hidden;}
-    .av-ini{font-size:2rem;font-weight:800;color:#7C3AED;}
-    .store-badge{padding:.25rem .75rem;background:#F5F3FF;color:#7C3AED;border-radius:var(--r-full);font-size:.6875rem;font-weight:700;}
+    .avatar{width:88px;height:88px;border-radius:50%;border:4px solid var(--white);box-shadow:var(--shadow-lg);background:#DCFCE7;display:grid;place-items:center;overflow:hidden;}
+    .av-ini{font-size:2rem;font-weight:800;color:#16A34A;}
+    .store-badge{padding:.25rem .75rem;background:#F0FDF4;color:#16A34A;border-radius:var(--r-full);font-size:.6875rem;font-weight:700;}
     .pname-row{display:flex;align-items:center;gap:.625rem;margin-bottom:.375rem;flex-wrap:wrap;}
     .pname{font-size:1.375rem;font-weight:800;color:var(--dark);}
     .pemail{font-size:.8125rem;color:var(--muted);margin-bottom:.5rem;}
     .ptags{display:flex;gap:.5rem;flex-wrap:wrap;}
     .ptag{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .625rem;border:1px solid var(--border);border-radius:var(--r-full);font-size:.6875rem;font-weight:500;color:var(--mid);}
-    .ptag.purple{border-color:#DDD6FE;color:#7C3AED;background:#F5F3FF;}
+    .ptag.purple{border-color:#BBF7D0;color:#16A34A;background:#F0FDF4;}
     .ptag.green{border-color:#BBF7D0;color:var(--green);background:#F0FDF4;}
     .ptag svg{width:10px;height:10px;}
     /* Stats */
@@ -43,10 +43,10 @@
     /* ── TABS ── */
     .ptabs{display:flex;overflow-x:auto;}
     .ptab{padding:.75rem 1.25rem;font-size:.875rem;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:.375rem;white-space:nowrap;font-family:var(--font-body);transition:color .15s,border-color .15s;}
-    .ptab:hover{color:#7C3AED;}
-    .ptab.active{color:#7C3AED;border-bottom-color:#7C3AED;}
+    .ptab:hover{color:#16A34A;}
+    .ptab.active{color:#16A34A;border-bottom-color:#16A34A;}
     .ptab svg{width:14px;height:14px;}
-    .ptab .badge{background:#7C3AED;color:var(--white);border-radius:var(--r-full);font-size:.5rem;font-weight:700;padding:.1rem .4rem;line-height:1.4;}
+    .ptab .badge{background:#16A34A;color:var(--white);border-radius:var(--r-full);font-size:.5rem;font-weight:700;padding:.1rem .4rem;line-height:1.4;}
     .ptab .badge.orange{background:var(--orange);}
 
     /* ── LAYOUT ── */
@@ -60,10 +60,10 @@
     .card+.card{margin-top:1.25rem;}
     .chdr{display:flex;align-items:center;justify-content:space-between;padding:1.125rem 1.5rem;border-bottom:1px solid var(--border);}
     .cttl{font-size:.9375rem;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:.5rem;}
-    .cttl svg{width:15px;height:15px;color:#7C3AED;}
+    .cttl svg{width:15px;height:15px;color:#16A34A;}
     .cbody{padding:1.5rem;}
-    .clnk{font-size:.8125rem;font-weight:600;color:#7C3AED;display:flex;align-items:center;gap:.25rem;background:none;border:none;cursor:pointer;font-family:var(--font-body);}
-    .clnk:hover{color:#6D28D9;}
+    .clnk{font-size:.8125rem;font-weight:600;color:#16A34A;display:flex;align-items:center;gap:.25rem;background:none;border:none;cursor:pointer;font-family:var(--font-body);}
+    .clnk:hover{color:#15803D;}
     .clnk svg{width:12px;height:12px;}
 
     /* ── STAT CARDS ── */
@@ -110,19 +110,19 @@
     .fg.full{grid-column:1/-1;}
     .fl{font-size:.75rem;font-weight:700;color:var(--mid);}
     .fi,.fs{padding:.6875rem .875rem;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:.875rem;font-family:var(--font-body);color:var(--dark);background:var(--white);outline:none;transition:border-color .2s,box-shadow .2s;width:100%;}
-    .fi:focus,.fs:focus{border-color:#7C3AED;box-shadow:0 0 0 3px #F5F3FF;}
+    .fi:focus,.fs:focus{border-color:#16A34A;box-shadow:0 0 0 3px #F0FDF4;}
     .fi::placeholder{color:var(--soft);}
     textarea.fi{resize:vertical;min-height:72px;}
     .fs{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6,9 12,15 18,9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center;padding-right:2.25rem;cursor:pointer;}
     .img-upload{border:2px dashed var(--border);border-radius:var(--r-sm);padding:2.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;}
-    .img-upload:hover{border-color:#7C3AED;background:#F5F3FF;}
+    .img-upload:hover{border-color:#16A34A;background:#F0FDF4;}
     .img-upload svg{width:32px;height:32px;color:var(--soft);margin:0 auto .75rem;}
     .img-upload p{font-size:.875rem;color:var(--muted);}
     .img-upload input{display:none;}
     #imgPreview{display:none;width:100%;height:160px;object-fit:cover;border-radius:var(--r-sm);margin-top:.75rem;}
     .faction{display:flex;align-items:center;gap:.75rem;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--light);}
-    .bsubmit{padding:.625rem 1.5rem;background:#7C3AED;color:var(--white);border-radius:var(--r-sm);font-size:.875rem;font-weight:700;border:none;cursor:pointer;font-family:var(--font-body);transition:background .15s;}
-    .bsubmit:hover{background:#6D28D9;}
+    .bsubmit{padding:.625rem 1.5rem;background:#16A34A;color:var(--white);border-radius:var(--r-sm);font-size:.875rem;font-weight:700;border:none;cursor:pointer;font-family:var(--font-body);transition:background .15s;}
+    .bsubmit:hover{background:#15803D;}
     .bcancel{padding:.625rem 1.25rem;background:var(--white);color:var(--mid);border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:.875rem;font-weight:600;cursor:pointer;font-family:var(--font-body);}
 
     /* ── AVAILABILITY ── */
@@ -133,8 +133,8 @@
     .avail-table td:first-child{color:var(--mid);font-weight:500;width:120px;}
     .avail-table td:last-child{color:var(--muted);text-align:right;}
     .avail-closed{color:var(--red)!important;font-weight:500;}
-    .avail-today td{color:#7C3AED!important;font-weight:600;}
-    .avail-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#7C3AED;margin-right:.375rem;vertical-align:middle;}
+    .avail-today td{color:#16A34A!important;font-weight:600;}
+    .avail-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#16A34A;margin-right:.375rem;vertical-align:middle;}
 
     /* ── PROFILE SECTION ── */
     .sec-hd{display:flex;align-items:center;gap:.625rem;padding-bottom:.75rem;border-bottom:1px solid var(--light);margin-bottom:1.25rem;}
@@ -150,23 +150,23 @@
     .rating-bar-count{font-size:.75rem;color:var(--muted);width:24px;text-align:right;}
 
     /* ── SIDEBAR ── */
-    .today-row{display:flex;align-items:center;gap:.75rem;padding:.875rem;background:#F5F3FF;border-radius:var(--r-sm);border:1px solid #DDD6FE;}
-    .today-day{background:#7C3AED;color:var(--white);border-radius:var(--r-sm);padding:.25rem .625rem;font-size:.75rem;font-weight:700;min-width:38px;text-align:center;}
+    .today-row{display:flex;align-items:center;gap:.75rem;padding:.875rem;background:#F0FDF4;border-radius:var(--r-sm);border:1px solid #BBF7D0;}
+    .today-day{background:#16A34A;color:var(--white);border-radius:var(--r-sm);padding:.25rem .625rem;font-size:.75rem;font-weight:700;min-width:38px;text-align:center;}
     .today-hours{font-size:.9375rem;font-weight:700;color:var(--dark);}
 
-    .earnings-card{background:linear-gradient(135deg,#7C3AED 0%,#6D28D9 100%);border-radius:var(--r-md);padding:1.375rem;}
-    .earnings-card p{font-size:.8125rem;color:#DDD6FE;margin-bottom:.5rem;}
+    .earnings-card{background:linear-gradient(135deg,#16A34A 0%,#15803D 100%);border-radius:var(--r-md);padding:1.375rem;}
+    .earnings-card p{font-size:.8125rem;color:#BBF7D0;margin-bottom:.5rem;}
     .earnings-num{font-size:1.875rem;font-weight:800;color:var(--white);margin-bottom:1rem;}
-    .earnings-sub{font-size:.75rem;color:#DDD6FE;margin-top:.5rem;}
-    .add-listing-btn{width:100%;padding:.6875rem;background:var(--white);color:#7C3AED;border-radius:var(--r-sm);font-size:.875rem;font-weight:700;border:none;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:.375rem;transition:background .15s;}
-    .add-listing-btn:hover{background:#EDE9FE;}
+    .earnings-sub{font-size:.75rem;color:#BBF7D0;margin-top:.5rem;}
+    .add-listing-btn{width:100%;padding:.6875rem;background:var(--white);color:#16A34A;border-radius:var(--r-sm);font-size:.875rem;font-weight:700;border:none;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:.375rem;transition:background .15s;}
+    .add-listing-btn:hover{background:#DCFCE7;}
     .add-listing-btn svg{width:14px;height:14px;}
 
     .sec-row{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid var(--light);}
     .sec-row:last-child{border-bottom:none;}
     .sec-lbl{display:flex;align-items:center;gap:.5rem;font-size:.875rem;font-weight:500;color:var(--mid);}
-    .sec-lbl svg{width:14px;height:14px;color:#7C3AED;}
-    .sec-act{font-size:.8125rem;font-weight:600;color:#7C3AED;cursor:pointer;border:none;background:none;font-family:var(--font-body);}
+    .sec-lbl svg{width:14px;height:14px;color:#16A34A;}
+    .sec-act{font-size:.8125rem;font-weight:600;color:#16A34A;cursor:pointer;border:none;background:none;font-family:var(--font-body);}
 
     .so-btn{width:100%;padding:.75rem;background:var(--red-light);color:var(--red);border:1.5px solid #FECACA;border-radius:var(--r-sm);font-size:.875rem;font-weight:700;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:.5rem;transition:background .15s;}
     .so-btn:hover{background:#FECACA;}
@@ -176,7 +176,7 @@
     .ov-grid{display:grid;grid-template-columns:1fr 300px;gap:1.25rem;}
 
     /* ── GETTING STARTED ── */
-    .gs-banner{background:linear-gradient(135deg,#F5F3FF 0%,#EDE9FE 100%);border:1.5px solid #DDD6FE;border-radius:var(--r-md);padding:1.5rem;margin-bottom:1.5rem;}
+    .gs-banner{background:linear-gradient(135deg,#F0FDF4 0%,#DCFCE7 100%);border:1.5px solid #BBF7D0;border-radius:var(--r-md);padding:1.5rem;margin-bottom:1.5rem;}
     .gs-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.25rem;}
     .gs-title{font-size:1.0625rem;font-weight:700;color:var(--dark);margin-bottom:.25rem;}
     .gs-sub{font-size:.875rem;color:var(--muted);}
@@ -185,7 +185,7 @@
     .gs-close svg{width:16px;height:16px;display:block;}
     .gs-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;}
     .gs-step{display:flex;flex-direction:column;align-items:flex-start;gap:.5rem;padding:1rem;background:var(--white);border:1.5px solid var(--border);border-radius:var(--r-sm);text-decoration:none;color:var(--dark);cursor:pointer;font-family:var(--font-body);width:100%;text-align:left;transition:border-color .15s,box-shadow .15s;}
-    .gs-step:hover{border-color:#7C3AED;box-shadow:var(--shadow-sm);}
+    .gs-step:hover{border-color:#16A34A;box-shadow:var(--shadow-sm);}
     .gs-step-ico{width:38px;height:38px;border-radius:var(--r-sm);display:grid;place-items:center;}
     .gs-step-ico svg{width:18px;height:18px;}
     .gs-step strong{font-size:.8125rem;font-weight:700;color:var(--dark);}
@@ -255,7 +255,7 @@
       <div class="pstats">
         <div class="pstat"><span class="pstat-n" id="sListings">6</span><span class="pstat-l">Listings</span></div>
         <div class="pstat-div"></div>
-        <div class="pstat"><span class="pstat-n" id="sSales" style="color:#7C3AED;">47</span><span class="pstat-l">Sales</span></div>
+        <div class="pstat"><span class="pstat-n" id="sSales" style="color:#16A34A;">47</span><span class="pstat-l">Sales</span></div>
         <div class="pstat-div"></div>
         <div class="pstat"><span class="pstat-n" id="sRevenue" style="color:var(--teal);">GH₵2,840</span><span class="pstat-l">Earned</span></div>
         <div class="pstat-div"></div>
@@ -295,7 +295,7 @@
       </div>
       <div class="gs-steps">
         <button class="gs-step" onclick="switchTab('add')">
-          <div class="gs-step-ico" style="background:#F5F3FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          <div class="gs-step-ico" style="background:#F0FDF4;"><svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
           <strong>Add your first listing</strong>
           <span>Upload a product and start earning</span>
         </button>
@@ -313,7 +313,7 @@
     </div>
 
     <div class="stat-row">
-      <div class="scard"><div class="scard-ico" style="background:#F5F3FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><div><div class="scard-n" id="sc1">6</div><div class="scard-l">Active Listings</div><div class="scard-chg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18,15 12,9 6,15"/></svg>+2 this month</div></div></div>
+      <div class="scard"><div class="scard-ico" style="background:#F0FDF4;"><svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><div><div class="scard-n" id="sc1">6</div><div class="scard-l">Active Listings</div><div class="scard-chg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18,15 12,9 6,15"/></svg>+2 this month</div></div></div>
       <div class="scard"><div class="scard-ico" style="background:#FEF3C7;"><svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div><div><div class="scard-n" id="sc2">47</div><div class="scard-l">Total Sales</div><div class="scard-chg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18,15 12,9 6,15"/></svg>+8% this month</div></div></div>
       <div class="scard"><div class="scard-ico" style="background:#F0FDF4;"><svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div><div class="scard-n" id="sc3" style="font-size:1.25rem;">GH₵2,840</div><div class="scard-l">Total Earned</div><div class="scard-chg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18,15 12,9 6,15"/></svg>+18% this month</div></div></div>
       <div class="scard"><div class="scard-ico" style="background:#FFFBEB;"><svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div><div><div class="scard-n" style="color:#FACC15;">4.9</div><div class="scard-l">Avg. Rating</div><div class="scard-chg">36 reviews</div></div></div>
@@ -324,8 +324,8 @@
         <div class="chart-top">
           <div class="chart-title">Sales Overview</div>
           <div class="chart-legend">
-            <div class="legend-item"><div class="legend-dot" style="background:#7C3AED;"></div>Revenue</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#A5B4FC;"></div>Orders</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#16A34A;"></div>Revenue</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#86EFAC;"></div>Orders</div>
           </div>
         </div>
         <div class="chart-wrap"><canvas id="salesChart"></canvas></div>
@@ -402,7 +402,7 @@
       <div class="chdr"><h2 class="cttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Seller Profile</h2></div>
       <div class="cbody">
         <!-- Personal -->
-        <div class="sec-hd"><div class="sec-hd-ico" style="background:#F5F3FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="sec-hd-lbl">Personal Information</span></div>
+        <div class="sec-hd"><div class="sec-hd-ico" style="background:#F0FDF4;"><svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="sec-hd-lbl">Personal Information</span></div>
         <div class="fgrid">
           <div class="fg"><label class="fl" for="pName">Full Name</label><input class="fi" id="pName" type="text"/></div>
           <div class="fg"><label class="fl" for="pEmail2">Email</label><input class="fi" id="pEmail2" type="email"/></div>
@@ -410,7 +410,7 @@
           <div class="fg"><label class="fl" for="pCampus">University</label><input class="fi" id="pCampus" type="text" placeholder="e.g. KNUST"/></div>
         </div>
         <!-- Store settings -->
-        <div class="sec-hd" style="margin-top:1.5rem;"><div class="sec-hd-ico" style="background:#F5F3FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><span class="sec-hd-lbl">Store Settings</span></div>
+        <div class="sec-hd" style="margin-top:1.5rem;"><div class="sec-hd-ico" style="background:#F0FDF4;"><svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><span class="sec-hd-lbl">Store Settings</span></div>
         <div class="fgrid">
           <div class="fg"><label class="fl" for="pStore">Store Name</label><input class="fi" id="pStore" type="text" placeholder="e.g. Ama's Crafts"/></div>
           <div class="fg"><label class="fl" for="pListCat">Primary Category</label><select class="fs" id="pListCat"><option value="">Select...</option><option>Art &amp; Crafts</option><option>Fashion</option><option>Stationery</option><option>Home Decor</option><option>Tech Accessories</option><option>Beauty &amp; Wellness</option></select></div>
@@ -469,7 +469,7 @@
     <div class="chdr"><h2 class="cttl" style="font-size:.875rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>Quick Stats</h2></div>
     <div class="cbody" style="padding:.5rem 1.5rem;display:flex;flex-direction:column;gap:.875rem;">
       <div style="display:flex;justify-content:space-between;padding-bottom:.875rem;border-bottom:1px solid var(--light);"><span style="font-size:.875rem;color:var(--muted);">Orders Pending</span><span style="font-weight:700;color:var(--orange);" id="qPending">2</span></div>
-      <div style="display:flex;justify-content:space-between;padding-bottom:.875rem;border-bottom:1px solid var(--light);"><span style="font-size:.875rem;color:var(--muted);">Active Listings</span><span style="font-weight:700;color:#7C3AED;" id="qListings">6</span></div>
+      <div style="display:flex;justify-content:space-between;padding-bottom:.875rem;border-bottom:1px solid var(--light);"><span style="font-size:.875rem;color:var(--muted);">Active Listings</span><span style="font-weight:700;color:#16A34A;" id="qListings">6</span></div>
       <div style="display:flex;justify-content:space-between;"><span style="font-size:.875rem;color:var(--muted);">This Month</span><span style="font-weight:700;color:var(--green);" id="qRevMonth">GH₵840</span></div>
     </div>
   </div>
@@ -544,32 +544,32 @@ document.querySelectorAll('.ptab').forEach(function(b){b.addEventListener('click
 function pill(s){return'<span class="pill '+s+'">'+s.charAt(0).toUpperCase()+s.slice(1)+'</span>';}
 
 /* ── BUYER AVATAR ── */
-function buyerAvi(ini){return'<div style="width:28px;height:28px;border-radius:50%;background:#F5F3FF;color:#7C3AED;display:grid;place-items:center;font-size:.6875rem;font-weight:700;">'+ini+'</div>';}
+function buyerAvi(ini){return'<div style="width:28px;height:28px;border-radius:50%;background:#F0FDF4;color:#16A34A;display:grid;place-items:center;font-size:.6875rem;font-weight:700;">'+ini+'</div>';}
 
 /* ── RECENT ORDERS (overview) ── */
 function renderRecentOrders(){
   var tb=document.getElementById('recentOrdersBody');if(!tb)return;
-  tb.innerHTML=orders.slice(0,4).map(function(o){return'<tr><td style="font-weight:700;color:#7C3AED;">'+o.id+'</td><td><div style="display:flex;align-items:center;gap:.5rem;">'+buyerAvi(o.ini)+window.sanitize(o.buyer)+'</div></td><td>'+window.sanitize(o.product)+'</td><td style="font-weight:700;color:var(--teal);">'+o.amount+'</td><td>'+pill(o.status)+'</td></tr>';}).join('');
+  tb.innerHTML=orders.slice(0,4).map(function(o){return'<tr><td style="font-weight:700;color:#16A34A;">'+o.id+'</td><td><div style="display:flex;align-items:center;gap:.5rem;">'+buyerAvi(o.ini)+window.sanitize(o.buyer)+'</div></td><td>'+window.sanitize(o.product)+'</td><td style="font-weight:700;color:var(--teal);">'+o.amount+'</td><td>'+pill(o.status)+'</td></tr>';}).join('');
 }
 
 /* ── ALL ORDERS ── */
 function renderAllOrders(){
   var tb=document.getElementById('allOrdersBody');if(!tb)return;
   document.getElementById('ordersCount').textContent=orders.length+' orders';
-  tb.innerHTML=orders.map(function(o){return'<tr><td style="font-weight:700;color:#7C3AED;">'+o.id+'</td><td><div style="display:flex;align-items:center;gap:.5rem;">'+buyerAvi(o.ini)+window.sanitize(o.buyer)+'</div></td><td>'+window.sanitize(o.product)+'</td><td style="font-weight:700;color:var(--teal);">'+o.amount+'</td><td style="color:var(--muted);">'+o.date+'</td><td>'+pill(o.status)+'</td><td><button style="font-size:.75rem;color:#7C3AED;background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);" onclick="showToast(\'Viewing '+o.id+'\')">View</button></td></tr>';}).join('');
+  tb.innerHTML=orders.map(function(o){return'<tr><td style="font-weight:700;color:#16A34A;">'+o.id+'</td><td><div style="display:flex;align-items:center;gap:.5rem;">'+buyerAvi(o.ini)+window.sanitize(o.buyer)+'</div></td><td>'+window.sanitize(o.product)+'</td><td style="font-weight:700;color:var(--teal);">'+o.amount+'</td><td style="color:var(--muted);">'+o.date+'</td><td>'+pill(o.status)+'</td><td><button style="font-size:.75rem;color:#16A34A;background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);" onclick="showToast(\'Viewing '+o.id+'\')">View</button></td></tr>';}).join('');
   document.getElementById('qPending').textContent=orders.filter(function(o){return o.status==='processing';}).length;
 }
 
 /* ── LISTINGS ── */
 function renderListings(){
   var tb=document.getElementById('listingsBody');if(!tb)return;
-  if(!listings.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">No listings. <button onclick="switchTab(\'add\')" style="color:#7C3AED;background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);">Add your first →</button></td></tr>';return;}
+  if(!listings.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">No listings. <button onclick="switchTab(\'add\')" style="color:#16A34A;background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);">Add your first →</button></td></tr>';return;}
   tb.innerHTML=listings.map(function(l){return'<tr>'+
     '<td><div style="display:flex;align-items:center;gap:.625rem;"><div style="width:40px;height:40px;border-radius:8px;background:var(--light);display:grid;place-items:center;font-size:.5rem;color:var(--muted);flex-shrink:0;">IMG</div><div><div style="font-size:.8125rem;font-weight:600;color:var(--dark);">'+window.sanitize(l.name)+'</div><div style="font-size:.6875rem;color:var(--muted);">'+l.cat+'</div></div></div></td>'+
     '<td>'+l.cat+'</td><td style="font-weight:700;color:var(--teal);">GH₵'+l.price.toFixed(2)+'</td>'+
     '<td>'+(l.stock>0?l.stock+' left':'<span style="color:var(--red);font-weight:600;">Out</span>')+'</td>'+
     '<td>'+pill(l.status)+'</td>'+
-    '<td><div style="display:flex;gap:.375rem;"><button style="font-size:.75rem;color:#7C3AED;background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);" onclick="editListing('+l.id+')">Edit</button><button style="font-size:.75rem;color:var(--red);background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);" onclick="deleteListing('+l.id+')">Delete</button></div></td>'+
+    '<td><div style="display:flex;gap:.375rem;"><button style="font-size:.75rem;color:#16A34A;background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);" onclick="editListing('+l.id+')">Edit</button><button style="font-size:.75rem;color:var(--red);background:none;border:none;cursor:pointer;font-weight:600;font-family:var(--font-body);" onclick="deleteListing('+l.id+')">Delete</button></div></td>'+
   '</tr>';}).join('');
   document.getElementById('qListings').textContent=listings.filter(function(l){return l.status==='active';}).length;
 }
@@ -637,7 +637,7 @@ function renderAvailability(){
   var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var today=days[new Date().getDay()];
   tb.innerHTML=AVAIL.map(function(d){var it=d.day===today;return'<tr'+(it?' class="avail-today"':'')+'>'+
-    '<td>'+(it?'<span class="avail-dot"></span>':'')+d.day+(it?' <span style="font-size:.6875rem;color:#7C3AED;">(Today)</span>':'')+
+    '<td>'+(it?'<span class="avail-dot"></span>':'')+d.day+(it?' <span style="font-size:.6875rem;color:#16A34A;">(Today)</span>':'')+
     '</td><td>'+(d.closed?'<span class="avail-closed">Closed</span>':d.hours)+'</td></tr>';}).join('');
 }
 
@@ -698,9 +698,9 @@ window.saveSellerProfile=function(){
 function initChart(){
   var ctx=document.getElementById('salesChart').getContext('2d');
   new Chart(ctx,{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[
-    {label:'Revenue',data:[320,580,460,840,620,980],borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,.08)',borderWidth:2.5,pointBackgroundColor:'#7C3AED',pointRadius:4,fill:true,tension:0.4,yAxisID:'y'},
-    {label:'Orders',data:[4,8,6,12,9,14],borderColor:'#A5B4FC',backgroundColor:'transparent',borderWidth:2,pointBackgroundColor:'#A5B4FC',pointRadius:3,fill:false,tension:0.4,yAxisID:'y1'}
-  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#0F172A',titleFont:{family:"'Plus Jakarta Sans',sans-serif",size:12},bodyFont:{family:"'Plus Jakarta Sans',sans-serif",size:12},padding:10,cornerRadius:8}},scales:{x:{grid:{color:'#F3F4F6'},ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#6B7280'}},y:{position:'left',grid:{color:'#F3F4F6'},ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#7C3AED',callback:function(v){return'GH₵'+v;}}},y1:{position:'right',grid:{drawOnChartArea:false},ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#A5B4FC'}}}}});
+    {label:'Revenue',data:[320,580,460,840,620,980],borderColor:'#16A34A',backgroundColor:'rgba(124,58,237,.08)',borderWidth:2.5,pointBackgroundColor:'#16A34A',pointRadius:4,fill:true,tension:0.4,yAxisID:'y'},
+    {label:'Orders',data:[4,8,6,12,9,14],borderColor:'#86EFAC',backgroundColor:'transparent',borderWidth:2,pointBackgroundColor:'#86EFAC',pointRadius:3,fill:false,tension:0.4,yAxisID:'y1'}
+  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#0F172A',titleFont:{family:"'Plus Jakarta Sans',sans-serif",size:12},bodyFont:{family:"'Plus Jakarta Sans',sans-serif",size:12},padding:10,cornerRadius:8}},scales:{x:{grid:{color:'#F3F4F6'},ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#6B7280'}},y:{position:'left',grid:{color:'#F3F4F6'},ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#16A34A',callback:function(v){return'GH₵'+v;}}},y1:{position:'right',grid:{drawOnChartArea:false},ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#86EFAC'}}}}});
 }
 
 /* ── BUYER VIEW — ensure session role allows buyer access ── */

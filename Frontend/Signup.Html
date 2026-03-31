@@ -12,7 +12,7 @@
     body { background: var(--bg-gray); }
     .auth-wrap { min-height: calc(100vh - 64px); display: flex; align-items: center; justify-content: center; padding: 2.5rem 1rem; }
     .auth-card { background: var(--white); border-radius: var(--r-lg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); width: 100%; max-width: 500px; overflow: hidden; }
-    .card-accent { height: 4px; background: linear-gradient(90deg, #7C3AED 0%, #9333EA 100%); }
+    .card-accent { height: 4px; background: linear-gradient(90deg, #16A34A 0%, #15803D 100%); }
 
     /* Brand */
     .auth-brand { text-align: center; padding: 2.25rem 2rem 0; }
@@ -216,8 +216,8 @@
         </label>
         <label class="role-card" id="rcSeller" onclick="pickRole('seller')">
           <input type="radio" name="role" value="seller" />
-          <div class="role-card-icon" style="background:#F5F3FF;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <div class="role-card-icon" style="background:#F0FDF4;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
           </div>
           <div class="role-card-title">Seller</div>
           <div class="role-card-desc">List your handmade &amp; custom products</div>
@@ -372,7 +372,7 @@
       : 'Your account is ready. Here\'s where to go next:';
 
     var steps = isSeller ? [
-      { bg:'#F5F3FF', stroke:'#7C3AED', path:'<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>', label:'Add your first listing', desc:'Start earning from your skills & creations', href:'SellerDashboard.html' },
+      { bg:'#F0FDF4', stroke:'#16A34A', path:'<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>', label:'Add your first listing', desc:'Start earning from your skills & creations', href:'SellerDashboard.html' },
       { bg:'#DBEAFE', stroke:'#1D4ED8', path:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>', label:'Browse the marketplace', desc:'See what other students are selling', href:'Categories.html' },
       { bg:'#DCFCE7', stroke:'#16A34A', path:'<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>', label:'Complete your profile', desc:'Add a bio and photo to build buyer trust', href:'SellerDashboard.html' }
     ] : [

@@ -17,8 +17,8 @@
       --accent-dark:   #15803D;
       --accent-light:  #BBF7D0;
       --accent-bg:     #F0FDF4;
-      --purple:        #7C3AED;
-      --purple-light:  #F5F3FF;
+      --purple:        #16A34A;
+      --purple-light:  #F0FDF4;
     }
     body { background: #F1F5F9; }
 
@@ -419,7 +419,7 @@
     .act-time { font-size: .6875rem; color: #94A3B8; margin-top: .125rem; }
 
     /* ── SELLER-AS-BUYER BANNER ── */
-    .seller-mode-bar { background: #7C3AED; color: #fff; padding: .625rem 0; font-size: .875rem; font-weight: 600; }
+    .seller-mode-bar { background: #16A34A; color: #fff; padding: .625rem 0; font-size: .875rem; font-weight: 600; }
     .seller-mode-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     .seller-mode-inner span { display: flex; align-items: center; gap: .5rem; }
     .seller-mode-inner svg { width: 16px; height: 16px; flex-shrink: 0; }
@@ -628,7 +628,7 @@
           <span>Add items to cart and check out</span>
         </a>
         <a href="#" onclick="switchTab('profile'); return false;" class="gs-step">
-          <div class="gs-step-ico" style="background:#F5F3FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="gs-step-ico" style="background:#F0FDF4;"><svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
           <strong>Complete your profile</strong>
           <span>Set up your name, campus and photo</span>
         </a>
@@ -1251,7 +1251,7 @@ function initSellerMode () {
   var chip = document.getElementById('roleChip');
   if (chip) {
     chip.textContent = 'Buyer & Seller';
-    chip.style.background = 'linear-gradient(90deg,#15803D,#7C3AED)';
+    chip.style.background = 'linear-gradient(90deg,#15803D,#16A34A)';
     chip.style.color = '#fff';
   }
 }

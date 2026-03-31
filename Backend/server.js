@@ -8,7 +8,12 @@ const app = express();
 
 // ── Middleware ──
 app.use(cors({
-  origin: '*',  // Allow all origins in dev
+  origin: [
+    'https://campus-mart-git-main-francisoteng105-2856s-projects.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
