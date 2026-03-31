@@ -1,7 +1,69 @@
 /* shared.js — common functionality for every page */
 document.addEventListener('DOMContentLoaded', function () {
 
-  /* 1. FOOTER YEAR */
+  /* 1. AUTH-AWARE NAVBAR */
+  (function () {
+    var user  = null;
+    var admin = null;
+    try { user  = JSON.parse(sessionStorage.getItem('cm_user')  || 'null'); } catch (e) {}
+    try { admin = JSON.parse(localStorage.getItem('cm_admin')   || 'null'); } catch (e) {}
+
+    var loggedIn = (user && user.loggedIn) || (admin && admin.isAdmin);
+    if (!loggedIn) return;
+
+    var name = (admin && admin.name) ? admin.name : (user && user.name) ? user.name : '';
+    var firstName = name.split(' ')[0] || 'You';
+
+    /* Hide Sign In / Sign Up buttons */
+    var actions = document.querySelector('.nav-actions');
+    if (actions) {
+      actions.querySelectorAll('.btn-outline, .btn-primary').forEach(function (btn) {
+        /* Only hide auth buttons (not other outline/primary buttons) */
+        var href = btn.getAttribute('href') || '';
+        if (/signin|signup|sign-in|sign-up|login/i.test(href)) btn.style.display = 'none';
+      });
+
+      /* Inject avatar greeting + sign-out link if not already present */
+      if (!actions.querySelector('.nav-user')) {
+        var dashHref = admin ? 'admin.html'
+          : (user && user.role === 'seller') ? 'SellerDashboard.html'
+          : 'BuyerDashboard.html';
+
+        var navUser = document.createElement('a');
+        navUser.href = dashHref;
+        navUser.className = 'nav-user';
+        navUser.innerHTML =
+          '<span class="nav-avatar">' + firstName.charAt(0).toUpperCase() + '</span>' +
+          '<span class="nav-user-name">' + firstName + '</span>';
+        actions.insertBefore(navUser, actions.querySelector('.cart-btn'));
+
+        var signoutLink = document.createElement('a');
+        signoutLink.href = 'Signout.html';
+        signoutLink.className = 'nav-signout';
+        signoutLink.textContent = 'Sign out';
+        actions.insertBefore(signoutLink, actions.querySelector('.cart-btn'));
+      }
+    }
+
+    /* Hide Sign In / Sign Up in mobile menu too */
+    var mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenu) {
+      mobileMenu.querySelectorAll('a').forEach(function (a) {
+        var href = a.getAttribute('href') || '';
+        if (/signin|signup|sign-in|sign-up|login/i.test(href)) a.style.display = 'none';
+      });
+      /* Add sign-out to mobile menu if not there */
+      if (!mobileMenu.querySelector('.mob-signout')) {
+        var mobOut = document.createElement('a');
+        mobOut.href = 'Signout.html';
+        mobOut.className = 'mob-signout';
+        mobOut.textContent = 'Sign out';
+        mobileMenu.appendChild(mobOut);
+      }
+    }
+  })();
+
+  /* 2. FOOTER YEAR */
   var yr = document.getElementById('current-year');
   if (yr) yr.textContent = new Date().getFullYear();
 

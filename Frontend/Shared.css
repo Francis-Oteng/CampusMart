@@ -77,6 +77,15 @@ input, select, button, textarea { font-family: var(--font-body); }
 .nav-links a:hover, .nav-links a.active { color: var(--teal); }
 .nav-actions { display: flex; align-items: center; gap: .75rem; flex-shrink: 0; }
 
+/* ─── AUTH NAV ELEMENTS ─── */
+.nav-user { display: flex; align-items: center; gap: .5rem; text-decoration: none; color: var(--dark); font-weight: 600; font-size: .875rem; }
+.nav-avatar { width: 32px; height: 32px; border-radius: var(--r-full); background: var(--teal); color: var(--white); font-weight: 800; font-size: .75rem; display: grid; place-items: center; flex-shrink: 0; }
+.nav-user-name { color: var(--dark); }
+.nav-user:hover .nav-user-name { color: var(--teal); }
+.nav-signout { font-size: .875rem; font-weight: 600; color: var(--muted); transition: color .15s; }
+.nav-signout:hover { color: var(--red); }
+@media (max-width: 768px) { .nav-user-name { display: none; } .nav-signout { display: none; } }
+
 /* ─── BUTTONS ─── */
 .btn-outline  { padding: .5rem 1.25rem; border: 1.5px solid var(--teal); border-radius: var(--r-full); font-size: .875rem; font-weight: 600; color: var(--teal); transition: background .15s, color .15s; }
 .btn-outline:hover { background: var(--teal); color: var(--white); }
