@@ -223,9 +223,9 @@ function updateNavForLogin() {
   var su = document.getElementById('navSignup');
   var ms = document.getElementById('mobileSignin');
   var mu = document.getElementById('mobileSignup');
-  if (si) { si.textContent = 'Sign Out'; si.href = 'Signout.html'; }
+  if (si) { si.textContent = 'Sign Out'; si.href = 'signout.html'; }
   if (su) su.style.display = 'none';
-  if (ms) { ms.textContent = 'Sign Out'; ms.href = 'Signout.html'; }
+  if (ms) { ms.textContent = 'Sign Out'; ms.href = 'signout.html'; }
   if (mu) mu.style.display = 'none';
 }
 
