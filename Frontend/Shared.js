@@ -200,8 +200,13 @@ document.addEventListener('DOMContentLoaded', function () {
   /* Bind any cards already in the DOM */
   window.bindCards();
 
-  /* 11. CART BUTTON — inject "Cart" label text for desktop visibility */
+  /* 11. CART BUTTON — ensure click navigates to cart + inject label */
   var cartBtn = document.querySelector('.cart-btn');
+  if (cartBtn) {
+    if (!cartBtn.getAttribute('onclick')) {
+      cartBtn.addEventListener('click', function () { window.location.href = 'cart.html'; });
+    }
+  }
   if (cartBtn && !cartBtn.querySelector('.cart-btn-label')) {
     var lbl = document.createElement('span');
     lbl.className = 'cart-btn-label';
