@@ -418,6 +418,15 @@
     .act-txt { font-size: .8125rem; color: #475569; line-height: 1.5; }
     .act-time { font-size: .6875rem; color: #94A3B8; margin-top: .125rem; }
 
+    /* ── SELLER-AS-BUYER BANNER ── */
+    .seller-mode-bar { background: #7C3AED; color: #fff; padding: .625rem 0; font-size: .875rem; font-weight: 600; }
+    .seller-mode-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .seller-mode-inner span { display: flex; align-items: center; gap: .5rem; }
+    .seller-mode-inner svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .back-to-seller { display: inline-flex; align-items: center; gap: .375rem; padding: .375rem 1rem; background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.4); border-radius: var(--r-full); font-size: .8125rem; font-weight: 700; color: #fff; white-space: nowrap; transition: background .15s; }
+    .back-to-seller:hover { background: rgba(255,255,255,.25); }
+    .back-to-seller svg { width: 13px; height: 13px; }
+
     /* ── GETTING STARTED ── */
     .gs-banner { background: linear-gradient(135deg, #F0FDFA 0%, #E0F2FE 100%); border: 1.5px solid var(--teal-light); border-radius: var(--r-md); padding: 1.5rem; margin-bottom: 1.5rem; }
     .gs-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
@@ -454,6 +463,20 @@
 </head>
 <body>
 
+<!-- Seller-as-buyer mode bar (shown only when a seller navigates here) -->
+<div class="seller-mode-bar" id="sellerModeBar" style="display:none;">
+  <div class="container seller-mode-inner">
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      You're viewing the Buyer experience as a Seller
+    </span>
+    <a href="SellerDashboard.html" class="back-to-seller">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+      Back to Seller Dashboard
+    </a>
+  </div>
+</div>
+
 <div class="announce">🎓 Free shipping on orders over ₵350 for all students!</div>
 <nav class="nav">
   <div class="container nav-inner">
@@ -464,8 +487,8 @@
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="catalog.html">Catalog</a></li>
-      <li><a href="buyer-dashboard.html" class="active">My Account</a></li>
-      <li><a href="seller-dashboard.html">Sell</a></li>
+      <li><a href="BuyerDashboard.html" class="active">My Account</a></li>
+      <li><a href="SellerDashboard.html">Sell</a></li>
       <li><a href="help.html">Help</a></li>
     </ul>
     <div class="nav-actions">
@@ -485,8 +508,8 @@
   <button class="mobile-menu-close" id="menuClose">&#x2715;</button>
   <a href="index.html">Home</a>
   <a href="catalog.html">Catalog</a>
-  <a href="buyer-dashboard.html">My Account</a>
-  <a href="seller-dashboard.html">Sell</a>
+  <a href="BuyerDashboard.html">My Account</a>
+  <a href="SellerDashboard.html">Sell</a>
   <a href="help.html">Help</a>
   <a href="signout.html">Sign out</a>
 </div>
@@ -514,13 +537,9 @@
         <div style="padding-bottom:1.25rem;">
           <div class="pname-row">
             <span class="pname" id="pName">Alex Johnson</span>
-            <span class="role-chip">Buyer</span>
+            <span class="role-chip" id="roleChip">Buyer</span>
           </div>
-<<<<<<< HEAD
-          <p class="pemail" id="pEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="81e0ede4f9afebc1e2e0ecf1f4f2afe4e5f4">[email&#160;protected]</a></p>
-=======
           <p class="pemail" id="pEmail">alex.j@campus.edu</p>
->>>>>>> 54e29d4cc97a9af0952c226ff1b365dc18104516
           <div class="ptags">
             <span class="ptag green">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
@@ -937,15 +956,11 @@
           <a href="#" class="social-btn" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
         </div>
       </div>
-      <div class="footer-col"><h3>Quick Links</h3><ul><li><a href="index.html">Home</a></li><li><a href="catalog.html">Shop</a></li><li><a href="seller-dashboard.html">Sell Products</a></li></ul></div>
+      <div class="footer-col"><h3>Quick Links</h3><ul><li><a href="index.html">Home</a></li><li><a href="catalog.html">Shop</a></li><li><a href="SellerDashboard.html">Sell Products</a></li></ul></div>
       <div class="footer-col"><h3>Support</h3><ul><li><a href="help.html">Help Center</a></li><li><a href="help.html#contact">Contact Us</a></li></ul></div>
       <div class="footer-col"><h3>Contact</h3>
         <div class="footer-contact">
-<<<<<<< HEAD
-          <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="87f4f2f7f7e8f5f3c7e4e6eaf7f2f4eae6f5f3a9e4e8ea">[email&#160;protected]</a></span></div>
-=======
           <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>support@campusmart.com</span></div>
->>>>>>> 54e29d4cc97a9af0952c226ff1b365dc18104516
         </div>
       </div>
     </div>
@@ -961,11 +976,7 @@
   <span id="toastMsg"></span>
 </div>
 
-<<<<<<< HEAD
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="api.js"></script><script src="shared.js"></script>
-=======
-<script src="shared.js"></script>
->>>>>>> 54e29d4cc97a9af0952c226ff1b365dc18104516
+<script src="api.js"></script><script src="shared.js"></script>
 <script>
 /* ════════════════════════════════════════
    BUYER DASHBOARD — Data & Logic
@@ -1225,6 +1236,26 @@ function flash (id) {
   setTimeout(function () { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2500);
 }
 
+/* ── SELLER-AS-BUYER MODE ── */
+function initSellerMode () {
+  var u = null;
+  try { u = JSON.parse(sessionStorage.getItem('cm_user') || 'null'); } catch (e) {}
+  var isSeller = u && (u.role === 'seller' || u.role === 'both');
+  if (!isSeller) return;
+
+  /* Show the purple mode bar */
+  var bar = document.getElementById('sellerModeBar');
+  if (bar) bar.style.display = 'block';
+
+  /* Update role chip to reflect dual role */
+  var chip = document.getElementById('roleChip');
+  if (chip) {
+    chip.textContent = 'Buyer & Seller';
+    chip.style.background = 'linear-gradient(90deg,#0D9488,#7C3AED)';
+    chip.style.color = '#fff';
+  }
+}
+
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded', function () {
   loadProfile();
@@ -1233,6 +1264,7 @@ document.addEventListener('DOMContentLoaded', function () {
   renderWishlist();
   updateStats();
   updateOnboarding();
+  initSellerMode();
 
   document.querySelectorAll('.fi, .fs').forEach(function (el) {
     el.addEventListener('input', function () {
