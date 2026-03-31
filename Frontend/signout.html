@@ -273,7 +273,7 @@
 
       /* Not signed in — send to sign-in page */
       if (!user || !user.loggedIn) {
-        window.location.replace('signin.html');
+        window.location.replace('Signin.html');
         return;
       }
 
@@ -290,12 +290,13 @@
       btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><polyline points="20,6 9,17 4,12"/></svg> Signed out';
       btn.style.background = 'var(--green)';
 
-      /* Clear session immediately */
+      /* Clear all auth data */
+      if (window.api && window.api.logout) window.api.logout();
       sessionStorage.removeItem('cm_user');
 
       /* Short pause so user sees feedback, then redirect */
       setTimeout(function () {
-        window.location.replace('signin.html');
+        window.location.replace('Signin.html');
       }, 900);
     }
   </script>
