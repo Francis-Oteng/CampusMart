@@ -199,4 +199,86 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* Bind any cards already in the DOM */
   window.bindCards();
+
+  /* 11. CART BUTTON — inject "Cart" label text for desktop visibility */
+  var cartBtn = document.querySelector('.cart-btn');
+  if (cartBtn && !cartBtn.querySelector('.cart-btn-label')) {
+    var lbl = document.createElement('span');
+    lbl.className = 'cart-btn-label';
+    lbl.textContent = 'Cart';
+    cartBtn.insertBefore(lbl, cartBtn.querySelector('.cart-badge'));
+  }
+
+  /* 13. MOBILE BOTTOM NAVIGATION */
+  var page = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  function mbnActive(p) {
+    if (p === 'index.html'      && (page === 'index.html' || page === '')) return true;
+    if (p === 'categories.html' && (page === 'categories.html' || page === 'catalog.html')) return true;
+    if (p === 'cart.html'       && page === 'cart.html') return true;
+    if (p === 'account.html'    && (page === 'account.html' || page === 'buyerdashboard.html' || page === 'sellerdashboard.html')) return true;
+    return false;
+  }
+  var mbn = document.createElement('nav');
+  mbn.className = 'mbn';
+  mbn.setAttribute('aria-label', 'Quick navigation');
+  var cartC = parseInt(sessionStorage.getItem('cm_cart') || '0');
+  mbn.innerHTML =
+    '<div class="mbn-inner">' +
+      '<a href="index.html" class="mbn-item' + (mbnActive('index.html') ? ' active' : '') + '">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>' +
+        '<span>Home</span>' +
+      '</a>' +
+      '<a href="Categories.html" class="mbn-item' + (mbnActive('categories.html') ? ' active' : '') + '">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>' +
+        '<span>Shop</span>' +
+      '</a>' +
+      '<a href="cart.html" class="mbn-item' + (mbnActive('cart.html') ? ' active' : '') + '">' +
+        '<div class="mbn-cart-wrap">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>' +
+          (cartC > 0 ? '<span class="mbn-cbadge" id="mbnBadge">' + cartC + '</span>' : '<span class="mbn-cbadge" id="mbnBadge" style="display:none">' + cartC + '</span>') +
+        '</div>' +
+        '<span>Cart</span>' +
+      '</a>' +
+      '<a href="account.html" class="mbn-item' + (mbnActive('account.html') ? ' active' : '') + '">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
+        '<span>Account</span>' +
+      '</a>' +
+    '</div>';
+  document.body.appendChild(mbn);
+
+  /* Keep mobile nav cart badge in sync */
+  var _origUpdate = window.addToCart;
+  window.addToCart = function (btn, productName) {
+    _origUpdate(btn, productName);
+    var mb = document.getElementById('mbnBadge');
+    if (mb) { mb.textContent = sessionStorage.getItem('cm_cart') || '0'; mb.style.display = ''; }
+  };
+
+  /* 14. FOOTER GUIDE STRIP */
+  var footer = document.querySelector('footer');
+  if (footer) {
+    var guide = document.createElement('div');
+    guide.className = 'footer-guide';
+    var isLoggedIn = false;
+    try { isLoggedIn = !!(JSON.parse(sessionStorage.getItem('cm_user') || 'null') || {}).loggedIn; } catch (e) {}
+    var links = [
+      { href: 'Categories.html', icon: '<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>', label: 'Browse Products' },
+      { href: 'cart.html',       icon: '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>', label: 'View Cart' },
+      { href: isLoggedIn ? 'account.html' : 'Signin.html', icon: '<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>', label: isLoggedIn ? 'My Account' : 'Sign In' },
+      { href: 'Help.html',       icon: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>', label: 'Help Center' }
+    ];
+    guide.innerHTML =
+      '<div class="container footer-guide-inner">' +
+        '<span class="footer-guide-lbl">Quick Links</span>' +
+        '<div class="footer-guide-links">' +
+          links.map(function (l) {
+            return '<a href="' + l.href + '" class="fgl-link">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' + l.icon + '</svg>' +
+              l.label + '</a>';
+          }).join('') +
+        '</div>' +
+      '</div>';
+    footer.parentNode.insertBefore(guide, footer);
+  }
+
 });

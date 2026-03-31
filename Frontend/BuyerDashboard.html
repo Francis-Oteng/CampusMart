@@ -418,6 +418,23 @@
     .act-txt { font-size: .8125rem; color: #475569; line-height: 1.5; }
     .act-time { font-size: .6875rem; color: #94A3B8; margin-top: .125rem; }
 
+    /* ── GETTING STARTED ── */
+    .gs-banner { background: linear-gradient(135deg, #F0FDFA 0%, #E0F2FE 100%); border: 1.5px solid var(--teal-light); border-radius: var(--r-md); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .gs-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+    .gs-title { font-size: 1.0625rem; font-weight: 700; color: var(--dark); margin-bottom: .25rem; }
+    .gs-sub { font-size: .875rem; color: var(--muted); }
+    .gs-close { background: none; border: none; cursor: pointer; color: var(--soft); padding: .25rem; border-radius: 4px; line-height: 1; }
+    .gs-close:hover { color: var(--mid); background: rgba(0,0,0,.05); }
+    .gs-close svg { width: 16px; height: 16px; display: block; }
+    .gs-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; }
+    .gs-step { display: flex; flex-direction: column; align-items: flex-start; gap: .5rem; padding: 1rem; background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r-sm); text-decoration: none; color: var(--dark); transition: border-color .15s, box-shadow .15s; }
+    .gs-step:hover { border-color: var(--teal); box-shadow: var(--shadow-sm); }
+    .gs-step-ico { width: 38px; height: 38px; border-radius: var(--r-sm); display: grid; place-items: center; }
+    .gs-step-ico svg { width: 18px; height: 18px; }
+    .gs-step strong { font-size: .8125rem; font-weight: 700; color: var(--dark); }
+    .gs-step span { font-size: .75rem; color: var(--muted); line-height: 1.4; }
+    @media(max-width:600px) { .gs-steps { grid-template-columns: 1fr; } }
+
     /* ── RESPONSIVE ── */
     @media(max-width:1024px) {
       .buyer-layout { grid-template-columns: 1fr; }
@@ -568,6 +585,36 @@
 
   <!-- ─ OVERVIEW TAB ─ -->
   <div class="tab-panel active" id="tab-overview">
+
+    <!-- Getting Started banner (shown for new users) -->
+    <div class="gs-banner" id="gsBanner" style="display:none;">
+      <div class="gs-top">
+        <div>
+          <div class="gs-title">Welcome! Let's get you started</div>
+          <div class="gs-sub">Complete these steps to make the most of CampusMarket</div>
+        </div>
+        <button class="gs-close" onclick="dismissGS()" title="Dismiss">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="gs-steps">
+        <a href="Categories.html" class="gs-step">
+          <div class="gs-step-ico" style="background:#DBEAFE;"><svg viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
+          <strong>Browse products</strong>
+          <span>Explore student-made items on campus</span>
+        </a>
+        <a href="cart.html" class="gs-step">
+          <div class="gs-step-ico" style="background:#F0FDF4;"><svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <strong>Make your first order</strong>
+          <span>Add items to cart and check out</span>
+        </a>
+        <a href="#" onclick="switchTab('profile'); return false;" class="gs-step">
+          <div class="gs-step-ico" style="background:#F5F3FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <strong>Complete your profile</strong>
+          <span>Set up your name, campus and photo</span>
+        </a>
+      </div>
+    </div>
 
     <!-- Summary cards -->
     <div class="ov-row">
@@ -1095,6 +1142,21 @@ function setText (id, val) {
   if (el) el.textContent = val;
 }
 
+/* ── GETTING STARTED BANNER ── */
+function updateOnboarding () {
+  var banner = document.getElementById('gsBanner');
+  if (!banner) return;
+  var dismissed = sessionStorage.getItem('gs_buyer_dismissed');
+  if (!dismissed && ORDERS.length === 0) {
+    banner.style.display = 'block';
+  }
+}
+window.dismissGS = function () {
+  var banner = document.getElementById('gsBanner');
+  if (banner) banner.style.display = 'none';
+  sessionStorage.setItem('gs_buyer_dismissed', '1');
+};
+
 /* ── PROFILE LOAD / SAVE ── */
 function loadProfile () {
   var p = {}; try { p = JSON.parse(localStorage.getItem('cm_profile') || '{}'); } catch (e) {}
@@ -1170,6 +1232,7 @@ document.addEventListener('DOMContentLoaded', function () {
   renderOrders();
   renderWishlist();
   updateStats();
+  updateOnboarding();
 
   document.querySelectorAll('.fi, .fs').forEach(function (el) {
     el.addEventListener('input', function () {
