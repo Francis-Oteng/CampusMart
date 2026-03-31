@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
 const User = require('../models/User');
 
@@ -12,6 +13,11 @@ router.post('/register', async (req, res) => {
   const { name, email, password, role, campus } = req.body;
 
   try {
+    // Check DB connection
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ msg: 'Database unavailable. Please try again shortly.' });
+    }
+
     // Validate required fields
     if (!name || !email || !password) {
       return res.status(400).json({ msg: 'Please provide name, email, and password' });
@@ -69,6 +75,10 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ msg: 'Database unavailable. Please try again shortly.' });
+    }
+
     if (!email || !password) {
       return res.status(400).json({ msg: 'Please provide email and password' });
     }

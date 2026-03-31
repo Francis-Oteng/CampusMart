@@ -8,12 +8,19 @@ const app = express();
 
 // ── Middleware ──
 app.use(cors({
-  origin: [
-    'https://campus-mart-git-main-francisoteng105-2856s-projects.vercel.app',
-    'http://localhost:3000',
-    'http://localhost:5500',
-    'http://127.0.0.1:5500'
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+    // Allow all Vercel deployments + localhost
+    if (
+      /\.vercel\.app$/.test(origin) ||
+      /^http:\/\/localhost(:\d+)?$/.test(origin) ||
+      /^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin)
+    ) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
